@@ -17,19 +17,12 @@ package task
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
 
-	"github.com/wentaojin/dmgr/response"
-	"github.com/xxjwxc/gowp/workpool"
-
 	expect "github.com/google/goexpect"
-
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
-
 	"github.com/wentaojin/dmgr/pkg/dmgrutil"
 )
 
@@ -38,63 +31,22 @@ var (
 )
 
 // SSHKeyCopy
-// 1、用于生成 SSH 密钥
-// 2、分发 SSH 密钥 ssh-copy-id
-type SSHKeyCopy struct {
+// 用于生成 SSH 密钥
+type SSHKeyGen struct {
 	homeSshDir     string
-	clusterSshDir  string
-	hosts          []response.MachineRespStruct
 	executeTimeout uint64
-	workerThreads  int
 }
 
 // Execute implements the Task interface
-func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
+func (s *SSHKeyGen) Execute(ctx *ctxt.Context) error {
 	ctx.Ev.PublishTaskProgress(s, "Generate SSH keys")
 
 	// 存放于用户家目录，用于日常管理 SSH
 	edHomePath := filepath.Join(s.homeSshDir, "id_ed25519")
 	edHomePubPath := filepath.Join(s.homeSshDir, "id_ed25519.pub")
 
-	// 存放于集群 SSH 目录，用于程序管理 SSH
-	edSshPath := filepath.Join(s.clusterSshDir, "id_ed25519")
-	edSshPubPath := filepath.Join(s.clusterSshDir, "id_ed25519.pub")
-
 	// Skip ssh key generate
 	if dmgrutil.IsExist(edHomePath) && dmgrutil.IsExist(edHomePubPath) {
-		wp := workpool.New(s.workerThreads)
-		for _, host := range s.hosts {
-			server := host
-			edFile := edHomePath
-			timeout := s.executeTimeout
-			wp.DoWait(func() error {
-				isConnect, err := server.SshAuthTest(edFile)
-				if err != nil {
-					return err
-				}
-				if !isConnect {
-					if err := server.SshCopyID(timeout); err != nil {
-						return err
-					}
-				}
-				return nil
-			})
-		}
-		if err := wp.Wait(); err != nil {
-			return err
-		}
-		if !wp.IsDone() {
-			return fmt.Errorf("ssh key gen error")
-		}
-
-		// 本机 COPY 认证文件到集群管理目录
-		cmd := exec.Command("/bin/sh", "-c", fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath))
-		if _, err := cmd.Output(); err != nil {
-			return err
-		}
-
-		ctx.PrivateKeyPath = edSshPath
-		ctx.PublicKeyPath = edSshPubPath
 		return nil
 	}
 
@@ -123,50 +75,15 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 			continue
 		}
 	}
-
-	// 本机 COPY 认证文件到集群管理目录
-	cmd := exec.Command("/bin/sh", "-c", fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath))
-	if _, err := cmd.Output(); err != nil {
-		return err
-	}
-
-	// SSH 认证文件分发
-	wp := workpool.New(s.workerThreads)
-	for _, host := range s.hosts {
-		server := host
-		edFile := edSshPath
-		timeout := s.executeTimeout
-		wp.DoWait(func() error {
-			isConnect, err := server.SshAuthTest(edFile)
-			if err != nil {
-				return err
-			}
-			if !isConnect {
-				if err := server.SshCopyID(timeout); err != nil {
-					return err
-				}
-			}
-			return nil
-		})
-	}
-	if err := wp.Wait(); err != nil {
-		return err
-	}
-	if !wp.IsDone() {
-		return fmt.Errorf("ssh key gen error")
-	}
-
-	ctx.PrivateKeyPath = edSshPath
-	ctx.PublicKeyPath = edSshPubPath
 	return nil
 }
 
 // Rollback implements the Task interface
-func (s *SSHKeyCopy) Rollback(ctx *ctxt.Context) error {
-	return os.Remove(s.clusterSshDir)
+func (s *SSHKeyGen) Rollback(ctx *ctxt.Context) error {
+	return ErrNoExecutor
 }
 
 // String implements the fmt.Stringer interface
-func (s *SSHKeyCopy) String() string {
-	return fmt.Sprintf("SSHKeyCopy: path=%s", s.clusterSshDir)
+func (s *SSHKeyGen) String() string {
+	return fmt.Sprintf("SSHKeyGen: path=%s", s.homeSshDir)
 }

@@ -170,6 +170,16 @@ func (b *Builder) CopyFile(src, dst, remoteHost string, download bool, limit int
 }
 
 // SSHKeyGen 将 SSHKeyGen 任务附加到当前任务集合
+func (b *Builder) SSHKeyGen(homeSshDir string,
+	executeTimeout uint64) *Builder {
+	b.tasks = append(b.tasks, &SSHKeyGen{
+		homeSshDir:     homeSshDir,
+		executeTimeout: executeTimeout,
+	})
+	return b
+}
+
+// SSHKeyCopy 将 SSHKeyCopy 任务附加到当前任务集合
 func (b *Builder) SSHKeyCopy(homeSshDir, clusterSshDir string,
 	hosts []response.MachineRespStruct,
 	executeTimeout uint64,

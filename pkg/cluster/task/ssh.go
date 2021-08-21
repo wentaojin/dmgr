@@ -91,6 +91,7 @@ func (s *UserSSH) Execute(ctx *ctxt.Context) error {
 		User:           s.clusterUser,
 		ConnectTimeout: time.Duration(s.connectTimeout) * time.Second,
 		ExecuteTimeout: time.Duration(s.executeTimeout) * time.Second,
+		KeyFile:        ctx.PrivateKeyPath,
 	}
 
 	e, err := executor.NewSSHExecutor(false, sc)
