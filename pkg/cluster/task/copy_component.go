@@ -48,10 +48,11 @@ func (c *CopyComponent) Execute(ctx *ctxt.Context) error {
 	}
 
 	if strings.ToLower(c.componentName) == dmgrutil.ComponentGrafana {
+		baseDir := strings.Split(c.dstPath, "/")
 		cmd := fmt.Sprintf(`tar --no-same-owner -zxf %s -C %s && rm %s`,
-			fmt.Sprintf("%s/%s", c.dstPath, dmgrutil.ComponentGrafanaTarPKG),
 			c.dstPath,
-			fmt.Sprintf("%s/%s", c.dstPath, dmgrutil.ComponentGrafanaTarPKG))
+			baseDir[len(baseDir)-1],
+			c.dstPath)
 
 		_, stderr, err := exec.Execute(cmd, false)
 		if err != nil || len(stderr) != 0 {
