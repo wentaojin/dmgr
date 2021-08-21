@@ -16,7 +16,6 @@ limitations under the License.
 package dmgrutil
 
 import (
-	"fmt"
 	"path/filepath"
 )
 
@@ -27,9 +26,14 @@ func AbsClusterUntarDir(clusterPath, clusterName string) string {
 }
 
 // 集群组件文件名
-// {cluster_path}/cluster/{cluster_name}/{cluster_version}/{componentName}.tar.gz
+// {cluster_path}/cluster/{cluster_name}/{cluster_version}/{componentName}或者{componentName}.tar.gz
 func AbsClusterComponent(clusterPath, clusterName, clusterVersion, componentName string) string {
-	return filepath.Join(AbsClusterUntarDir(clusterPath, clusterName), clusterVersion, fmt.Sprintf("%s.tar.gz", componentName))
+	return filepath.Join(AbsClusterUntarDir(clusterPath, clusterName), clusterVersion, componentName)
+}
+
+// 集群目录
+func AbsClusterDir(deployDir, instanceName string) string {
+	return filepath.Join(deployDir, instanceName)
 }
 
 // 集群部署 Bin 目录

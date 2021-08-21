@@ -89,7 +89,7 @@ func (e *EasySSHExecutor) Execute(cmd string, sudo bool, execTimeout ...time.Dur
 	// 在远程主机上运行命令
 	// easyssh-proxy 中的默认超时时间为 60 秒
 	if len(execTimeout) == 0 {
-		execTimeout = append(execTimeout, time.Second*DefaultExecuteTimeout)
+		execTimeout = append(execTimeout, time.Duration(DefaultExecuteTimeout)*time.Second)
 	}
 
 	stdout, stderr, done, err := e.Config.Run(cmd, execTimeout...)
