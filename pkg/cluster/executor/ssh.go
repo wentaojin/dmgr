@@ -130,8 +130,9 @@ func (e *EasySSHExecutor) Execute(cmd string, sudo bool, execTimeout ...time.Dur
 
 // 通过 SCP 传输副本文件
 // 此函数依赖于 `scp`（来自 OpenSSH 或其他 SSH 实现的工具）
-// 该函数基于　easyssh.MakeConfig.Scp()　但支持复制从远程到本地的文件
+// 该函数基于　easyssh.MakeConfig.Scp()　但支持复制到远程的文件
 func (e *EasySSHExecutor) Transfer(src, dst string, download bool, limit int) error {
+	// Call Scp method with file you want to upload to remote server.
 	if !download {
 		err := e.Config.Scp(src, dst)
 		if err != nil {

@@ -244,7 +244,7 @@ func EnvClusterComponentInit(clusterTopo []response.ClusterTopologyRespStruct,
 				cluster.ClusterVersion,
 				dmgrutil.AbsClusterGrafanaComponent(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ComponentGrafanaTarPKG),
 				cluster.MachineHost,
-				fmt.Sprintf("%s/%s", dmgrutil.AbsClusterDir(cluster.DeployDir, cluster.InstanceName), dmgrutil.ComponentGrafanaTarPKG))
+				dmgrutil.AbsClusterDir(cluster.DeployDir, cluster.InstanceName))
 		default:
 			copyCompTask.CopyComponent(
 				cluster.ComponentName,

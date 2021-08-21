@@ -17,6 +17,7 @@ package task
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
 
@@ -46,11 +47,14 @@ func (c *CopyComponent) Execute(ctx *ctxt.Context) error {
 		return errors.Annotatef(err, "failed to scp %s to %s:%s", c.srcPath, c.host, c.dstPath)
 	}
 
-	if c.componentName == dmgrutil.ComponentGrafana {
-		cmd := fmt.Sprintf(`tar --no-same-owner -zxf %s && rm %s`, c.dstPath, c.dstPath)
+	if strings.ToLower(c.componentName) == dmgrutil.ComponentGrafana {
+		cmd := fmt.Sprintf(`tar --no-same-owner -zxf %s -C %s && rm %s`,
+			fmt.Sprintf("%s/%s", c.dstPath, dmgrutil.ComponentGrafanaTarPKG),
+			c.dstPath,
+			fmt.Sprintf("%s/%s", c.dstPath, dmgrutil.ComponentGrafanaTarPKG))
 
 		_, stderr, err := exec.Execute(cmd, false)
-		if err != nil {
+		if err != nil || len(stderr) != 0 {
 			return errors.Annotatef(err, "stderr: %s", string(stderr))
 		}
 	}
