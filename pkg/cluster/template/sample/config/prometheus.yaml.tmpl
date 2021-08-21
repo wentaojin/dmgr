@@ -1,0 +1,60 @@
+---
+global:
+scrape_interval:     15s # By default, scrape targets every 15 seconds.
+evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+# scrape_timeout is set to the global default (10s).
+external_labels:
+cluster: '{{.ClusterName}}'
+monitor: "prometheus"
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+    {{- if .DMWorkerAddrs}}
+        - 'dm_worker.rules.yml'
+    {{- end}}
+
+{{- if .AlertmanagerAddrs}}
+alerting:
+    alertmanagers:
+    - static_configs:
+        - targets:
+        {{- range .AlertmanagerAddrs}}
+            - '{{.}}'
+        {{- end}}
+{{- end}}
+
+scrape_configs:
+{{- if .GrafanaAddr}}
+    - targets:
+    - '{{.GrafanaAddr}}'
+    labels:
+    group: 'grafana'
+{{- end}}
+relabel_configs:
+- source_labels: [__address__]
+target_label: __param_target
+- source_labels: [__param_target]
+target_label: instance
+{{- if .DMMasterAddrs}}
+    - job_name: "dm_master"
+    honor_labels: true # don't overwrite job & instance labels
+    static_configs:
+    - targets:
+    {{- range .DMMasterAddrs}}
+        - '{{.}}'
+    {{- end}}
+{{- end}}
+
+{{- if .DMWorkerAddrs}}
+    - job_name: "dm_worker"
+    honor_labels: true # don't overwrite job & instance labels
+    static_configs:
+    - targets:
+    {{- range .DMWorkerAddrs}}
+        - '{{.}}'
+    {{- end}}
+{{- end}}
+
+{{- if .RemoteConfig}}
+    {{.RemoteConfig}}
+{{- end}}
