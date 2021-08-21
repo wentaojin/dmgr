@@ -92,8 +92,16 @@ func NewUserModule(config UserModuleConfig) *UserModule {
 		// useradd -g <group-name> <user-name>
 		cmd = fmt.Sprintf("%s -g %s %s", cmd, config.Group, config.Name)
 
+		// chown privilege and group
+		var chownCmd string
+		if config.Home != "" {
+			chownCmd = fmt.Sprintf("chown %s:%s %s", config.Name, config.Group, config.Home)
+		} else {
+			chownCmd = fmt.Sprintf("chown %s:%s %s", config.Name, config.Group, fmt.Sprintf("/home/%s", config.Name))
+		}
+
 		//防止用户名已被使用时出错
-		cmd = fmt.Sprintf("id -u %s > /dev/null 2>&1 || (%s && %s)", config.Name, groupAdd, cmd)
+		cmd = fmt.Sprintf("id -u %s > /dev/null 2>&1 || (%s && %s && %s)", config.Name, groupAdd, cmd, chownCmd)
 
 		// 将用户添加到 sudoers 列表
 		if config.Sudoer {
