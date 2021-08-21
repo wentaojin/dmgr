@@ -29,7 +29,7 @@ func main() {
 		Server:   "172.16.4.206",
 		Password: "marvin",
 		Port:     "22",
-		Timeout:  60 * time.Nanosecond,
+		Timeout:  60 * time.Second,
 	}
 
 	// Call Run method with command you want to run on remote server.

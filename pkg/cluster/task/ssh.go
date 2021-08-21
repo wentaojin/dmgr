@@ -45,8 +45,8 @@ func (s *RootSSH) Execute(ctx *ctxt.Context) error {
 		Password:       s.password,
 		KeyFile:        s.keyFile,
 		Passphrase:     s.passphrase,
-		ConnectTimeout: time.Duration(s.connectTimeout),
-		ExecuteTimeout: time.Duration(s.executeTimeout),
+		ConnectTimeout: time.Duration(s.connectTimeout) * time.Second,
+		ExecuteTimeout: time.Duration(s.executeTimeout) * time.Second,
 	}
 
 	e, err := executor.NewSSHExecutor(s.user != "root", sc)
@@ -89,8 +89,8 @@ func (s *UserSSH) Execute(ctx *ctxt.Context) error {
 		Host:           s.host,
 		Port:           int(s.port),
 		User:           s.clusterUser,
-		ConnectTimeout: time.Duration(s.connectTimeout),
-		ExecuteTimeout: time.Duration(s.executeTimeout),
+		ConnectTimeout: time.Duration(s.connectTimeout) * time.Second,
+		ExecuteTimeout: time.Duration(s.executeTimeout) * time.Second,
 	}
 
 	e, err := executor.NewSSHExecutor(false, sc)

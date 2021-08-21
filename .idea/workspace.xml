@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/dmgr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/dmgr.toml" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dmgr.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/executor/executor.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/executor/executor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/executor/ssh.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/executor/ssh.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/ssh.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/ssh.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test/test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
