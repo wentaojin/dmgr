@@ -242,17 +242,16 @@ func EnvClusterComponentInit(clusterTopo []response.ClusterTopologyRespStruct,
 			copyCompTask.CopyComponent(
 				cluster.ComponentName,
 				cluster.ClusterVersion,
-				dmgrutil.AbsClusterComponent(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ComponentGrafanaTarPKG),
+				dmgrutil.AbsClusterGrafanaComponent(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ComponentGrafanaTarPKG),
 				cluster.MachineHost,
-				filepath.Join(dmgrutil.AbsClusterDir(cluster.DeployDir, cluster.InstanceName), dmgrutil.ComponentGrafanaTarPKG),
-			)
+				fmt.Sprintf("%s/%s", dmgrutil.AbsClusterDir(cluster.DeployDir, cluster.InstanceName), dmgrutil.ComponentGrafanaTarPKG))
 		default:
 			copyCompTask.CopyComponent(
 				cluster.ComponentName,
 				cluster.ClusterVersion,
 				filepath.Join(clusterUntarDir, dmgrutil.DirBin, strings.ToLower(cluster.ComponentName)),
 				cluster.MachineHost,
-				dmgrutil.AbsClusterBinDir(cluster.DeployDir, cluster.InstanceName),
+				filepath.Join(dmgrutil.AbsClusterBinDir(cluster.DeployDir, cluster.InstanceName), strings.ToLower(cluster.ComponentName)),
 			)
 		}
 		copyCompTasks = append(copyCompTasks, copyCompTask.BuildTask())

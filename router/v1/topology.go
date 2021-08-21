@@ -682,7 +682,7 @@ func ClusterUpgrade(c *gin.Context) {
 					upgradeCompTask = upgradeCompTask.CopyComponent(
 						t.ComponentName,
 						req.ClusterVersion,
-						filepath.Join(dmgrutil.AbsClusterComponent(t.ClusterPath, t.ClusterName, req.ClusterVersion, dmgrutil.ComponentGrafanaTarPKG)),
+						dmgrutil.AbsClusterGrafanaComponent(t.ClusterPath, t.ClusterName, req.ClusterVersion, dmgrutil.ComponentGrafanaTarPKG),
 						t.MachineHost,
 						dmgrutil.AbsClusterBinDir(t.DeployDir, t.InstanceName),
 					)

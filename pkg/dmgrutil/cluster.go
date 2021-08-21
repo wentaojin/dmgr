@@ -16,6 +16,7 @@ limitations under the License.
 package dmgrutil
 
 import (
+	"fmt"
 	"path/filepath"
 )
 
@@ -26,9 +27,9 @@ func AbsClusterUntarDir(clusterPath, clusterName string) string {
 }
 
 // 集群组件文件名
-// {cluster_path}/cluster/{cluster_name}/{cluster_version}/{componentName}或者{componentName}.tar.gz
-func AbsClusterComponent(clusterPath, clusterName, clusterVersion, componentName string) string {
-	return filepath.Join(AbsClusterUntarDir(clusterPath, clusterName), clusterVersion, componentName)
+// {cluster_path}/cluster/{cluster_name}/{cluster_version}/grafana.tar.gz
+func AbsClusterGrafanaComponent(clusterPath, clusterName, clusterVersion, grafanaPKG string) string {
+	return fmt.Sprintf("%s/%s", filepath.Join(AbsClusterUntarDir(clusterPath, clusterName), clusterVersion), grafanaPKG)
 }
 
 // 集群目录
