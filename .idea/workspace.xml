@@ -5,8 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/executor/executor.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/executor/executor.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/executor/local.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/executor/local.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/ssh_keycopy.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/ssh_keycopy.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/v1/topology.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/topology.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

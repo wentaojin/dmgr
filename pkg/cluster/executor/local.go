@@ -49,7 +49,7 @@ func NewLocalExecutor(host string, user string, sudo bool) *Local {
 }
 
 // Execute implements Executor interface.
-func (l *Local) Execute(cmd string, execTimeout ...time.Duration) ([]byte, []byte, error) {
+func (l *Local) Execute(cmd string, execTimeout time.Duration) ([]byte, []byte, error) {
 	// try to acquire root permission
 	if l.Sudo {
 		cmd = fmt.Sprintf("sudo -H -u root bash -c \"cd; %s\"", cmd)
@@ -66,16 +66,14 @@ func (l *Local) Execute(cmd string, execTimeout ...time.Duration) ([]byte, []byt
 
 	// run command on remote host
 	// default timeout is 60s in easyssh-proxy
-	if len(execTimeout) == 0 {
-		execTimeout = append(execTimeout, time.Duration(DefaultExecuteTimeout)*time.Second)
+	if execTimeout == 0 {
+		execTimeout = DefaultExecuteTimeout * time.Second
 	}
 
 	ctx := context.Background()
-	if len(execTimeout) > 0 {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(context.Background(), execTimeout[0])
-		defer cancel()
-	}
+	var cancel context.CancelFunc
+	ctx, cancel = context.WithTimeout(context.Background(), execTimeout)
+	defer cancel()
 
 	command := exec.CommandContext(ctx, "/bin/sh", "-c", cmd)
 
