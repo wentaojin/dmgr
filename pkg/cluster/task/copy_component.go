@@ -17,7 +17,6 @@ package task
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
 
@@ -48,8 +47,7 @@ func (c *CopyComponent) Execute(ctx *ctxt.Context) error {
 	}
 
 	if c.componentName == dmgrutil.ComponentGrafana {
-		cmd := fmt.Sprintf(`tar --no-same-owner -zxf %s && rm %s`, c.dstPath,
-			filepath.Join(c.dstPath, dmgrutil.ComponentGrafanaTarPKG))
+		cmd := fmt.Sprintf(`tar --no-same-owner -zxf %s && rm %s`, c.dstPath, c.dstPath)
 
 		_, stderr, err := exec.Execute(cmd, false)
 		if err != nil {
