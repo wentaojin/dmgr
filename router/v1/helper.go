@@ -119,7 +119,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				cluster.MachineHost,
 				false,
 				0).CopyFile(
-				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterVersion, dmgrutil.ConfDmWorkerRuleFile)),
+				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfDmWorkerRuleFile)),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "dm_worker.rules.yml"),
 				cluster.MachineHost,
 				false,
@@ -133,7 +133,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentAlertmanager {
 			copyFileTask.CopyFile(
-				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterVersion, dmgrutil.ConfAlertmanagerFile)),
+				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfAlertmanagerFile)),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "alertmanager.yml"),
 				cluster.MachineHost,
 				false,
@@ -147,7 +147,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentDmMaster {
 			copyFileTask.CopyFile(
-				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterVersion, dmgrutil.ConfDmMasterFile)),
+				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfDmMasterFile)),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "dm-master.toml"),
 				cluster.MachineHost,
 				false,
@@ -161,7 +161,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentDmWorker {
 			copyFileTask.CopyFile(
-				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterVersion, dmgrutil.ConfDmWorkerFile)),
+				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfDmWorkerFile)),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "dm-worker.toml"),
 				cluster.MachineHost,
 				false,

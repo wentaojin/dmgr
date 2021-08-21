@@ -87,6 +87,6 @@ func AbsClusterSSHDir(clusterPath, clusterName string) string {
 }
 
 // 集群压缩包文件位置
-func AbsUntarConfDir(clusterPath, clusterVersion, fileName string) string {
-	return filepath.Join(clusterPath, clusterVersion, fileName)
+func AbsUntarConfDir(clusterPath, clusterName, clusterVersion, fileName string) string {
+	return filepath.Join(clusterPath, DirCluster, clusterName, clusterVersion, fileName)
 }
