@@ -67,7 +67,7 @@ func (l *Local) Execute(cmd string, execTimeout ...time.Duration) ([]byte, []byt
 	// run command on remote host
 	// default timeout is 60s in easyssh-proxy
 	if len(execTimeout) == 0 {
-		execTimeout = append(execTimeout, time.Second*DefaultExecuteTimeout)
+		execTimeout = append(execTimeout, time.Duration(DefaultExecuteTimeout)*time.Second)
 	}
 
 	ctx := context.Background()

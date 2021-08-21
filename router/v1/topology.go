@@ -135,7 +135,9 @@ func ClusterDeploy(c *gin.Context) {
 
 	builder := task.NewBuilder().
 		Serial("+ Generate SSH keys",
-			task.NewBuilder().SSHKeyGen(dmgrutil.HomeSshDir, executor.DefaultExecuteTimeout).SSHKeyCopy(dmgrutil.HomeSshDir, dmgrutil.AbsClusterSSHDir(topo.ClusterPath, topo.ClusterName), machineList, executor.DefaultExecuteTimeout, dmgrutil.RsaConcurrency).BuildTask()).
+			task.NewBuilder().
+				SSHKeyGen(dmgrutil.HomeSshDir, executor.DefaultExecuteTimeout).
+				SSHKeyCopy(dmgrutil.HomeSshDir, dmgrutil.AbsClusterSSHDir(topo.ClusterPath, topo.ClusterName), machineList, executor.DefaultExecuteTimeout, dmgrutil.RsaConcurrency).BuildTask()).
 		Parallel("+ Initialize target host environments", false, envInitTasks...).
 		Parallel("+ Copy components", false, copyCompTasks...).
 		Parallel("+ Copy files", false, copyFileTasks...).BuildTask()
@@ -782,7 +784,7 @@ func ClusterPatch(c *gin.Context) {
 		if response.FailWithMsg(c, err) {
 			return
 		}
-		_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser != "root").Execute(cmd, executor.DefaultExecuteTimeout)
+		_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(cmd, executor.DefaultExecuteTimeout)
 		if response.FailWithMsg(c, err) {
 			return
 		}

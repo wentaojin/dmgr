@@ -49,7 +49,7 @@ func NewSSHExecutor(sudo bool, c SSHConfig) (Executor, error) {
 	}
 
 	if c.ConnectTimeout == 0 {
-		c.ConnectTimeout = DefaultConnectTimeout * time.Second // 默认 SSH 连接超时时间
+		c.ConnectTimeout = time.Duration(DefaultConnectTimeout) * time.Second // 默认 SSH 连接超时时间
 	}
 
 	executor := &EasySSHExecutor{

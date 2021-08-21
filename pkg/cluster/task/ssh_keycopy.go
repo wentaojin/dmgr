@@ -56,7 +56,7 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 	ctx.Ev.PublishTaskProgress(s, "Copy SSH keys")
 	// 本机 COPY 认证文件到集群管理目录
 	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
-	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser != "root").Execute(fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath), executor.DefaultExecuteTimeout)
+	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath), executor.DefaultExecuteTimeout)
 	if err != nil || len(stdErr) != 0 {
 		return fmt.Errorf("local copy err: [%v], stderr: [%v]", err, string(stdErr))
 	}
