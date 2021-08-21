@@ -17,25 +17,26 @@ package main
 
 import (
 	"fmt"
+	"time"
 
-	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
-	"github.com/wentaojin/dmgr/pkg/cluster/executor"
-	"github.com/wentaojin/dmgr/pkg/cluster/task"
+	"github.com/appleboy/easyssh-proxy"
 )
 
 func main() {
+	// Create MakeConfig instance with remote username, server address and path to private key.
+	ssh := &easyssh.MakeConfig{
+		User:     "marvin",
+		Server:   "172.16.4.206",
+		Password: "marvin",
+		Port:     "22",
+		Timeout:  60 * time.Nanosecond,
+	}
 
-	envInitTask := task.NewBuilder().
-		RootSSH(
-			"172.16.4.206",
-			22,
-			"marvin",
-			"marvin",
-			"",
-			"",
-			executor.DefaultConnectTimeout,
-			executor.DefaultExecuteTimeout,
-		).EnvInit("172.16.4.206", "dm", "", false).BuildTask()
-
-	fmt.Println(envInitTask.Execute(ctxt.NewContext()))
+	// Call Run method with command you want to run on remote server.
+	stdout, stderr, done, err := ssh.Run("ls -al", 60*time.Second)
+	// Handle errors
+	if err != nil {
+		panic("Can't run remote command: " + err.Error())
+	}
+	fmt.Println("don is :", done, "stdout is :", stdout, ";   stderr is :", stderr)
 }

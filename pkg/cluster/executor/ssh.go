@@ -92,8 +92,6 @@ func (e *EasySSHExecutor) Execute(cmd string, sudo bool, execTimeout ...time.Dur
 		execTimeout = append(execTimeout, time.Second*DefaultExecuteTimeout)
 	}
 
-	fmt.Println(e.Config)
-
 	stdout, stderr, done, err := e.Config.Run(cmd, execTimeout...)
 	dmgrutil.Logger.Info("SSHCommand",
 		zap.String("host", e.Config.Server),
