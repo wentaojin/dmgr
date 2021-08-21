@@ -186,35 +186,42 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 }
 
 // 用于初始化环境的任务
-// 用于 COPY 集群组件的任务
-func EnvClusterInit(clusterTopo []response.ClusterTopologyRespStruct,
-	clusterUntarDir string, skipCreateUser string) ([]task.Task, []task.Task) {
-	var (
-		envInitTasks  []task.Task
-		copyCompTasks []task.Task
-	)
+func EnvClusterUserInit(machineList []response.MachineRespStruct, clusterUser, skipCreateUser string) []task.Task {
+	var envInitTasks []task.Task
+
 	// 集群环境初始化以及组件名 Copy
-	for _, cluster := range clusterTopo {
+	for _, machine := range machineList {
 		envInitTask := task.NewBuilder().
 			RootSSH(
-				cluster.MachineHost,
-				cluster.SshPort,
-				cluster.SshUser,
-				cluster.SshPassword,
+				machine.SshHost,
+				machine.SshPort,
+				machine.SshUser,
+				machine.SshPassword,
 				"",
 				"",
 				executor.DefaultConnectTimeout,
 				executor.DefaultExecuteTimeout,
 			).
 			EnvInit(
-				cluster.MachineHost,
-				cluster.ClusterUser,
+				machine.SshHost,
+				clusterUser,
 				"",
 				dmgrutil.StringEqualFold(skipCreateUser, dmgrutil.BoolTrue),
 			).BuildTask()
 
 		envInitTasks = append(envInitTasks, envInitTask)
+	}
 
+	return envInitTasks
+}
+
+// 用于 COPY 集群组件的任务
+func EnvClusterComponentInit(clusterTopo []response.ClusterTopologyRespStruct,
+	clusterUntarDir string) []task.Task {
+	var copyCompTasks []task.Task
+
+	// 集群环境初始化以及组件名 Copy
+	for _, cluster := range clusterTopo {
 		copyCompTask := task.NewBuilder().
 			UserSSH(
 				cluster.MachineHost,
@@ -251,5 +258,5 @@ func EnvClusterInit(clusterTopo []response.ClusterTopologyRespStruct,
 		copyCompTasks = append(copyCompTasks, copyCompTask.BuildTask())
 	}
 
-	return envInitTasks, copyCompTasks
+	return copyCompTasks
 }
