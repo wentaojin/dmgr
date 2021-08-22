@@ -48,7 +48,7 @@ func (e *EnableInstance) Execute(ctx *ctxt.Context) error {
 		action = module.OperatorEnable
 	}
 	if err := systemctl(exec, e.serviceName, action, e.executeTimeout); err != nil {
-		return toFailedActionError(err, action, e.instanceName, e.serviceName, e.logDir)
+		return toFailedActionError(err, action, e.host, e.instanceName, e.serviceName, e.logDir)
 	}
 	dmgrutil.Logger.Info("Enable/Disable instance success",
 		zap.String("instance", e.instanceName), zap.Bool("enabled", e.isEnable))

@@ -42,11 +42,11 @@ func (s *StopInstance) Execute(ctx *ctxt.Context) error {
 		return ErrNoExecutor
 	}
 	if err := systemctl(exec, s.serviceName, module.OperatorStop, s.executeTimeout); err != nil {
-		return toFailedActionError(err, module.OperatorStop, s.instanceName, s.serviceName, s.logDir)
+		return toFailedActionError(err, module.OperatorStop, s.host, s.instanceName, s.serviceName, s.logDir)
 	}
 	// Check stop.
 	if err := PortStopped(exec, s.servicePort, s.executeTimeout); err != nil {
-		return toFailedActionError(err, module.OperatorStart, s.instanceName, s.serviceName, s.logDir)
+		return toFailedActionError(err, module.OperatorStart, s.host, s.instanceName, s.serviceName, s.logDir)
 	}
 	dmgrutil.Logger.Info("Stop instance success", zap.String("instance", s.instanceName))
 	return nil
