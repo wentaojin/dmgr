@@ -259,7 +259,7 @@ func GenerateClusterFileWithStage(
 						dmgrutil.TmplPrometheusYAML),
 					filepath.Join(
 						dmgrutil.AbsClusterCacheDir(t.ClusterPath, t.ClusterName),
-						"prometheus.yaml")); err != nil {
+						"prometheus.yml")); err != nil {
 				return err
 			}
 

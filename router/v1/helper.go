@@ -121,8 +121,8 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentPrometheus {
 			copyFileTask.CopyFile(
-				filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "prometheus.yaml"),
-				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "prometheus.yaml"),
+				filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "prometheus.yml"),
+				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "prometheus.yml"),
 				dmgrutil.FileTypeComponent,
 				cluster.MachineHost,
 				false,

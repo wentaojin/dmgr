@@ -67,7 +67,7 @@ const (
 	TmplGrafanaDatasourceYAML = "template/datasource.yml.tmpl"
 	TmplGrafanaScript         = "template/run_grafana.sh.tmpl"
 
-	TmplPrometheusYAML   = "template/prometheus.yaml.tmpl"
+	TmplPrometheusYAML   = "template/prometheus.yml.tmpl"
 	TmplPrometheusScript = "template/run_prometheus.sh.tmpl"
 
 	TmplAlertmanagerScript  = "template/run_alertmanager.sh.tmpl"
