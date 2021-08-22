@@ -105,14 +105,18 @@ func GenerateClusterFileWithStage(
 					dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
 					dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
 					dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
-					WithPort(t.ServicePort).WithPeerPort(t.PeerPort).WithScheme("http").ConfigToFile(
-					filepath.Join(
-						dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
-						t.ClusterVersion,
-						dmgrutil.TmplDmMasterScript),
-					filepath.Join(
-						dmgrutil.AbsClusterCacheDir(t.ClusterPath, t.ClusterName),
-						fmt.Sprintf("run_dm-master-%s-%d.sh", t.MachineHost, t.ServicePort))); err != nil {
+					AppendEndpoints(dmMasterScripts...).
+					WithPort(t.ServicePort).
+					WithPeerPort(t.PeerPort).
+					WithScheme("http").
+					ConfigToFile(
+						filepath.Join(
+							dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
+							t.ClusterVersion,
+							dmgrutil.TmplDmMasterScript),
+						filepath.Join(
+							dmgrutil.AbsClusterCacheDir(t.ClusterPath, t.ClusterName),
+							fmt.Sprintf("run_dm-master-%s-%d.sh", t.MachineHost, t.ServicePort))); err != nil {
 					return err
 				}
 			}
