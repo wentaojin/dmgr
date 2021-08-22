@@ -194,14 +194,10 @@ func ClusterStart(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
 					EnableInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout, true).BuildTask()
 
 				if response.FailWithMsg(c, startCompTask.Execute(ctxt.NewContext())) {
@@ -256,9 +252,7 @@ func ClusterStop(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).BuildTask()
 
 				if response.FailWithMsg(c, startCompTask.Execute(ctxt.NewContext())) {
@@ -389,9 +383,7 @@ func ClusterScaleOut(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).BuildTask()
 				if response.FailWithMsg(c, fmt.Errorf("failed start cluster [%v] component instance [%v] by scale-out: %v", t.ClusterName, t.InstanceName, scaleOutCompTask.Execute(ctxt.NewContext()))) {
 					return
@@ -473,7 +465,7 @@ func ClusterScaleIn(c *gin.Context) {
 
 	// 缩容组件
 	// 注意：缩容组件 DestroyInstance 只会清理子目录，不会清理父目录
-	// 比如：deployDir=/data/marvin/{instance_name}, 则清理执行命令 rm -rf /data/marvin/{instance_name}，保留 /data/marvin/ 目录，防止误删除
+	// 比如：deployDir=/data/marvin/{instance_name}, 则清理执行命令 m -rf /data/marvin/{instance_name}，保留 /data/marvin/ 目录，防止误删除
 	for _, component := range dmgrutil.StartComponentOrder {
 		for _, t := range clusterTopos {
 			if component == strings.ToLower(t.ComponentName) {
@@ -490,9 +482,7 @@ func ClusterScaleIn(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
 					DestroyInstance(t.MachineHost, t.ServicePort, t.ComponentName, t.InstanceName, t.DeployDir, t.DataDir, t.LogDir, executor.DefaultExecuteTimeout).BuildTask()
 
@@ -582,14 +572,10 @@ func CLusterReload(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
 					StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)), module.DefaultSystemdExecuteTimeout).BuildTask()
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort), module.DefaultSystemdExecuteTimeout).BuildTask()
 				if response.FailWithMsg(c, reloadCompTask.Execute(ctxt.NewContext())) {
 					return
 				}
@@ -672,9 +658,7 @@ func ClusterUpgrade(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout)
 
 				switch strings.ToLower(t.ComponentName) {
@@ -696,9 +680,7 @@ func ClusterUpgrade(c *gin.Context) {
 					)
 				}
 				upgradeCompTask = upgradeCompTask.StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-					filepath.Join(
-						dmgrutil.AbsClusterSystemdDir(),
-						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)), module.DefaultSystemdExecuteTimeout)
+					fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort), module.DefaultSystemdExecuteTimeout)
 
 				if response.FailWithMsg(c, upgradeCompTask.BuildTask().Execute(ctxt.NewContext())) {
 					return
@@ -770,12 +752,12 @@ func ClusterPatch(c *gin.Context) {
 			}
 		}
 		cmds = []string{
-			fmt.Sprintf(`tar -zxvf %v -C %v;rm -rf %v`, filePath, pkgDir, filePath),
+			fmt.Sprintf(`tar --no-same-owner -zxvf %v -C %v; rm -rf %v`, filePath, pkgDir, filePath),
 			fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, strings.ToLower(req.ComponentName)), filepath.Join(clusterUntarDir, strings.ToLower(req.ComponentName))),
 		}
 	} else {
 		if req.ComponentName != dmgrutil.ComponentGrafana {
-			cmds = []string{fmt.Sprintf(`tar -zxvf %v -C %v;rm -rf %v`, filePath, pkgDir, filePath)}
+			cmds = []string{fmt.Sprintf(`tar --no-same-owner -zxvf %v -C %v; rm -rf %v`, filePath, pkgDir, filePath)}
 		}
 	}
 
@@ -828,9 +810,7 @@ func ClusterPatch(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout)
 
 				switch strings.ToLower(t.ComponentName) {
@@ -852,9 +832,7 @@ func ClusterPatch(c *gin.Context) {
 					)
 				}
 				patchCompTask = patchCompTask.StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-					filepath.Join(
-						dmgrutil.AbsClusterSystemdDir(),
-						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)), module.DefaultSystemdExecuteTimeout)
+					fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort), module.DefaultSystemdExecuteTimeout)
 
 				if response.FailWithMsg(c, patchCompTask.BuildTask().Execute(ctxt.NewContext())) {
 					return
@@ -918,9 +896,7 @@ func ClusterDestroy(c *gin.Context) {
 						executor.DefaultConnectTimeout,
 						executor.DefaultExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
-						filepath.Join(
-							dmgrutil.AbsClusterSystemdDir(),
-							fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort)),
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
 					DestroyInstance(t.MachineHost, t.ServicePort, t.ComponentName, t.InstanceName, t.DeployDir, t.DataDir, t.LogDir, executor.DefaultExecuteTimeout).BuildTask()
 

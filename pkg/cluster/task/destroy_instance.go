@@ -17,6 +17,7 @@ package task
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
@@ -51,9 +52,9 @@ func (s *DestroyInstance) Execute(ctx *ctxt.Context) error {
 
 	// would save parent dir
 	delPaths := dmgrutil.NewStringSet()
-	delPaths.Insert(fmt.Sprintf(`rm -rf %s/%s`, s.deployDir, s.instanceName))
-	delPaths.Insert(fmt.Sprintf(`rm -rf %s/%s`, s.dataDir, s.instanceName))
-	delPaths.Insert(fmt.Sprintf(`rm -rf %s/%s`, s.logDir, s.instanceName))
+	delPaths.Insert(fmt.Sprintf(`rm -rf %s`, filepath.Join(s.deployDir, s.instanceName)))
+	delPaths.Insert(fmt.Sprintf(`rm -rf %s`, filepath.Join(s.dataDir, s.instanceName)))
+	delPaths.Insert(fmt.Sprintf(`rm -rf %s`, filepath.Join(s.logDir, s.instanceName)))
 	delPaths.Insert(fmt.Sprintf("/etc/systemd/system/%s-%d.service", s.componentName, s.servicePort))
 	c := module.ShellModuleConfig{
 		Command:  fmt.Sprintf("rm -rf %s;", strings.Join(delPaths.Slice(), " ")),
