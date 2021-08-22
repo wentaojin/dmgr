@@ -109,10 +109,11 @@ func systemctl(executor executor.Executor, service string, action string, timeou
 	stdout, stderr, err := systemd.Execute(executor)
 
 	if len(stdout) > 0 {
-		fmt.Println(string(stdout))
+		dmgrutil.Logger.Warn("Systemctl", zap.String("Stdout", string(stdout)))
 	}
 	if len(stderr) > 0 && !bytes.Contains(stderr, []byte("Created symlink ")) && !bytes.Contains(stderr, []byte("Removed symlink ")) {
 		dmgrutil.Logger.Error(string(stderr))
+		return fmt.Errorf("systemctl action [%s] service [%v] failed: %v", action, service, string(stderr))
 	}
 	if len(stderr) > 0 && action == "stop" {
 		// ignore "unit not loaded" error, as this means the unit is not
