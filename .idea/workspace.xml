@@ -3,16 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/dashboard.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/dashboard.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/datasource.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/datasource.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/grafana.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/grafana.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/prometheus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/alertmanager.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/alertmanager.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/dm_master.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/dm_master.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/dm_worker.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/dm_worker.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/grafana.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/grafana.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/prometheus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/systemd/systemd.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/systemd/systemd.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

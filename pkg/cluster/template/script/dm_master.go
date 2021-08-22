@@ -23,15 +23,16 @@ import (
 
 // DMMasterScript 表示生成 dm-master config 的数据
 type DMMasterScript struct {
-	Name      string
-	Scheme    string
-	IP        string
-	Port      uint64
-	PeerPort  uint64
-	DeployDir string
-	DataDir   string
-	LogDir    string
-	Endpoints []*DMMasterScript
+	Name         string
+	Scheme       string
+	IP           string
+	Port         uint64
+	PeerPort     uint64
+	DeployDir    string
+	DataDir      string
+	LogDir       string
+	V1SourcePath string
+	Endpoints    []*DMMasterScript
 }
 
 // NewDMMasterScript 返回带有给定参数的 DMMasterScript
@@ -63,6 +64,12 @@ func (c *DMMasterScript) WithPort(port uint64) *DMMasterScript {
 // WithPeerPort set PeerPort field of DMMasterScript
 func (c *DMMasterScript) WithPeerPort(port uint64) *DMMasterScript {
 	c.PeerPort = port
+	return c
+}
+
+// WithV1SourcePath set Scheme field of V1SourcePath
+func (c *DMMasterScript) WithV1SourcePath(path string) *DMMasterScript {
+	c.V1SourcePath = path
 	return c
 }
 
