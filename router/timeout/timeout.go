@@ -71,7 +71,7 @@ func New(opts ...Option) gin.HandlerFunc {
 		defer cancelCtx()
 		c.Request = c.Request.WithContext(ctx)
 
-		tw := &router.timeoutWriter{
+		tw := &timeoutWriter{
 			ResponseWriter: c.Writer,
 			h:              make(http.Header),
 		}
