@@ -68,8 +68,11 @@ func AbsClusterScriptDir(deployDir, instanceName string) string {
 }
 
 // 集群部署 Data 目录
-func AbsClusterDataDir(dataDir, instanceName string) string {
-	return filepath.Join(dataDir, instanceName, DirData)
+func AbsClusterDataDir(deployDir, dataDir, instanceName string) string {
+	if deployDir == dataDir {
+		return filepath.Join(dataDir, instanceName, DirData)
+	}
+	return filepath.Join(dataDir, instanceName)
 }
 
 // 集群部署 Log 目录

@@ -60,6 +60,14 @@ func (c *CopyComponent) Execute(ctx *ctxt.Context) error {
 			return errors.Annotatef(err, "stderr: %s", string(stderr))
 		}
 	}
+
+	if strings.ToLower(c.componentName) != dmgrutil.ComponentGrafana {
+		cmd := fmt.Sprintf(`chmod +x %s`, c.dstPath)
+		_, stderr, err := exec.Execute(cmd, false)
+		if err != nil || len(stderr) != 0 {
+			return errors.Annotatef(err, "stderr: %s", string(stderr))
+		}
+	}
 	return nil
 }
 
