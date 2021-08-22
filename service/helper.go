@@ -18,6 +18,8 @@ package service
 import (
 	"fmt"
 
+	"go.uber.org/zap"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/wentaojin/dmgr/pkg/dmgrutil"
 	"github.com/wentaojin/dmgr/request"
@@ -147,32 +149,21 @@ WHERE meta.cluster_name = ? AND topo.instance_name IN (?)`, clusterName, instanc
 
 // 集群元信息以及拓扑清理
 func (s *MysqlService) DestroyClusterMetaAndTopology(clusterName string) error {
-	tx, err := s.Engine.Beginx()
-	if err != nil {
-		return err
-	}
-	_, err = tx.Exec(`DELETE FROM cluster_topology WHERE cluster_name = ?`, clusterName)
-	_, err = tx.Exec(`DELETE FROM cluster_meta WHERE cluster_name = ?`, clusterName)
-
-	if err != nil {
-		if err = tx.Rollback(); err != nil {
+	return Transact(s.Engine, func(tx *sqlx.Tx) error {
+		if _, err := tx.Exec(`DELETE FROM cluster_topology WHERE cluster_name = ?`, clusterName); err != nil {
 			return err
 		}
-		return err
-	}
-	if err = tx.Commit(); err != nil {
-		return err
-	}
-	return nil
+		if _, err := tx.Exec(`DELETE FROM cluster_meta WHERE cluster_name = ?`, clusterName); err != nil {
+			return err
+		}
+		return nil
+	})
 }
 
 // 集群拓扑以及元数据新增
 func (s *MysqlService) AddClusterMetaAndTopology(clusterMeta request.ClusterMetaReqStruct, topo []request.TopologyReqStruct) error {
-	tx, err := s.Engine.Beginx()
-	if err != nil {
-		return err
-	}
-	_, err = tx.NamedExec(`INSERT INTO cluster_meta (
+	return Transact(s.Engine, func(tx *sqlx.Tx) error {
+		if _, err := tx.NamedExec(`INSERT INTO cluster_meta (
 cluster_name, 
 cluster_user, 
 cluster_version,
@@ -186,8 +177,11 @@ skip_create_user) VALUES (
 :cluster_path,
 :admin_user,
 :admin_password,
-:skip_create_user)`, clusterMeta)
-	_, err = tx.NamedExec(`INSERT INTO cluster_topology (
+:skip_create_user)`, clusterMeta); err != nil {
+			return err
+		}
+
+		if _, err := tx.NamedExec(`INSERT INTO cluster_topology (
 cluster_name, 
 component_name, 
 instance_name,
@@ -207,16 +201,34 @@ log_dir) VALUES (
 :cluster_port,
 :deploy_dir,
 :data_dir,
-:log_dir)`, topo)
-
-	if err != nil {
-		if err = tx.Rollback(); err != nil {
+:log_dir)`, topo); err != nil {
 			return err
 		}
-		return err
+		return nil
+	})
+}
+
+// 事务更新
+func Transact(db *sqlx.DB, txFunc func(*sqlx.Tx) error) (err error) {
+	tx, err := db.Beginx()
+	if err != nil {
+		return
 	}
-	if err = tx.Commit(); err != nil {
-		return err
-	}
-	return nil
+
+	defer func() {
+		if p := recover(); p != nil {
+			tx.Rollback()
+			// re-throw panic after Rollback
+			panic(p)
+			return
+		} else if err != nil {
+			dmgrutil.Logger.Error("Transaction", zap.String("error", err.Error()))
+			tx.Rollback()
+		} else {
+			err = tx.Commit()
+		}
+	}()
+
+	err = txFunc(tx)
+	return err
 }
