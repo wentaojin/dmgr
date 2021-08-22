@@ -17,7 +17,7 @@ cd "${DEPLOY_DIR}" || exit 1
 {{- end}}
 
 
-exec bin/dm-master/dm-master \
+exec bin/dm-master \
 {{- if .V1SourcePath}}
     --v1-sources-path="{{.V1SourcePath}}" \
 {{- end}}

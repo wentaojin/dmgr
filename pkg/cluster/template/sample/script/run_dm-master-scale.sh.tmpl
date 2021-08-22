@@ -16,7 +16,7 @@ cd "${DEPLOY_DIR}" || exit 1
     {{- end}}
 {{- end}}
 
-exec bin/dm-master/dm-master \
+exec bin/dm-master \
 --name="{{.Name}}" \
 --master-addr="0.0.0.0:{{.Port}}" \
 --advertise-addr="{{.IP}}:{{.Port}}" \

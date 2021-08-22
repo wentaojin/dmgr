@@ -17,7 +17,7 @@ cd "${DEPLOY_DIR}" || exit 1
     {{- end}}
 {{- end}}
 
-exec bin/dm-worker/dm-worker \
+exec bin/dm-worker \
 --name="{{.Name}}" \
 --worker-addr="0.0.0.0:{{.Port}}" \
 --advertise-addr="{{.IP}}:{{.Port}}" \

@@ -8,17 +8,17 @@ LimitSTACK=10485760
 User={{.User}}
 ExecStart={{.DeployDir}}/script/run_{{.ServiceName}}.sh
 {{- if eq .ServiceName "prometheus"}}
-    ExecReload=/bin/kill -HUP $MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
 {{end}}
 
 {{- if .Restart}}
-    Restart={{.Restart}}
+Restart={{.Restart}}
 {{else}}
-    Restart=always
+Restart=always
 {{end}}
 RestartSec=15s
 {{- if .DisableSendSigkill}}
-    SendSIGKILL=no
+SendSIGKILL=no
 {{- end}}
 
 [Install]
