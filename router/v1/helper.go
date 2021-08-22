@@ -104,8 +104,8 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 					false,
 					0).
 				CopyFile(
-					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "datasource.yaml"),
-					filepath.Join(dmgrutil.AbsClusterDatasourceDir(cluster.DeployDir, cluster.InstanceName), "datasource.yaml"),
+					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "datasource.yml"),
+					filepath.Join(dmgrutil.AbsClusterDatasourceDir(cluster.DeployDir, cluster.InstanceName), "datasource.yml"),
 					dmgrutil.FileTypeComponent,
 					cluster.MachineHost,
 					false,
