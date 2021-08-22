@@ -42,12 +42,12 @@ func (c *CopyFile) Execute(ctx *ctxt.Context) error {
 		return ErrNoExecutor
 	}
 
-	if c.fileType == dmgrutil.FileTypeSystemd {
-		err := e.Transfer(c.src, c.dst, c.download, c.limit)
-		if err != nil {
-			return errors.Annotate(err, "failed to transfer file")
-		}
+	err := e.Transfer(c.src, c.dst, c.download, c.limit)
+	if err != nil {
+		return errors.Annotate(err, "failed to transfer file")
+	}
 
+	if c.fileType == dmgrutil.FileTypeSystemd {
 		cmd := fmt.Sprintf(`cp %s %s && rm %s`,
 			c.dst,
 			dmgrutil.AbsClusterSystemdDir(),
@@ -56,12 +56,16 @@ func (c *CopyFile) Execute(ctx *ctxt.Context) error {
 		if err != nil || len(stderr) != 0 {
 			return errors.Annotatef(err, "stderr: %s", string(stderr))
 		}
-		return nil
 	}
-	err := e.Transfer(c.src, c.dst, c.download, c.limit)
-	if err != nil {
-		return errors.Annotate(err, "failed to transfer file")
+
+	if c.fileType == dmgrutil.FileTypeScript {
+		cmd := fmt.Sprintf(`chmod +x %s`, c.dst)
+		_, stderr, err := e.Execute(cmd, true)
+		if err != nil || len(stderr) != 0 {
+			return errors.Annotatef(err, "stderr: %s", string(stderr))
+		}
 	}
+
 	return nil
 }
 

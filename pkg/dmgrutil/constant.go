@@ -93,6 +93,7 @@ const (
 
 	// 用于 copy file 类型区分
 	FileTypeComponent = "component"
+	FileTypeScript    = "script"
 	FileTypeSystemd   = "systemd"
 )
 

@@ -21,6 +21,7 @@ const (
 	Unauthorized        = 401
 	Forbidden           = 403
 	InternalServerError = 500
+	RequestTimeout      = 503
 )
 const (
 	OkMsg                  = "operation success"
@@ -29,6 +30,7 @@ const (
 	LoginCheckErrorMsg     = "username or password is incorrect"
 	ForbiddenMsg           = "no access to this resource, please contact the site administrator for authorization"
 	InternalServerErrorMsg = "server internal error"
+	RequestTimeoutMsg      = "request timeout"
 )
 
 var CustomError = map[int]string{
@@ -37,4 +39,5 @@ var CustomError = map[int]string{
 	Unauthorized:        UnauthorizedMsg,
 	Forbidden:           ForbiddenMsg,
 	InternalServerError: InternalServerErrorMsg,
+	RequestTimeout:      RequestTimeoutMsg,
 }

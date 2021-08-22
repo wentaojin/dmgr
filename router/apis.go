@@ -16,8 +16,12 @@ limitations under the License.
 package router
 
 import (
+	"time"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/wentaojin/dmgr/pkg/cluster/module"
+	"github.com/wentaojin/dmgr/router/timeout"
 	v1 "github.com/wentaojin/dmgr/router/v1"
 )
 
@@ -62,15 +66,23 @@ func InitClusterRouter(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware)
 	router := r.Group("/cluster").Use(authMiddleware.MiddlewareFunc())
 	{
 		router.POST("/deploy", v1.ClusterDeploy)
-		router.POST("/start", v1.ClusterStart)
-		router.POST("/stop", v1.ClusterStop)
-		router.POST("/scale-out", v1.ClusterScaleOut)
-		router.POST("/scale-in", v1.ClusterScaleIn)
-		router.POST("/reload", v1.CLusterReload)
-		router.POST("/upgrade", v1.ClusterUpgrade)
 		router.POST("/destroy", v1.ClusterDestroy)
-		router.POST("/patch", v1.ClusterPatch)
 		router.POST("/status", v1.ClusterStatus)
+
+		router.POST("/start", timeout.New(
+			timeout.WithTimeout(module.DefaultSystemdExecuteTimeout*time.Second)), v1.ClusterStart)
+		router.POST("/stop", timeout.New(
+			timeout.WithTimeout(module.DefaultSystemdExecuteTimeout*time.Second)), v1.ClusterStop)
+		router.POST("/scale-out", timeout.New(
+			timeout.WithTimeout(module.DefaultSystemdExecuteTimeout*time.Second)), v1.ClusterScaleOut)
+		router.POST("/scale-in", timeout.New(
+			timeout.WithTimeout(module.DefaultSystemdExecuteTimeout*time.Second)), v1.ClusterScaleIn)
+		router.POST("/reload", timeout.New(
+			timeout.WithTimeout(module.DefaultSystemdExecuteTimeout*time.Second)), v1.CLusterReload)
+		router.POST("/upgrade", timeout.New(
+			timeout.WithTimeout(module.DefaultSystemdExecuteTimeout*time.Second)), v1.ClusterUpgrade)
+		router.POST("/patch", timeout.New(
+			timeout.WithTimeout(module.DefaultSystemdExecuteTimeout*time.Second)), v1.ClusterPatch)
 	}
 	return router
 }

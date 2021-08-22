@@ -113,7 +113,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				CopyFile(
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "run_grafana.sh"),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_grafana.sh"),
-					dmgrutil.FileTypeComponent,
+					dmgrutil.FileTypeScript,
 					cluster.MachineHost,
 					false,
 					0)
@@ -137,7 +137,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				CopyFile(
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "run_prometheus.sh"),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_prometheus.sh"),
-					dmgrutil.FileTypeComponent,
+					dmgrutil.FileTypeScript,
 					cluster.MachineHost,
 					false,
 					0)
@@ -154,7 +154,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				CopyFile(
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("run_alertmanager-%s-%d.sh", cluster.MachineHost, cluster.ServicePort)),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_prometheus.sh"),
-					dmgrutil.FileTypeComponent,
+					dmgrutil.FileTypeScript,
 					cluster.MachineHost,
 					false,
 					0)
@@ -171,7 +171,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				CopyFile(
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("run_dm-master-%s-%d.sh", cluster.MachineHost, cluster.ServicePort)),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_dm-master.sh"),
-					dmgrutil.FileTypeComponent,
+					dmgrutil.FileTypeScript,
 					cluster.MachineHost,
 					false,
 					0)
@@ -188,7 +188,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				CopyFile(
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("run_dm-worker-%s-%d.sh", cluster.MachineHost, cluster.ServicePort)),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_dm-worker.sh"),
-					dmgrutil.FileTypeComponent,
+					dmgrutil.FileTypeScript,
 					cluster.MachineHost,
 					false,
 					0)

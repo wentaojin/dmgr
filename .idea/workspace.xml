@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/router/timeout/timeout.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/router/timeout/writer.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/template.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/copy_file.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/copy_file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/dmgrutil/constant.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/dmgrutil/constant.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/response/error.go" beforeDir="false" afterPath="$PROJECT_DIR$/response/error.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/apis.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/apis.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/v1/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/helper.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,17 +49,17 @@
     <property name="settings.editor.selected.configurable" value="watcher.settings" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\ctxt" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\task" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\executor" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api\dmpb" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\request" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api\dmpb" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Marvin\Projects\goModules\dmgr\router\timeout" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\ctxt" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\task" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\executor" />
     </key>
   </component>
   <component name="RunManager" selected="Go Build.go build github.com/wentaojin/dmgr/test">
