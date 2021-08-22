@@ -113,7 +113,7 @@ func systemctl(executor executor.Executor, service string, action string, timeou
 	}
 	if len(stderr) > 0 && !bytes.Contains(stderr, []byte("Created symlink ")) && !bytes.Contains(stderr, []byte("Removed symlink ")) {
 		dmgrutil.Logger.Error(string(stderr))
-		return fmt.Errorf("systemctl action [%s] service [%v] failed: %v", action, service, string(stderr))
+		return fmt.Errorf("host [%v] systemctl action [%s] service [%v] failed: %v", executor, action, service, string(stderr))
 	}
 	if len(stderr) > 0 && action == "stop" {
 		// ignore "unit not loaded" error, as this means the unit is not
@@ -130,9 +130,9 @@ func systemctl(executor executor.Executor, service string, action string, timeou
 }
 
 // toFailedActionError formats the errror msg for failed action
-func toFailedActionError(err error, action string, host, service, logDir string) error {
+func toFailedActionError(err error, action string, host, instance, service, logDir string) error {
 	return errors.Annotatef(err,
-		"failed to %s: %s %s, please check the instance's log(%s) for more detail.",
-		action, host, service, logDir,
+		"failed to %s: %s %s %s, please check the instance's log(%s) for more detail.",
+		action, host, instance, service, logDir,
 	)
 }

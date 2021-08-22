@@ -60,9 +60,9 @@ func GetClusterFile(topo []response.ClusterTopologyRespStruct) ClusterOperatorSt
 				IP:        cluster.MachineHost,
 				Port:      cluster.ServicePort,
 				PeerPort:  cluster.PeerPort,
-				DeployDir: cluster.DeployDir,
-				DataDir:   cluster.DataDir,
-				LogDir:    cluster.LogDir,
+				DeployDir: dmgrutil.AbsClusterDeployDir(cluster.DeployDir, cluster.InstanceName),
+				DataDir:   dmgrutil.AbsClusterDataDir(cluster.DeployDir, cluster.DataDir, cluster.InstanceName),
+				LogDir:    dmgrutil.AbsClusterLogDir(cluster.DeployDir, cluster.LogDir, cluster.InstanceName),
 			})
 		case dmgrutil.ComponentDmWorker:
 			cos.DmWorkerAddrs = append(cos.DmWorkerAddrs, fmt.Sprintf("%s:%v", cluster.MachineHost, cluster.ServicePort))
@@ -72,9 +72,9 @@ func GetClusterFile(topo []response.ClusterTopologyRespStruct) ClusterOperatorSt
 				IP:          cluster.MachineHost,
 				WebPort:     cluster.ServicePort,
 				ClusterPort: cluster.ClusterPort,
-				DeployDir:   cluster.DeployDir,
-				DataDir:     cluster.DataDir,
-				LogDir:      cluster.LogDir,
+				DeployDir:   dmgrutil.AbsClusterDeployDir(cluster.DeployDir, cluster.InstanceName),
+				DataDir:     dmgrutil.AbsClusterDataDir(cluster.DeployDir, cluster.DataDir, cluster.InstanceName),
+				LogDir:      dmgrutil.AbsClusterLogDir(cluster.DeployDir, cluster.LogDir, cluster.InstanceName),
 				TLSEnabled:  false,
 			})
 		}
@@ -101,7 +101,10 @@ func GenerateClusterFileWithStage(
 		switch strings.ToLower(t.ComponentName) {
 		case dmgrutil.ComponentDmMaster:
 			if clusterStage == ClusterDeployStage {
-				if err := script.NewDMMasterScript(t.InstanceName, t.MachineHost, t.DeployDir, t.DataDir, t.LogDir).
+				if err := script.NewDMMasterScript(t.InstanceName, t.MachineHost,
+					dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
+					dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
+					dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
 					WithPort(t.ServicePort).WithPeerPort(t.PeerPort).WithScheme("http").ConfigToFile(
 					filepath.Join(
 						dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
@@ -114,7 +117,10 @@ func GenerateClusterFileWithStage(
 				}
 			}
 			if clusterStage == ClusterScaleOutStage {
-				if err := script.NewDMMasterScaleScript(t.InstanceName, t.MachineHost, t.DeployDir, t.DataDir, t.LogDir).
+				if err := script.NewDMMasterScaleScript(t.InstanceName, t.MachineHost,
+					dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
+					dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
+					dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
 					WithPort(t.ServicePort).
 					AppendEndpoints(dmMasterScripts...).
 					WithPeerPort(t.PeerPort).
@@ -130,7 +136,8 @@ func GenerateClusterFileWithStage(
 					return err
 				}
 			}
-			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser, t.DeployDir).ConfigToFile(
+			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,
@@ -141,7 +148,9 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 		case dmgrutil.ComponentDmWorker:
-			if err := script.NewDMWorkerScript(t.InstanceName, t.MachineHost, t.DeployDir, t.LogDir).
+			if err := script.NewDMWorkerScript(t.InstanceName, t.MachineHost,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
+				dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
 				WithPort(t.ServicePort).AppendEndpoints(dmMasterScripts...).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
@@ -153,7 +162,8 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 
-			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser, t.DeployDir).ConfigToFile(
+			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,
@@ -172,7 +182,7 @@ func GenerateClusterFileWithStage(
 				grafanaPassword = t.AdminPassword
 			}
 
-			if err := config.NewGrafanaConfig(t.MachineHost, t.DeployDir).
+			if err := config.NewGrafanaConfig(t.MachineHost, dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).
 				WithPort(t.ServicePort).
 				WithUsername(grafanaUser).
 				WithPassword(grafanaPassword).
@@ -212,7 +222,7 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 
-			if err := script.NewGrafanaScript(t.ClusterName, t.DeployDir).ConfigToFile(
+			if err := script.NewGrafanaScript(t.ClusterName, dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,
@@ -224,7 +234,8 @@ func GenerateClusterFileWithStage(
 
 			}
 
-			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser, t.DeployDir).ConfigToFile(
+			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,
@@ -252,7 +263,11 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 
-			if err := script.NewPrometheusScript(t.MachineHost, t.DeployDir, t.DataDir, t.LogDir).
+			if err := script.NewPrometheusScript(t.MachineHost,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
+				dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
+				dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName),
+			).
 				WithPort(t.ServicePort).
 				WithRetention("").
 				ConfigToFile(
@@ -266,7 +281,8 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 
-			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser, t.DeployDir).ConfigToFile(
+			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,
@@ -277,7 +293,10 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 		case dmgrutil.ComponentAlertmanager:
-			if err := script.NewAlertManagerScript(t.MachineHost, t.DeployDir, t.DataDir, t.LogDir, false).
+			if err := script.NewAlertManagerScript(t.MachineHost,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
+				dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
+				dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName), false).
 				AppendEndpoints(alertmanagerScripts).WithClusterPort(t.ClusterPort).WithWebPort(t.ServicePort).
 				ConfigToFile(
 					filepath.Join(
@@ -290,7 +309,8 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 
-			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser, t.DeployDir).ConfigToFile(
+			if err := systemd.NewSystemdConfig(strings.ToLower(t.ComponentName), t.ClusterUser,
+				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,

@@ -44,14 +44,16 @@ func (s *StartInstance) Execute(ctx *ctxt.Context) error {
 		return ErrNoExecutor
 	}
 	if err := systemctl(exec, s.serviceName, module.OperatorStart, s.executeTimeout); err != nil {
-		return toFailedActionError(err, module.OperatorStart, s.instanceName, s.serviceName, s.logDir)
+		return toFailedActionError(err, module.OperatorStart, s.host, s.instanceName, s.serviceName, s.logDir)
 	}
 
 	// Check ready.
 	if err := PortStarted(exec, s.servicePort, s.executeTimeout); err != nil {
-		return toFailedActionError(err, module.OperatorStart, s.instanceName, s.serviceName, s.logDir)
+		return toFailedActionError(err, module.OperatorStart, s.host, s.instanceName, s.serviceName, s.logDir)
 	}
-	dmgrutil.Logger.Info("Start instance success", zap.String("instance", s.instanceName))
+	dmgrutil.Logger.Info("Start host instance success",
+		zap.String("host", s.host),
+		zap.String("instance", s.instanceName))
 	return nil
 }
 

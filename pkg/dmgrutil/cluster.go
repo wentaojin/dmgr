@@ -33,7 +33,7 @@ func AbsClusterGrafanaComponent(clusterPath, clusterName, clusterVersion, grafan
 }
 
 // 集群目录
-func AbsClusterDir(deployDir, instanceName string) string {
+func AbsClusterDeployDir(deployDir, instanceName string) string {
 	return filepath.Join(deployDir, instanceName)
 }
 
