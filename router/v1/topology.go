@@ -192,7 +192,7 @@ func ClusterStart(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
@@ -250,7 +250,7 @@ func ClusterStop(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).BuildTask()
@@ -381,7 +381,7 @@ func ClusterScaleOut(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).BuildTask()
@@ -480,7 +480,7 @@ func ClusterScaleIn(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
@@ -570,7 +570,7 @@ func CLusterReload(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
@@ -656,7 +656,7 @@ func ClusterUpgrade(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout)
@@ -808,7 +808,7 @@ func ClusterPatch(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout)
@@ -894,7 +894,7 @@ func ClusterDestroy(c *gin.Context) {
 						t.SshPort,
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
-						executor.DefaultExecuteTimeout).
+						module.DefaultSystemdExecuteTimeout).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).

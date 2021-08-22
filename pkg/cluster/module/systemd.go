@@ -32,7 +32,7 @@ const (
 	// systemd 服务命令执行耗时，单位：秒
 	DefaultSystemdExecuteTimeout = 100
 	// systemd 服务命令重试 sleep，单位：秒
-	DefaultSystemdSleepTime = 1
+	DefaultSystemdSleepTime = 10
 
 	// 集群操作
 	OperatorStart   = "start"
