@@ -3,7 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/helper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/dashboard.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/dashboard.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/datasource.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/datasource.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/grafana.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/grafana.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/prometheus.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/alertmanager.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/alertmanager.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/dm_master.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/dm_master.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/dm_worker.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/dm_worker.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/grafana.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/grafana.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/script/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/script/prometheus.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/systemd/systemd.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/systemd/systemd.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,11 +149,11 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="142" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1627012179638" />
-    <state x="243" y="24" width="794" height="632" key="find.popup" timestamp="1629607758888">
+    <state x="243" y="24" width="794" height="632" key="find.popup" timestamp="1629620930358">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="2406" y="49" width="1588" height="1302" key="find.popup/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1628674733477" />
-    <state x="243" y="24" width="794" height="632" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1629607758888" />
+    <state x="243" y="24" width="794" height="632" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1629620930358" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1628940155433">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

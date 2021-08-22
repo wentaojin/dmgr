@@ -45,7 +45,7 @@ func (c *DatasourceConfig) WithPort(port uint64) *DatasourceConfig {
 
 // ConfigToFile write config content to specific path
 func (c *DatasourceConfig) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("datasource").Parse(tmplFile)
+	tmpl, err := template.New("datasource").ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("DatasourceConfig template new failed: %v", err)
 	}

@@ -74,7 +74,7 @@ func (c *DMMasterScript) AppendEndpoints(ends ...*DMMasterScript) *DMMasterScrip
 
 // ConfigToFile write config content to specific path
 func (c *DMMasterScript) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("dm-master").Parse(tmplFile)
+	tmpl, err := template.New("dm-master").ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("DMMasterScript template new failed: %v", err)
 	}
@@ -126,7 +126,7 @@ func (c *DMMasterScaleScript) AppendEndpoints(ends ...*DMMasterScript) *DMMaster
 
 // ConfigToFile write config content to specific path
 func (c *DMMasterScaleScript) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("dm-master").Parse(tmplFile)
+	tmpl, err := template.New("dm-master").ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("DMMasterScript template new failed: %v", err)
 	}

@@ -56,7 +56,7 @@ func (c *DMWorkerScript) AppendEndpoints(ends ...*DMMasterScript) *DMWorkerScrip
 
 // ConfigToFile write config content to specific path
 func (c *DMWorkerScript) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("dm-worker").Parse(tmplFile)
+	tmpl, err := template.New("dm-worker").ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("DMWorkerScript template new failed: %v", err)
 	}

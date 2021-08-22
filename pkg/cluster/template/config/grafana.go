@@ -80,7 +80,7 @@ func (c *GrafanaConfig) WithDomain(domain string) *GrafanaConfig {
 
 // ConfigToFile write config content to specific path
 func (c *GrafanaConfig) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("grafana").Parse(tmplFile)
+	tmpl, err := template.New("grafana").ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("GrafanaConfig template new failed: %v", err)
 	}

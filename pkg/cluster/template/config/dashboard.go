@@ -37,7 +37,7 @@ func NewDashboardConfig(cluster, deployDir string) *DashboardConfig {
 
 // ConfigToFile write config content to specific path
 func (c *DashboardConfig) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("dashboard").Parse(tmplFile)
+	tmpl, err := template.New("dashboard").ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("DashboardConfig template new failed: %v", err)
 	}

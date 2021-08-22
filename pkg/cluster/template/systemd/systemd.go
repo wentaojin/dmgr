@@ -55,7 +55,7 @@ func (c *Config) WithRestart(action string) *Config {
 
 // ConfigToFile write config content to specific path
 func (c *Config) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("systemd").Parse(tmplFile)
+	tmpl, err := template.New("systemd").ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("SystemdConfig template new failed: %v", err)
 	}
