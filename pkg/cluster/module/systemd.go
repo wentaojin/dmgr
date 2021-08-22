@@ -31,6 +31,9 @@ const (
 
 	// systemd 服务命令执行耗时，单位：秒
 	DefaultSystemdExecuteTimeout = 100
+	// systemd 服务命令重试 sleep，单位：秒
+	DefaultSystemdSleepTime = 1
+
 	// 集群操作
 	OperatorStart   = "start"
 	OperatorStop    = "stop"
@@ -95,7 +98,7 @@ func NewSystemdModule(config SystemdModuleConfig) *SystemdModule {
 	// the default TimeoutStopSec of systemd is 90s, after which it sends a SIGKILL
 	// to remaining processes, set the default value slightly larger than it
 	if config.ExecuteTimeout == 0 {
-		mod.executeTimeout = time.Second * DefaultSystemdExecuteTimeout
+		mod.executeTimeout = time.Duration(DefaultSystemdExecuteTimeout) * time.Second
 	}
 
 	return mod

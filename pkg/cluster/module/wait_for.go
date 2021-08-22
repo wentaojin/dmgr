@@ -48,10 +48,10 @@ type WaitFor struct {
 // NewWaitFor create a WaitFor instance.
 func NewWaitFor(c WaitForConfig) *WaitFor {
 	if c.Sleep == 0 {
-		c.Sleep = time.Second
+		c.Sleep = time.Duration(DefaultSystemdSleepTime) * time.Second
 	}
 	if c.Timeout == 0 {
-		c.Timeout = time.Second * 60
+		c.Timeout = time.Duration(DefaultSystemdExecuteTimeout) * time.Second
 	}
 	if c.State == "" {
 		c.State = "started"

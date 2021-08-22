@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/destroy_instance.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/destroy_instance.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/v1/topology.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/topology.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/module/systemd.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/module/systemd.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/module/wait_for.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/module/wait_for.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/helper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/systemd/systemd.service.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/systemd/systemd.service.tmpl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

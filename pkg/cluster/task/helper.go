@@ -39,7 +39,7 @@ func PortStarted(e executor.Executor, port uint64, timeout uint64) error {
 	c := module.WaitForConfig{
 		Port:    int(port),
 		State:   "started",
-		Timeout: time.Second * time.Duration(timeout),
+		Timeout: time.Duration(timeout) * time.Second,
 	}
 	w := module.NewWaitFor(c)
 	return w.Execute(e)
@@ -50,7 +50,7 @@ func PortStopped(e executor.Executor, port uint64, timeout uint64) error {
 	c := module.WaitForConfig{
 		Port:    int(port),
 		State:   "stopped",
-		Timeout: time.Second * time.Duration(timeout),
+		Timeout: time.Duration(timeout) * time.Second,
 	}
 	w := module.NewWaitFor(c)
 	return w.Execute(e)
@@ -103,7 +103,7 @@ func systemctl(executor executor.Executor, service string, action string, timeou
 		Unit:           service,
 		ReloadDaemon:   true,
 		Action:         action,
-		ExecuteTimeout: time.Second * time.Duration(timeout),
+		ExecuteTimeout: time.Duration(timeout) * time.Second,
 	}
 	systemd := module.NewSystemdModule(c)
 	stdout, stderr, err := systemd.Execute(executor)
