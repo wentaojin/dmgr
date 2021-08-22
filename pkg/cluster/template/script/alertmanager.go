@@ -66,7 +66,7 @@ func (c *AlertManagerScript) AppendEndpoints(ends []*AlertManagerScript) *AlertM
 
 // ConfigToFile write config content to specific path
 func (c *AlertManagerScript) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("alertmanager").ParseFiles(tmplFile)
+	tmpl, err := template.ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("AlertManagerScript template new failed: %v", err)
 	}

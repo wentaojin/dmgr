@@ -37,7 +37,7 @@ func NewGrafanaScript(cluster, deployDir string) *GrafanaScript {
 
 // ConfigToFile write config content to specific path
 func (c *GrafanaScript) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("grafana").ParseFiles(tmplFile)
+	tmpl, err := template.ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("GrafanaScript template new failed: %v", err)
 	}

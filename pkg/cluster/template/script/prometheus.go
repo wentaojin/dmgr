@@ -62,7 +62,7 @@ func (c *PrometheusScript) WithRetention(retention string) *PrometheusScript {
 
 // ConfigToFile write config content to specific path
 func (c *PrometheusScript) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("prometheus").ParseFiles(tmplFile)
+	tmpl, err := template.ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("PrometheusScript template new failed: %v", err)
 	}

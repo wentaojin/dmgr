@@ -77,7 +77,7 @@ func (c *PrometheusConfig) SetRemoteConfig(cfg string) *PrometheusConfig {
 
 // ConfigToFile write config content to specific path
 func (c *PrometheusConfig) ConfigToFile(tmplFile, outFile string) error {
-	tmpl, err := template.New("prometheus").ParseFiles(tmplFile)
+	tmpl, err := template.ParseFiles(tmplFile)
 	if err != nil {
 		return fmt.Errorf("PrometheusConfig template new failed: %v", err)
 	}
