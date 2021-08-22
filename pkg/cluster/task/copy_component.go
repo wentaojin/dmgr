@@ -49,9 +49,10 @@ func (c *CopyComponent) Execute(ctx *ctxt.Context) error {
 
 	if strings.ToLower(c.componentName) == dmgrutil.ComponentGrafana {
 		baseDir := strings.Split(c.dstPath, "/")
-		cmd := fmt.Sprintf(`tar --no-same-owner -zxf %s -C %s && rm %s`,
+
+		cmd := fmt.Sprintf(`tar --no-same-owner -zxvf %s -C %s && rm %s`,
 			c.dstPath,
-			baseDir[len(baseDir)-1],
+			strings.Join(baseDir[:len(baseDir)-1], "/"),
 			c.dstPath)
 
 		_, stderr, err := exec.Execute(cmd, false)
@@ -69,6 +70,6 @@ func (c *CopyComponent) Rollback(ctx *ctxt.Context) error {
 
 // String implements the fmt.Stringer interface
 func (c *CopyComponent) String() string {
-	return fmt.Sprintf("CopyComponent: component=%s, version=%s, remote=%s:%s",
-		c.componentName, c.clusterVersion, c.host, c.dstPath)
+	return fmt.Sprintf("CopyComponent: component=%s, version=%s, src=%s, remote=%s:%s",
+		c.componentName, c.clusterVersion, c.srcPath, c.host, c.dstPath)
 }
