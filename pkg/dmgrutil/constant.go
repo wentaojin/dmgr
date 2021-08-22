@@ -90,6 +90,10 @@ const (
 
 	// 密钥生成并发
 	RsaConcurrency = 10
+
+	// 用于 copy file 类型区分
+	FileTypeComponent = "component"
+	FileTypeSystemd   = "systemd"
 )
 
 var (

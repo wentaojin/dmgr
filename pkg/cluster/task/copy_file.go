@@ -18,6 +18,8 @@ package task
 import (
 	"fmt"
 
+	"github.com/wentaojin/dmgr/pkg/dmgrutil"
+
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
 
 	"github.com/pingcap/errors"
@@ -27,6 +29,7 @@ import (
 type CopyFile struct {
 	src        string
 	dst        string
+	fileType   string
 	remoteHost string
 	download   bool
 	limit      int
@@ -39,11 +42,26 @@ func (c *CopyFile) Execute(ctx *ctxt.Context) error {
 		return ErrNoExecutor
 	}
 
+	if c.fileType == dmgrutil.FileTypeSystemd {
+		err := e.Transfer(c.src, c.dst, c.download, c.limit)
+		if err != nil {
+			return errors.Annotate(err, "failed to transfer file")
+		}
+
+		cmd := fmt.Sprintf(`cp %s %s && rm %s`,
+			c.dst,
+			dmgrutil.AbsClusterSystemdDir(),
+			c.dst)
+		_, stderr, err := e.Execute(cmd, true)
+		if err != nil || len(stderr) != 0 {
+			return errors.Annotatef(err, "stderr: %s", string(stderr))
+		}
+		return nil
+	}
 	err := e.Transfer(c.src, c.dst, c.download, c.limit)
 	if err != nil {
 		return errors.Annotate(err, "failed to transfer file")
 	}
-
 	return nil
 }
 

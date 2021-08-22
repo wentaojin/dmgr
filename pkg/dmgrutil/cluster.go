@@ -58,6 +58,10 @@ func AbsClusterDatasourceDir(deployDir, instanceName string) string {
 }
 
 // 集群部署 Datasource 目录
+func AbsClusterTempSystemdDir(deployDir string) string {
+	return filepath.Join(deployDir)
+}
+
 func AbsClusterSystemdDir() string {
 	return filepath.Join(DirSystemd)
 }
@@ -76,8 +80,11 @@ func AbsClusterDataDir(deployDir, dataDir, instanceName string) string {
 }
 
 // 集群部署 Log 目录
-func AbsClusterLogDir(logDir, instanceName string) string {
-	return filepath.Join(logDir, instanceName, DirLog)
+func AbsClusterLogDir(deployDir, logDir, instanceName string) string {
+	if deployDir == logDir {
+		return filepath.Join(logDir, instanceName, DirLog)
+	}
+	return filepath.Join(logDir, instanceName)
 }
 
 // 集群模板文件缓存 Cache 目录
