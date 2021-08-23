@@ -188,7 +188,7 @@ func GenerateClusterFileWithStage(
 			if adminPassword == "" {
 				grafanaPassword = t.AdminPassword
 			} else {
-				grafanaUser = adminPassword
+				grafanaPassword = adminPassword
 			}
 
 			if err := config.NewGrafanaConfig(t.MachineHost, dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName), dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName), dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
