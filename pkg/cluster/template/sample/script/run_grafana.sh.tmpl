@@ -9,5 +9,5 @@ cd "${DEPLOY_DIR}" || exit 1
 LANG=en_US.UTF-8 \
 
 exec bin/grafana-server \
---homepath="{{.DeployDir}}/bin" \
+--homepath="{{.DeployDir}}/homepath" \
 --config="{{.DeployDir}}/conf/grafana.ini"

@@ -95,7 +95,6 @@ func GenerateClusterFileWithStage(
 	grafanaAddr string,
 	clusterStage string,
 	adminUser, adminPassword string) error {
-	var grafanaUser, grafanaPassword string
 
 	for _, t := range topo {
 		switch strings.ToLower(t.ComponentName) {
@@ -178,15 +177,21 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 		case dmgrutil.ComponentGrafana:
+			var grafanaUser, grafanaPassword string
+
 			// 用于集群扩容阶段 -》 扩容阶段如果未指定 grafana 用户密码，则使用数据库中已有的 grafana 用户密码
 			if adminUser == "" {
 				grafanaUser = t.AdminUser
+			} else {
+				grafanaUser = adminUser
 			}
 			if adminPassword == "" {
 				grafanaPassword = t.AdminPassword
+			} else {
+				grafanaUser = adminPassword
 			}
 
-			if err := config.NewGrafanaConfig(t.MachineHost, dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).
+			if err := config.NewGrafanaConfig(t.MachineHost, dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName), dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
 				WithPort(t.ServicePort).
 				WithUsername(grafanaUser).
 				WithPassword(grafanaPassword).

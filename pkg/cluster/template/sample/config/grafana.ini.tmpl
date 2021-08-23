@@ -13,11 +13,11 @@
 [paths]
 # Path to where grafana can store temp files, sessions, and the sqlite3 db (if that is used)
 #
-data = {{.DeployDir}}/data
+data = {{.DataDir}}
 #
 # Directory where grafana can store logs
 #
-logs = {{.DeployDir}}/log
+logs = {{.LogDir}}
 #
 # Directory where grafana will automatically scan and look for plugins
 #
@@ -40,9 +40,9 @@ http_port = {{.Port}}
 
 # The public facing domain name used to access grafana from a browser
 {{- if .Domain}}
-    domain = {{.Domain}}
+domain = {{.Domain}}
 {{- else}}
-    domain = {{.IP}}
+domain = {{.IP}}
 {{- end}}
 
 # Redirect to correct domain if host header does not match domain
@@ -51,8 +51,8 @@ http_port = {{.Port}}
 
 # The full public facing url
 {{- if .RootURL}}
-    root_url = {{.RootURL}}
-    server_from_sub_path = true
+root_url = {{.RootURL}}
+server_from_sub_path = true
 {{- end}}
 
 # Log web requests
@@ -174,7 +174,7 @@ admin_password = {{.Password}}
 #################################### Anonymous Auth ##########################
 [auth.anonymous]
 {{- if .AnonymousEnable}}
-    enabled = true
+enabled = true
 {{- end}}
 
 # specify organization name that should be used for unauthenticated users

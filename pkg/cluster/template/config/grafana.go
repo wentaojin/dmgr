@@ -23,7 +23,8 @@ import (
 
 // GrafanaConfig represent the data to generate Grafana config
 type GrafanaConfig struct {
-	DeployDir       string
+	DataDir         string
+	LogDir          string
 	IP              string
 	Port            uint64
 	Username        string // admin_user
@@ -34,11 +35,12 @@ type GrafanaConfig struct {
 }
 
 // NewGrafanaConfig returns a GrafanaConfig
-func NewGrafanaConfig(ip, deployDir string) *GrafanaConfig {
+func NewGrafanaConfig(ip, dataDir, LogDir string) *GrafanaConfig {
 	return &GrafanaConfig{
-		DeployDir: deployDir,
-		IP:        ip,
-		Port:      3000,
+		DataDir: dataDir,
+		LogDir:  LogDir,
+		IP:      ip,
+		Port:    3000,
 	}
 }
 

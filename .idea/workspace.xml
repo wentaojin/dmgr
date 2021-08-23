@@ -3,19 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/config/dashboard.yaml.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/config/dashboard.yml.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/config/datasource.yaml.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/config/datasource.yml.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/config/prometheus.yaml.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/config/prometheus.yml.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_alertmanager.sh.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_alertmanager.sh.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_dm-master-scale.sh.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_dm-master-scale.sh.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_dm-master.sh.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_dm-master.sh.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_dm-worker.sh.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_dm-worker.sh.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/config/grafana.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/config/grafana.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/config/grafana.ini.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/config/grafana.ini.tmpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_grafana.sh.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_grafana.sh.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_prometheus.sh.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/script/run_prometheus.sh.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/systemd/systemd.service.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/systemd/systemd.service.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/apis.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/apis.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/timeout/timeout.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/timeout/writer.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/template.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
