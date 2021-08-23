@@ -191,7 +191,7 @@ func GenerateClusterFileWithStage(
 				grafanaUser = adminPassword
 			}
 
-			if err := config.NewGrafanaConfig(t.MachineHost, dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName), dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
+			if err := config.NewGrafanaConfig(t.MachineHost, dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName), dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName), dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
 				WithPort(t.ServicePort).
 				WithUsername(grafanaUser).
 				WithPassword(grafanaPassword).
