@@ -17,6 +17,7 @@ package task
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
@@ -28,6 +29,7 @@ import (
 
 // CopyComponent 用于复制一个组件特定版本相关的所有文件到 path 的目标目录
 type CopyComponent struct {
+	clusterName    string
 	componentName  string
 	clusterVersion string
 	host           string
@@ -48,17 +50,39 @@ func (c *CopyComponent) Execute(ctx *ctxt.Context) error {
 	}
 
 	if strings.ToLower(c.componentName) == dmgrutil.ComponentGrafana {
-		baseDir := strings.Split(c.dstPath, "/")
+		baseDirArr := strings.Split(c.dstPath, "/")
+		baseDir := strings.Join(baseDirArr[:len(baseDirArr)-1], "/")
 
+		// 解压并清理压缩包
 		cmd := fmt.Sprintf(`tar --no-same-owner -zxvf %s -C %s && rm %s`,
 			c.dstPath,
-			strings.Join(baseDir[:len(baseDir)-1], "/"),
+			baseDir,
 			c.dstPath)
 
 		_, stderr, err := exec.Execute(cmd, false)
 		if err != nil || len(stderr) != 0 {
 			return errors.Annotatef(err, "stderr: %s", string(stderr))
 		}
+
+		// dashboards json 文件初始化
+		// dm_instance.json、dm.json
+		// Deal with the cluster name
+
+		for _, cmd := range []string{
+			`find %s -type f -exec sed -i "s/\${DS_.*-CLUSTER}/%s/g" {} \;`,
+			`find %s -type f -exec sed -i "s/DS_.*-CLUSTER/%s/g" {} \;`,
+			`find %s -type f -exec sed -i "s/\${DS_LIGHTNING}/%s/g" {} \;`,
+			`find %s -type f -exec sed -i "s/DS_LIGHTNING/%s/g" {} \;`,
+			`find %s -type f -exec sed -i "s/test-cluster/%s/g" {} \;`,
+			`find %s -type f -exec sed -i "s/Test-Cluster/%s/g" {} \;`,
+		} {
+			cmd := fmt.Sprintf(cmd, filepath.Join(baseDir, "dashboards"), c.clusterName)
+			_, stderr, err := exec.Execute(cmd, false)
+			if err != nil || len(stderr) > 0 {
+				return errors.Annotatef(err, "stderr: %s", string(stderr))
+			}
+		}
+		return nil
 	}
 
 	if strings.ToLower(c.componentName) != dmgrutil.ComponentGrafana {

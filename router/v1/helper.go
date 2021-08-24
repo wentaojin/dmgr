@@ -153,7 +153,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				0).
 				CopyFile(
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("run_alertmanager-%s-%d.sh", cluster.MachineHost, cluster.ServicePort)),
-					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_prometheus.sh"),
+					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_alertmanager.sh"),
 					dmgrutil.FileTypeScript,
 					cluster.MachineHost,
 					false,

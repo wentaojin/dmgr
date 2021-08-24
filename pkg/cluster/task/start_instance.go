@@ -53,6 +53,7 @@ func (s *StartInstance) Execute(ctx *ctxt.Context) error {
 	}
 	dmgrutil.Logger.Info("Start host instance success",
 		zap.String("host", s.host),
+		zap.Uint64("service-port", s.servicePort),
 		zap.String("instance", s.instanceName))
 	return nil
 }

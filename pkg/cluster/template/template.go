@@ -220,7 +220,7 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 
-			if err := config.NewDashboardConfig(t.ClusterName, t.DeployDir).ConfigToFile(
+			if err := config.NewDashboardConfig(t.ClusterName, dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName)).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,
