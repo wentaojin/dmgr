@@ -128,7 +128,17 @@ func ClusterDeploy(c *gin.Context) {
 	// 生成以及 Copy 组件配置文件、运行脚本
 	if response.FailWithMsg(c,
 		template.GenerateClusterFileWithStage(
-			clusterTopo, cos.DmMasterScripts, cos.AlertmanagerScripts, cos.AlertmanagerAddrs, cos.DmMasterAddrs, cos.DmWorkerAddrs, cos.GrafanaAddr, template.ClusterDeployStage, topo.AdminUser, topo.AdminPassword)) {
+			clusterTopo,
+			cos.DmMasterScripts,
+			cos.AlertmanagerScripts,
+			cos.AlertmanagerAddrs,
+			cos.DmMasterAddrs,
+			cos.DmWorkerAddrs,
+			cos.GrafanaAddr,
+			cos.PrometheusAddr,
+			template.ClusterDeployStage,
+			topo.AdminUser,
+			topo.AdminPassword)) {
 		return
 	}
 	copyFileTasks := CopyClusterFile(clusterTopo)
@@ -347,7 +357,11 @@ func ClusterScaleOut(c *gin.Context) {
 		cos.AlertmanagerAddrs,
 		cos.DmMasterAddrs,
 		cos.DmWorkerAddrs,
-		cos.GrafanaAddr, template.ClusterScaleOutStage, topo.AdminUser, topo.AdminPassword)) {
+		cos.GrafanaAddr,
+		cos.PrometheusAddr,
+		template.ClusterScaleOutStage,
+		topo.AdminUser,
+		topo.AdminPassword)) {
 		return
 	}
 	copyFileTasks := CopyClusterFile(clusterTopo)
@@ -545,7 +559,17 @@ func CLusterReload(c *gin.Context) {
 	// 生成以及 Copy 组件配置文件、运行脚本
 	if response.FailWithMsg(c,
 		template.GenerateClusterFileWithStage(
-			clusterTopos, cos.DmMasterScripts, cos.AlertmanagerScripts, cos.AlertmanagerAddrs, cos.DmMasterAddrs, cos.DmWorkerAddrs, cos.GrafanaAddr, template.ClusterDeployStage, clusterMeta.AdminUser, clusterMeta.AdminPassword)) {
+			clusterTopos,
+			cos.DmMasterScripts,
+			cos.AlertmanagerScripts,
+			cos.AlertmanagerAddrs,
+			cos.DmMasterAddrs,
+			cos.DmWorkerAddrs,
+			cos.GrafanaAddr,
+			cos.PrometheusAddr,
+			template.ClusterDeployStage,
+			clusterMeta.AdminUser,
+			clusterMeta.AdminPassword)) {
 		return
 	}
 	copyFileTasks := CopyClusterFile(clusterTopos)
@@ -631,7 +655,17 @@ func ClusterUpgrade(c *gin.Context) {
 	// 生成以及 Copy 组件配置文件、运行脚本
 	if response.FailWithMsg(c,
 		template.GenerateClusterFileWithStage(
-			clusterTopos, cos.DmMasterScripts, cos.AlertmanagerScripts, cos.AlertmanagerAddrs, cos.DmMasterAddrs, cos.DmWorkerAddrs, cos.GrafanaAddr, template.ClusterDeployStage, clusterMeta.AdminUser, clusterMeta.AdminPassword)) {
+			clusterTopos,
+			cos.DmMasterScripts,
+			cos.AlertmanagerScripts,
+			cos.AlertmanagerAddrs,
+			cos.DmMasterAddrs,
+			cos.DmWorkerAddrs,
+			cos.GrafanaAddr,
+			cos.PrometheusAddr,
+			template.ClusterDeployStage,
+			clusterMeta.AdminUser,
+			clusterMeta.AdminPassword)) {
 		return
 	}
 	copyFileTasks := CopyClusterFile(clusterTopos)

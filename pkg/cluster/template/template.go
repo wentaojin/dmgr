@@ -43,6 +43,7 @@ type ClusterOperatorStage struct {
 	DmMasterAddrs       []string
 	DmWorkerAddrs       []string
 	GrafanaAddr         string
+	PrometheusAddr      string
 }
 
 // 获取生成集群部署配置文件、运行脚本等文件信息
@@ -77,6 +78,8 @@ func GetClusterFile(topo []response.ClusterTopologyRespStruct) ClusterOperatorSt
 				LogDir:      dmgrutil.AbsClusterLogDir(cluster.DeployDir, cluster.LogDir, cluster.InstanceName),
 				TLSEnabled:  false,
 			})
+		case dmgrutil.ComponentPrometheus:
+			cos.PrometheusAddr = fmt.Sprintf("%s:%v", cluster.MachineHost, cluster.ServicePort)
 		}
 
 	}
@@ -93,6 +96,7 @@ func GenerateClusterFileWithStage(
 	dmMasterAddrs []string,
 	dmWorkerAddrs []string,
 	grafanaAddr string,
+	prometheusAddr string,
 	clusterStage string,
 	adminUser, adminPassword string) error {
 
@@ -179,6 +183,8 @@ func GenerateClusterFileWithStage(
 		case dmgrutil.ComponentGrafana:
 			var grafanaUser, grafanaPassword string
 
+			promtheusAddrs := strings.Split(prometheusAddr, ":")
+
 			// 用于集群扩容阶段 -》 扩容阶段如果未指定 grafana 用户密码，则使用数据库中已有的 grafana 用户密码
 			if adminUser == "" {
 				grafanaUser = t.AdminUser
@@ -209,7 +215,7 @@ func GenerateClusterFileWithStage(
 				return err
 			}
 
-			if err := config.NewDatasourceConfig(t.ClusterName, t.MachineHost).WithPort(t.ServicePort).ConfigToFile(
+			if err := config.NewDatasourceConfig(t.ClusterName, promtheusAddrs[0]).WithPort(promtheusAddrs[1]).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,

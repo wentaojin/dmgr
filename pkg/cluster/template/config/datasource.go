@@ -25,7 +25,7 @@ import (
 type DatasourceConfig struct {
 	ClusterName string
 	IP          string
-	Port        uint64
+	Port        string
 }
 
 // NewDatasourceConfig returns a DatasourceConfig
@@ -33,12 +33,12 @@ func NewDatasourceConfig(cluster, ip string) *DatasourceConfig {
 	return &DatasourceConfig{
 		ClusterName: cluster,
 		IP:          ip,
-		Port:        9090,
+		Port:        "9090",
 	}
 }
 
 // WithPort set Port field of DatasourceConfig
-func (c *DatasourceConfig) WithPort(port uint64) *DatasourceConfig {
+func (c *DatasourceConfig) WithPort(port string) *DatasourceConfig {
 	c.Port = port
 	return c
 }
