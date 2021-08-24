@@ -143,11 +143,12 @@ func (b *Builder) EnableInstance(
 }
 
 // CopyComponent 将 CopyComponent 任务附加到当前任务集合
-func (b *Builder) CopyComponent(componentName string,
+func (b *Builder) CopyComponent(clusterName, componentName string,
 	clusterVersion string,
 	srcPath, dstHost, dstPath string,
 ) *Builder {
 	b.tasks = append(b.tasks, &CopyComponent{
+		clusterName:    clusterName,
 		componentName:  componentName,
 		clusterVersion: clusterVersion,
 		srcPath:        srcPath,

@@ -664,6 +664,7 @@ func ClusterUpgrade(c *gin.Context) {
 				switch strings.ToLower(t.ComponentName) {
 				case dmgrutil.ComponentGrafana:
 					upgradeCompTask = upgradeCompTask.CopyComponent(
+						t.ClusterName,
 						t.ComponentName,
 						req.ClusterVersion,
 						dmgrutil.AbsClusterGrafanaComponent(t.ClusterPath, t.ClusterName, req.ClusterVersion, dmgrutil.ComponentGrafanaTarPKG),
@@ -672,6 +673,7 @@ func ClusterUpgrade(c *gin.Context) {
 					)
 				default:
 					upgradeCompTask = upgradeCompTask.CopyComponent(
+						t.ClusterName,
 						t.ComponentName,
 						req.ClusterVersion,
 						filepath.Join(clusterUntarDir, dmgrutil.DirBin, strings.ToLower(t.ComponentName)),
@@ -816,6 +818,7 @@ func ClusterPatch(c *gin.Context) {
 				switch strings.ToLower(t.ComponentName) {
 				case dmgrutil.ComponentGrafana:
 					patchCompTask = patchCompTask.CopyComponent(
+						t.ClusterName,
 						t.ComponentName,
 						"patched",
 						filepath.Join(pkgDir, dmgrutil.ComponentGrafanaTarPKG),
@@ -824,6 +827,7 @@ func ClusterPatch(c *gin.Context) {
 					)
 				default:
 					patchCompTask = patchCompTask.CopyComponent(
+						t.ClusterName,
 						t.ComponentName,
 						"patched",
 						filepath.Join(pkgDir, t.ComponentName),

@@ -26,7 +26,8 @@ alerting:
 scrape_configs:
 {{- if .DMMasterAddrs}}
     - job_name: "dm_master"
-      honor_labels: true # don't overwrite job & instance labels
+      # don't overwrite job & instance labels
+      honor_labels: true
       static_configs:
       - targets:
     {{- range .DMMasterAddrs}}
@@ -36,7 +37,8 @@ scrape_configs:
 
 {{- if .DMWorkerAddrs}}
     - job_name: "dm_worker"
-      honor_labels: true # don't overwrite job & instance labels
+      # don't overwrite job & instance labels
+      honor_labels: true
       static_configs:
       - targets:
     {{- range .DMWorkerAddrs}}

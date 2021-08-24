@@ -3,13 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/copy_component.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/copy_component.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/start_instance.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/start_instance.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/config/dashboard.yml.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/config/dashboard.yml.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/config/datasource.yml.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/config/datasource.yml.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/builder.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/builder.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/template/sample/config/prometheus.yml.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/sample/config/prometheus.yml.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/template/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/template/template.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/v1/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/helper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/v1/topology.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/topology.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
