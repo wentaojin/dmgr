@@ -28,6 +28,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/mitchellh/go-homedir"
+
 	"google.golang.org/grpc/codes"
 
 	expect "github.com/google/goexpect"
@@ -132,7 +134,12 @@ func GinRecovery(logger *zap.Logger, stack bool) gin.HandlerFunc {
 
 // 测试 SSH 认证连通性
 func (m *MachineRespStruct) SshAuthTest(edPrivatePath string) (bool, error) {
-	key, err := ioutil.ReadFile(edPrivatePath)
+	expandedPath, err := homedir.Expand(edPrivatePath)
+	if err != nil {
+		return false, err
+	}
+
+	key, err := ioutil.ReadFile(expandedPath)
 	if err != nil {
 		return false, fmt.Errorf("unable to read private key: %v", err)
 	}
