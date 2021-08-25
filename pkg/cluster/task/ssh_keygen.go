@@ -47,6 +47,8 @@ func (s *SSHKeyGen) Execute(ctx *ctxt.Context) error {
 
 	// Skip ssh key generate
 	if dmgrutil.IsExist(edHomePath) && dmgrutil.IsExist(edHomePubPath) {
+		ctx.PrivateKeyPath = edHomePath
+		ctx.PublicKeyPath = edHomePubPath
 		return nil
 	}
 
@@ -85,5 +87,5 @@ func (s *SSHKeyGen) Rollback(ctx *ctxt.Context) error {
 
 // String implements the fmt.Stringer interface
 func (s *SSHKeyGen) String() string {
-	return fmt.Sprintf("SSHKeyGen: path=%s", s.homeSshDir)
+	return fmt.Sprintf("SSHKeyGen: homePath=%s", s.homeSshDir)
 }

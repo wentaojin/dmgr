@@ -76,9 +76,6 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 					return err
 				}
 			}
-			ctx.PrivateKeyPath = edSshPath
-			ctx.PublicKeyPath = edSshPubPath
-
 			return nil
 		})
 	}
