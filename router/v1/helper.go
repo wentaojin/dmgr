@@ -80,6 +80,11 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 	for _, cluster := range clusterTopo {
 		copyFileTask := task.NewBuilder().
+			SSHKeySet(
+				filepath.Join(
+					dmgrutil.AbsClusterSSHDir(cluster.ClusterPath, cluster.ClusterName), "id_ed25519"),
+				filepath.Join(
+					dmgrutil.AbsClusterSSHDir(cluster.ClusterPath, cluster.ClusterName), "id_ed25519.pub")).
 			UserSSH(
 				cluster.MachineHost,
 				cluster.SshPort,
@@ -245,6 +250,11 @@ func EnvClusterComponentInit(clusterTopo []response.ClusterTopologyRespStruct,
 	// 集群环境初始化以及组件名 Copy
 	for _, cluster := range clusterTopo {
 		copyCompTask := task.NewBuilder().
+			SSHKeySet(
+				filepath.Join(
+					dmgrutil.AbsClusterSSHDir(cluster.ClusterPath, cluster.ClusterName), "id_ed25519"),
+				filepath.Join(
+					dmgrutil.AbsClusterSSHDir(cluster.ClusterPath, cluster.ClusterName), "id_ed25519.pub")).
 			UserSSH(
 				cluster.MachineHost,
 				cluster.SshPort,
