@@ -74,7 +74,7 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 	}
 
 	// clusterUser Authorize(PublicKeyPath)
-	cmd := `su - ` + e.clusterUser + ` -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh'`
+	cmd := fmt.Sprintf(`su - %s -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh`, e.clusterUser)
 	_, stderr, err := exec.Execute(cmd, true)
 	if err != nil || len(stderr) > 0 {
 		return wrapError(errEnvInitSubCommandFailed.
@@ -86,7 +86,9 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 	cmd = fmt.Sprintf(`su - %[1]s -c 'grep %[2]s %[3]s || echo %[4]s >> %[3]s && chmod 600 %[3]s'`,
 		e.clusterUser, pk[1], sshAuthorizedKeys, string(pubKey))
 	_, stderr, err = exec.Execute(cmd, true)
-	if err != nil || len(stderr) > 0 {
+
+	// 忽略 sshAuthorizedKeys 不存在的错误
+	if err != nil {
 		return wrapError(errEnvInitSubCommandFailed.
 			Wrap(fmt.Errorf("error: %v, stderr: %v", err, string(stderr)), "Failed to write public keys to '%s' for user '%s'", sshAuthorizedKeys, e.clusterUser))
 	}
