@@ -90,7 +90,7 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 		return wrapError(errEnvInitSubCommandFailed.
 			Wrap(fmt.Errorf("error: %v, stderr: %v", err, string(stderr)), "Failed to grep '~/.ssh' directory for user '%s'", e.clusterUser))
 	}
-	if string(stdout) == "0" {
+	if strings.Replace(string(stdout), "\n", "", -1) == "0" {
 		cmd = fmt.Sprintf(`su - %[1]s -c 'echo %[2]s >> %[3]s && chmod 600 %[3]s'`,
 			e.clusterUser, string(pubKey), sshAuthorizedKeys)
 		_, stderr, err = exec.Execute(cmd, true)
