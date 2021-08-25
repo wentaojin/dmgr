@@ -74,7 +74,7 @@ func AbsClusterScriptDir(deployDir, instanceName string) string {
 // 集群部署 Data 目录
 func AbsClusterDataDir(deployDir, dataDir, instanceName string) string {
 	if deployDir == dataDir || dataDir == "" {
-		return filepath.Join(dataDir, instanceName, DirData)
+		return filepath.Join(deployDir, instanceName, DirData)
 	}
 	return filepath.Join(dataDir, instanceName)
 }
@@ -82,7 +82,7 @@ func AbsClusterDataDir(deployDir, dataDir, instanceName string) string {
 // 集群部署 Log 目录
 func AbsClusterLogDir(deployDir, logDir, instanceName string) string {
 	if deployDir == logDir || logDir == "" {
-		return filepath.Join(logDir, instanceName, DirLog)
+		return filepath.Join(deployDir, instanceName, DirLog)
 	}
 	return filepath.Join(logDir, instanceName)
 }
