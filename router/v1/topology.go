@@ -344,7 +344,7 @@ func ClusterScaleOut(c *gin.Context) {
 	}
 
 	// 集群环境初始化以及集群组件复制 COPY
-	envInitTasks := EnvClusterUserInit(machineList, topo.ClusterName, topo.SkipCreateUser)
+	envInitTasks := EnvClusterUserInit(machineList, clusterMeta.ClusterName, topo.SkipCreateUser)
 	copyCompTasks := EnvClusterComponentInit(clusterTopo, clusterUntarDir)
 
 	// 获取生成集群部署配置文件、运行脚本等文件信息
