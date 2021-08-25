@@ -21,6 +21,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/mitchellh/go-homedir"
+
 	expect "github.com/google/goexpect"
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
 	"github.com/wentaojin/dmgr/pkg/dmgrutil"
@@ -41,10 +43,19 @@ type SSHKeyGen struct {
 func (s *SSHKeyGen) Execute(ctx *ctxt.Context) error {
 	// 存放于用户家目录，用于日常管理 SSH
 	edHomePath := filepath.Join(s.homeSshDir, "id_ed25519")
+	expandedHomePath, err := homedir.Expand(edHomePath)
+	if err != nil {
+		return err
+	}
+
 	edHomePubPath := filepath.Join(s.homeSshDir, "id_ed25519.pub")
+	expandedHomePubPath, err := homedir.Expand(edHomePubPath)
+	if err != nil {
+		return err
+	}
 
 	// Skip ssh key generate
-	if dmgrutil.IsExist(edHomePath) && dmgrutil.IsExist(edHomePubPath) {
+	if dmgrutil.IsExist(expandedHomePath) && dmgrutil.IsExist(expandedHomePubPath) {
 		return nil
 	}
 

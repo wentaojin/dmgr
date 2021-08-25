@@ -20,6 +20,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/mitchellh/go-homedir"
+
 	"github.com/wentaojin/dmgr/pkg/cluster/executor"
 
 	"github.com/wentaojin/dmgr/response"
@@ -45,13 +47,22 @@ type SSHKeyCopy struct {
 func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 	// 存放于用户家目录，用于日常管理 SSH
 	edHomePath := filepath.Join(s.homeSshDir, "id_ed25519")
+	expandedHomePath, err := homedir.Expand(edHomePath)
+	if err != nil {
+		return err
+	}
+
 	edHomePubPath := filepath.Join(s.homeSshDir, "id_ed25519.pub")
+	expandedHomePubPath, err := homedir.Expand(edHomePubPath)
+	if err != nil {
+		return err
+	}
 
 	// SSH 认证文件分发
 	wp := workpool.New(s.workerThreads)
 	for _, host := range s.hosts {
 		server := host
-		edFile := edHomePath
+		edFile := expandedHomePath
 		timeout := s.executeTimeout
 		wp.DoWait(func() error {
 			isConnect, err := server.SshAuthTest(edFile)
@@ -79,7 +90,7 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 
 	// 本机 COPY 认证文件到集群管理目录
 	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
-	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath), executor.DefaultExecuteTimeout)
+	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(fmt.Sprintf("cp %v %v;cp %v %v", expandedHomePath, edSshPath, expandedHomePubPath, edSshPubPath), executor.DefaultExecuteTimeout)
 	if err != nil || len(stdErr) != 0 {
 		return fmt.Errorf("local copy err: [%v], stderr: [%v]", err, string(stdErr))
 	}
