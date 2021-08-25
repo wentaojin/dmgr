@@ -18,6 +18,7 @@ package task
 import (
 	"fmt"
 	"io/ioutil"
+	"strings"
 
 	"github.com/wentaojin/dmgr/pkg/cluster/executor"
 
@@ -80,9 +81,10 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 			Wrap(fmt.Errorf("error: %v, stderr: %v", err, string(stderr)), "Failed to create '~/.ssh' directory for user '%s'", e.clusterUser))
 	}
 
+	pk := strings.Fields(string(pubKey))
 	sshAuthorizedKeys := executor.FindSSHAuthorizedKeysFile(exec)
-	cmd = fmt.Sprintf(`su - %[1]s -c 'grep "%[2]s" %[3]s || echo "%[2]s" >> %[3]s && chmod 600 %[3]s'`,
-		e.clusterUser, string(pubKey), sshAuthorizedKeys)
+	cmd = fmt.Sprintf(`su - %[1]s -c 'grep %[2]s %[3]s || echo %[2]s >> %[3]s && chmod 600 %[3]s'`,
+		e.clusterUser, pk[1], sshAuthorizedKeys)
 	_, stderr, err = exec.Execute(cmd, true)
 	if err != nil || len(stderr) > 0 {
 		return wrapError(errEnvInitSubCommandFailed.
