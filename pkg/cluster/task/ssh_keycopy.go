@@ -43,7 +43,7 @@ type SSHKeyCopy struct {
 
 // Execute implements the Task interface
 func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
-	ctx.Ev.PublishTaskProgress(s, "Generate SSH keys")
+	ctx.Ev.PublishTaskProgress(s, "Copy SSH keys")
 
 	// 存放于用户家目录，用于日常管理 SSH
 	edHomePath := filepath.Join(s.homeSshDir, "id_ed25519")
