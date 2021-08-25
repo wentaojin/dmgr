@@ -86,10 +86,12 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 	cmd = fmt.Sprintf(`su - %[1]s -c 'grep %[2]s %[3]s | wc -l'`,
 		e.clusterUser, pk[1], sshAuthorizedKeys)
 	stdout, stderr, err := exec.Execute(cmd, true)
-	if err != nil || len(stderr) > 0 {
+	// 忽略 sshAuthorizedKeys 文件不存在错误
+	if err != nil {
 		return wrapError(errEnvInitSubCommandFailed.
-			Wrap(fmt.Errorf("error: %v, stderr: %v", err, string(stderr)), "Failed to grep '~/.ssh' directory for user '%s'", e.clusterUser))
+			Wrap(err, "Failed to grep '~/.ssh' directory for user '%s'", e.clusterUser))
 	}
+
 	if strings.Replace(string(stdout), "\n", "", -1) == "0" {
 		cmd = fmt.Sprintf(`su - %[1]s -c 'echo %[2]s >> %[3]s && chmod 600 %[3]s'`,
 			e.clusterUser, string(pubKey), sshAuthorizedKeys)
