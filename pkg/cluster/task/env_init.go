@@ -83,14 +83,21 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 
 	pk := strings.Fields(string(pubKey))
 	sshAuthorizedKeys := executor.FindSSHAuthorizedKeysFile(exec)
-	cmd = fmt.Sprintf(`su - %[1]s -c 'grep %[2]s %[3]s || echo %[4]s >> %[3]s && chmod 600 %[3]s'`,
-		e.clusterUser, pk[1], sshAuthorizedKeys, string(pubKey))
-	_, stderr, err = exec.Execute(cmd, true)
-
-	// 忽略 sshAuthorizedKeys 不存在的错误
-	if err != nil {
+	cmd = fmt.Sprintf(`su - %[1]s -c 'grep %[2]s %[3]s | wc -l'`,
+		e.clusterUser, pk[1], sshAuthorizedKeys)
+	stdout, stderr, err := exec.Execute(cmd, true)
+	if err != nil || len(stderr) > 0 {
 		return wrapError(errEnvInitSubCommandFailed.
-			Wrap(fmt.Errorf("error: %v, stderr: %v", err, string(stderr)), "Failed to write public keys to '%s' for user '%s'", sshAuthorizedKeys, e.clusterUser))
+			Wrap(fmt.Errorf("error: %v, stderr: %v", err, string(stderr)), "Failed to grep '~/.ssh' directory for user '%s'", e.clusterUser))
+	}
+	if string(stdout) == "0" {
+		cmd = fmt.Sprintf(`su - %[1]s -c 'echo %[2]s >> %[3]s && chmod 600 %[3]s'`,
+			e.clusterUser, string(pubKey), sshAuthorizedKeys)
+		_, stderr, err = exec.Execute(cmd, true)
+		if err != nil || len(stderr) > 0 {
+			return wrapError(errEnvInitSubCommandFailed.
+				Wrap(fmt.Errorf("error: %v, stderr: %v", err, string(stderr)), "Failed to write public keys to '%s' for user '%s'", sshAuthorizedKeys, e.clusterUser))
+		}
 	}
 
 	return nil
