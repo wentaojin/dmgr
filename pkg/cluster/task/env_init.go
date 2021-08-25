@@ -52,7 +52,7 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 
 	exec, found := ctx.GetExecutor(e.host)
 	if !found {
-		panic(ErrNoExecutor)
+		return wrapError(ErrNoExecutor)
 	}
 
 	if !e.skipCreateUser {
@@ -74,7 +74,7 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 	}
 
 	// clusterUser Authorize(PublicKeyPath)
-	cmd := `su - ` + e.clusterUser + ` -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh'`
+	cmd := fmt.Sprintf(`su - %[1]s -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh'`, e.clusterUser)
 	_, stderr, err := exec.Execute(cmd, true)
 	if err != nil || len(stderr) > 0 {
 		return wrapError(errEnvInitSubCommandFailed.
