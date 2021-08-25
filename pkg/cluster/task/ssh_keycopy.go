@@ -53,7 +53,6 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 	edSshPath := filepath.Join(s.clusterSshDir, "id_ed25519")
 	edSshPubPath := filepath.Join(s.clusterSshDir, "id_ed25519.pub")
 
-	ctx.Ev.PublishTaskProgress(s, "Copy SSH keys")
 	// 本机 COPY 认证文件到集群管理目录
 	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
 	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath), executor.DefaultExecuteTimeout)
@@ -77,6 +76,9 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 					return err
 				}
 			}
+			ctx.PrivateKeyPath = edSshPath
+			ctx.PublicKeyPath = edSshPubPath
+
 			return nil
 		})
 	}
