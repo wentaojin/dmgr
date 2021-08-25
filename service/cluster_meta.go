@@ -56,9 +56,9 @@ func (s *MysqlService) ValidClusterNameIsExist(clusterName string) (bool, error)
 	return false, fmt.Errorf("cluster_name cannot be null")
 }
 
-func (s *MysqlService) GetClusterMeta(clusterName string) ([]response.ClusterMetaRespStruct, error) {
-	var cm []response.ClusterMetaRespStruct
-	if err := s.Engine.Select(&cm, `SELECT cluster_name,cluster_user,cluster_version,cluster_path,cluster_status,admin_user,admin_password FROM cluster_meta WHERE cluster_name = ?`, clusterName); err != nil {
+func (s *MysqlService) GetClusterMeta(clusterName string) (response.ClusterMetaRespStruct, error) {
+	var cm response.ClusterMetaRespStruct
+	if err := s.Engine.Get(&cm, `SELECT cluster_name,cluster_user,cluster_version,cluster_path,cluster_status,admin_user,admin_password FROM cluster_meta WHERE cluster_name = ?`, clusterName); err != nil {
 		return cm, err
 	}
 	return cm, nil

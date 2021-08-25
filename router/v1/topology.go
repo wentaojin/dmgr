@@ -317,8 +317,8 @@ func ClusterScaleOut(c *gin.Context) {
 
 	// 判断解压离线镜像包指定目录是否存在扩容组件
 	// {cluster_path}/cluster/{cluster_name}/{cluster_version}
-	clusterNameDir := dmgrutil.AbsClusterUntarDir(clusterMeta[0].ClusterPath, clusterMeta[0].ClusterName)
-	clusterUntarDir := filepath.Join(clusterNameDir, clusterMeta[0].ClusterVersion)
+	clusterNameDir := dmgrutil.AbsClusterUntarDir(clusterMeta.ClusterPath, clusterMeta.ClusterName)
+	clusterUntarDir := filepath.Join(clusterNameDir, clusterMeta.ClusterVersion)
 
 	if exist, _ := dmgrutil.PathExists(filepath.Join(clusterUntarDir, dmgrutil.DirBin, strings.ToLower(topo.ComponentName))); !exist {
 		if response.FailWithMsg(c, fmt.Errorf("scale out failed: component [%v] bin not exist", strings.ToLower(topo.ComponentName))) {
@@ -568,8 +568,8 @@ func CLusterReload(c *gin.Context) {
 			cos.GrafanaAddr,
 			cos.PrometheusAddr,
 			template.ClusterDeployStage,
-			clusterMeta[0].AdminUser,
-			clusterMeta[0].AdminPassword)) {
+			clusterMeta.AdminUser,
+			clusterMeta.AdminPassword)) {
 		return
 	}
 	copyFileTasks := CopyClusterFile(clusterTopos)
@@ -635,7 +635,7 @@ func ClusterUpgrade(c *gin.Context) {
 	}
 	// 解压离线镜像包到指定目录
 	// {cluster_path}/cluster/{cluster_name}/{cluster_version}
-	clusterNameDir := dmgrutil.AbsClusterUntarDir(clusterMeta[0].ClusterPath, clusterMeta[0].ClusterName)
+	clusterNameDir := dmgrutil.AbsClusterUntarDir(clusterMeta.ClusterPath, clusterMeta.ClusterName)
 
 	// 创建新集群版本路径
 	clusterUntarDir := filepath.Join(clusterNameDir, req.ClusterVersion)
@@ -644,7 +644,7 @@ func ClusterUpgrade(c *gin.Context) {
 	}
 
 	// 集群拓扑查询生成
-	clusterTopos, err := s.GetClusterTopologyByClusterName(clusterMeta[0].ClusterName)
+	clusterTopos, err := s.GetClusterTopologyByClusterName(clusterMeta.ClusterName)
 	if response.FailWithMsg(c, err) {
 		return
 	}
@@ -664,8 +664,8 @@ func ClusterUpgrade(c *gin.Context) {
 			cos.GrafanaAddr,
 			cos.PrometheusAddr,
 			template.ClusterDeployStage,
-			clusterMeta[0].AdminUser,
-			clusterMeta[0].AdminPassword)) {
+			clusterMeta.AdminUser,
+			clusterMeta.AdminPassword)) {
 		return
 	}
 	copyFileTasks := CopyClusterFile(clusterTopos)
@@ -755,9 +755,9 @@ func ClusterPatch(c *gin.Context) {
 
 	// 解压离线镜像包到指定目录
 	// {cluster_path}/cluster/{cluster_name}/{cluster_version}
-	clusterNameDir := dmgrutil.AbsClusterUntarDir(clusterMeta[0].ClusterPath, clusterMeta[0].ClusterName)
+	clusterNameDir := dmgrutil.AbsClusterUntarDir(clusterMeta.ClusterPath, clusterMeta.ClusterName)
 	// 新集群版本路径
-	clusterUntarDir := filepath.Join(clusterNameDir, clusterMeta[0].ClusterVersion)
+	clusterUntarDir := filepath.Join(clusterNameDir, clusterMeta.ClusterVersion)
 	// 目标目录是否存在
 	pkgDir := filepath.Join(clusterUntarDir, dmgrutil.DirPatch)
 	if exist, _ := dmgrutil.PathExists(pkgDir); !exist {
