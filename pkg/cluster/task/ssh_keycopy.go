@@ -47,22 +47,11 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 	edHomePath := filepath.Join(s.homeSshDir, "id_ed25519")
 	edHomePubPath := filepath.Join(s.homeSshDir, "id_ed25519.pub")
 
-	// 存放于集群 SSH 目录，用于程序管理 SSH
-	edSshPath := filepath.Join(s.clusterSshDir, "id_ed25519")
-	edSshPubPath := filepath.Join(s.clusterSshDir, "id_ed25519.pub")
-
-	// 本机 COPY 认证文件到集群管理目录
-	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
-	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath), executor.DefaultExecuteTimeout)
-	if err != nil || len(stdErr) != 0 {
-		return fmt.Errorf("local copy err: [%v], stderr: [%v]", err, string(stdErr))
-	}
-
 	// SSH 认证文件分发
 	wp := workpool.New(s.workerThreads)
 	for _, host := range s.hosts {
 		server := host
-		edFile := edSshPath
+		edFile := edHomePath
 		timeout := s.executeTimeout
 		wp.DoWait(func() error {
 			isConnect, err := server.SshAuthTest(edFile)
@@ -82,6 +71,17 @@ func (s *SSHKeyCopy) Execute(ctx *ctxt.Context) error {
 	}
 	if !wp.IsDone() {
 		return fmt.Errorf("ssh key gen error")
+	}
+
+	// 存放于集群 SSH 目录，用于程序管理 SSH
+	edSshPath := filepath.Join(s.clusterSshDir, "id_ed25519")
+	edSshPubPath := filepath.Join(s.clusterSshDir, "id_ed25519.pub")
+
+	// 本机 COPY 认证文件到集群管理目录
+	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
+	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(fmt.Sprintf("cp %v %v;cp %v %v", edHomePath, edSshPath, edHomePubPath, edSshPubPath), executor.DefaultExecuteTimeout)
+	if err != nil || len(stdErr) != 0 {
+		return fmt.Errorf("local copy err: [%v], stderr: [%v]", err, string(stdErr))
 	}
 
 	ctx.PrivateKeyPath = edSshPath
