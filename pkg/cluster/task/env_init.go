@@ -83,8 +83,8 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 
 	pk := strings.Fields(string(pubKey))
 	sshAuthorizedKeys := executor.FindSSHAuthorizedKeysFile(exec)
-	cmd = fmt.Sprintf(`su - %[1]s -c 'grep %[2]s %[3]s || echo %[2]s >> %[3]s && chmod 600 %[3]s'`,
-		e.clusterUser, pk[1], sshAuthorizedKeys)
+	cmd = fmt.Sprintf(`su - %[1]s -c 'grep %[2]s %[3]s || echo %[4]s >> %[3]s && chmod 600 %[3]s'`,
+		e.clusterUser, pk[1], sshAuthorizedKeys, string(pubKey))
 	_, stderr, err = exec.Execute(cmd, true)
 	if err != nil || len(stderr) > 0 {
 		return wrapError(errEnvInitSubCommandFailed.
