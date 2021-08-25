@@ -74,7 +74,7 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 	}
 
 	// clusterUser Authorize(PublicKeyPath)
-	cmd := `su - ` + e.clusterUser + ` -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh`
+	cmd := `su - ` + e.clusterUser + ` -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh'`
 	_, stderr, err := exec.Execute(cmd, true)
 	if err != nil || len(stderr) > 0 {
 		return wrapError(errEnvInitSubCommandFailed.
