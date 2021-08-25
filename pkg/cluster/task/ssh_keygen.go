@@ -39,8 +39,6 @@ type SSHKeyGen struct {
 
 // Execute implements the Task interface
 func (s *SSHKeyGen) Execute(ctx *ctxt.Context) error {
-	ctx.Ev.PublishTaskProgress(s, "Generate SSH keys")
-
 	// 存放于用户家目录，用于日常管理 SSH
 	edHomePath := filepath.Join(s.homeSshDir, "id_ed25519")
 	edHomePubPath := filepath.Join(s.homeSshDir, "id_ed25519.pub")
@@ -51,7 +49,6 @@ func (s *SSHKeyGen) Execute(ctx *ctxt.Context) error {
 	}
 
 	// 默认生成认证文件 HOME 家目录
-	ctx.Ev.PublishTaskProgress(s, "Generate private and public key")
 	e, _, err := expect.Spawn(sshKeyGenCMD, time.Second*time.Duration(s.executeTimeout))
 	if err != nil {
 		return err

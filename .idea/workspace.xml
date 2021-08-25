@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/ctxt/context.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/ctxt/context.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/executor/ssh.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/executor/ssh.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/ssh_keygen.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/ssh_keygen.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/task.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

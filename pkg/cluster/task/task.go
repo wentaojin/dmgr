@@ -70,9 +70,7 @@ func (s *Serial) Execute(ctx *ctxt.Context) error {
 		if !s.hideDetailDisplay {
 			dmgrutil.Logger.Info("Serial", zap.String("msg", t.String()))
 		}
-		ctx.Ev.PublishTaskBegin(t)
 		err := t.Execute(ctx)
-		ctx.Ev.PublishTaskFinish(t, err)
 		if err != nil && !s.ignoreError {
 			return err
 		}
@@ -114,9 +112,7 @@ func (p *Parallel) Execute(ctx *ctxt.Context) error {
 			if !p.hideDetailDisplay {
 				logger.Info("Parallel", zap.String("msg", t.String()))
 			}
-			ctx.Ev.PublishTaskBegin(t)
 			err := t.Execute(ctx)
-			ctx.Ev.PublishTaskFinish(t, err)
 			if err != nil {
 				mu.Lock()
 				if firstError == nil {

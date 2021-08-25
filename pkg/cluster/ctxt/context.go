@@ -26,8 +26,6 @@ import (
 // 使用互斥锁来防止某些字段的并发读/写
 // 因为可以在并行任务中共享相同的上下文。
 type Context struct {
-	Ev EventBus
-
 	Exec struct {
 		sync.RWMutex
 		Executors    map[string]executor.Executor
@@ -44,7 +42,6 @@ type Context struct {
 // NewContext create a context instance.
 func NewContext() *Context {
 	return &Context{
-		Ev: NewEventBus(),
 		Exec: struct {
 			sync.RWMutex
 			Executors    map[string]executor.Executor
