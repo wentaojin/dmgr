@@ -148,7 +148,7 @@ func ClusterDeploy(c *gin.Context) {
 			task.NewBuilder().
 				SSHKeyGen(dmgrutil.HomeSshDir, executor.DefaultExecuteTimeout).
 				SSHKeyCopy(dmgrutil.HomeSshDir, dmgrutil.AbsClusterSSHDir(topo.ClusterPath, topo.ClusterName), machineList, executor.DefaultExecuteTimeout, dmgrutil.RsaConcurrency).BuildTask()).
-		Serial("+ Initialize target host environments", envInitTasks...).
+		Parallel("+ Initialize target host environments", false, envInitTasks...).
 		Parallel("+ Copy components", false, copyCompTasks...).
 		Parallel("+ Copy files", false, copyFileTasks...).BuildTask()
 
