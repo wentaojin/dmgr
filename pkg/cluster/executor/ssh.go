@@ -76,7 +76,7 @@ var _ Executor = &EasySSHExecutor{}
 func (e *EasySSHExecutor) Execute(cmd string, sudo bool, execTimeout ...time.Duration) ([]byte, []byte, error) {
 	// 尝试获取 root 权限
 	if e.Sudo || sudo {
-		cmd = fmt.Sprintf("sudo -H bash -c \"%s\"", cmd)
+		cmd = fmt.Sprintf("sudo -H bash -c '%s'", cmd)
 	}
 
 	//设置一个基本的 PATH 以防在登录时为空
