@@ -17,6 +17,9 @@ package task
 
 import (
 	"fmt"
+	"io/ioutil"
+
+	"github.com/wentaojin/dmgr/pkg/cluster/executor"
 
 	"github.com/joomcode/errorx"
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
@@ -64,6 +67,28 @@ func (e *EnvInit) Execute(ctx *ctxt.Context) error {
 			return wrapError(errx)
 		}
 	}
+	pubKey, err := ioutil.ReadFile(ctx.PublicKeyPath)
+	if err != nil {
+		return wrapError(err)
+	}
+
+	// clusterUser Authorize(PublicKeyPath)
+	cmd := `su - ` + e.clusterUser + ` -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh'`
+	_, _, err = exec.Execute(cmd, true)
+	if err != nil {
+		return wrapError(errEnvInitSubCommandFailed.
+			Wrap(err, "Failed to create '~/.ssh' directory for user '%s'", e.clusterUser))
+	}
+
+	sshAuthorizedKeys := executor.FindSSHAuthorizedKeysFile(exec)
+	cmd = fmt.Sprintf(`su - %[1]s -c 'grep $(echo %[2]s) %[3]s || echo %[2]s >> %[3]s && chmod 600 %[3]s'`,
+		e.clusterUser, string(pubKey), sshAuthorizedKeys)
+	_, _, err = exec.Execute(cmd, true)
+	if err != nil {
+		return wrapError(errEnvInitSubCommandFailed.
+			Wrap(err, "Failed to write public keys to '%s' for user '%s'", sshAuthorizedKeys, e.clusterUser))
+	}
+
 	return nil
 }
 
