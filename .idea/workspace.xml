@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/ssh_keycopy.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/ssh_keycopy.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/task/env_init.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/env_init.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/task/ssh_keygen.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/task/ssh_keygen.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -47,8 +47,6 @@ func (s *SSHKeyGen) Execute(ctx *ctxt.Context) error {
 
 	// Skip ssh key generate
 	if dmgrutil.IsExist(edHomePath) && dmgrutil.IsExist(edHomePubPath) {
-		ctx.PrivateKeyPath = edHomePath
-		ctx.PublicKeyPath = edHomePubPath
 		return nil
 	}
 
