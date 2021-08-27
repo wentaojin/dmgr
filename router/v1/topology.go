@@ -347,8 +347,13 @@ func ClusterScaleOut(c *gin.Context) {
 	envInitTasks := EnvClusterUserInit(machineList, clusterMeta.ClusterUser, topo.SkipCreateUser)
 	copyCompTasks := EnvClusterComponentInit(clusterTopo, clusterUntarDir)
 
+	// 获取集群拓扑信息
+	topoDB, err := s.GetClusterTopologyByClusterName(topo.ClusterName)
+	if response.FailWithMsg(c, err) {
+		return
+	}
 	// 获取生成集群部署配置文件、运行脚本等文件信息
-	cos := template.GetClusterFile(clusterTopo)
+	cos := template.GetClusterFile(topoDB)
 
 	// 生成以及 Copy 组件配置文件、运行脚本
 	if response.FailWithMsg(c, template.GenerateClusterFileWithStage(clusterTopo,
@@ -411,6 +416,33 @@ func ClusterScaleOut(c *gin.Context) {
 						return
 					}
 				}
+			}
+		}
+	}
+
+	// 刷新 prometheus 组件
+	for _, t := range topoDB {
+		if strings.ToLower(t.ComponentName) == dmgrutil.ComponentPrometheus {
+			refreshCompTask := task.NewBuilder().
+				SSHKeySet(
+					filepath.Join(
+						dmgrutil.AbsClusterSSHDir(t.ClusterPath, t.ClusterName), "id_ed25519"),
+					filepath.Join(
+						dmgrutil.AbsClusterSSHDir(t.ClusterPath, t.ClusterName), "id_ed25519.pub")).
+				UserSSH(
+					t.MachineHost,
+					t.SshPort,
+					t.ClusterUser,
+					executor.DefaultConnectTimeout,
+					module.DefaultSystemdExecuteTimeout).
+				StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
+					fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
+					module.DefaultSystemdExecuteTimeout).
+				StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
+					fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort), module.DefaultSystemdExecuteTimeout).BuildTask()
+
+			if response.FailWithMsg(c, fmt.Errorf("failed reload cluster [%v] component instance [%v] by scale-out: %v", t.ClusterName, t.InstanceName, refreshCompTask.Execute(ctxt.NewContext()))) {
+				return
 			}
 		}
 	}

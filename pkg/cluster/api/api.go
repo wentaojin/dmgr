@@ -109,7 +109,7 @@ func (dm *DMMasterClient) deleteMember(endpoints []string) (*dmpb.OfflineMemberR
 		body, statusCode, err := dm.httpClient.Delete(endpoint, nil)
 
 		if statusCode == 404 || bytes.Contains(body, []byte("not exists")) {
-			zap.L().Debug("member to offline does not exist, ignore.")
+			dmgrutil.Logger.Debug("member to offline does not exist, ignore.")
 			return body, nil
 		}
 		if err != nil {
@@ -139,7 +139,7 @@ func (dm *DMMasterClient) GetMaster(name string) (isFound bool, isActive bool, i
 	memberResp, err := dm.getMember(endpoints)
 
 	if err != nil {
-		zap.L().Error("get dm master status failed", zap.Error(err))
+		dmgrutil.Logger.Error("get dm master status failed", zap.Error(err))
 		return false, false, false, err
 	}
 
@@ -169,7 +169,7 @@ func (dm *DMMasterClient) GetWorker(name string) (string, error) {
 	memberResp, err := dm.getMember(endpoints)
 
 	if err != nil {
-		zap.L().Error("get dm worker status failed", zap.Error(err))
+		dmgrutil.Logger.Error("get dm worker status failed", zap.Error(err))
 		return "", err
 	}
 
@@ -232,7 +232,7 @@ func (dm *DMMasterClient) GetRegisteredMembers() ([]string, []string, error) {
 	)
 
 	if err != nil {
-		zap.L().Error("get dm master status failed", zap.Error(err))
+		dmgrutil.Logger.Error("get dm master status failed", zap.Error(err))
 		return registeredMasters, registeredWorkers, err
 	}
 
