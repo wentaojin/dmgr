@@ -403,8 +403,12 @@ func ClusterScaleOut(c *gin.Context) {
 						module.DefaultSystemdExecuteTimeout).
 					StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
-						module.DefaultSystemdExecuteTimeout).BuildTask()
-				if response.FailWithMsg(c, fmt.Errorf("failed start cluster [%v] component instance [%v] by scale-out: %v", t.ClusterName, t.InstanceName, scaleOutCompTask.Execute(ctxt.NewContext()))) {
+						module.DefaultSystemdExecuteTimeout).
+					EnableInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
+						module.DefaultSystemdExecuteTimeout, true).BuildTask()
+
+				if response.FailWithMsg(c, scaleOutCompTask.Execute(ctxt.NewContext())) {
 					return
 				}
 
@@ -441,7 +445,7 @@ func ClusterScaleOut(c *gin.Context) {
 				StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 					fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort), module.DefaultSystemdExecuteTimeout).BuildTask()
 
-			if response.FailWithMsg(c, fmt.Errorf("failed reload cluster [%v] component instance [%v] by scale-out: %v", t.ClusterName, t.InstanceName, refreshCompTask.Execute(ctxt.NewContext()))) {
+			if response.FailWithMsg(c, refreshCompTask.Execute(ctxt.NewContext())) {
 				return
 			}
 		}
