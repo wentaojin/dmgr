@@ -762,7 +762,7 @@ func CLusterReload(c *gin.Context) {
 	var cmd string
 	if req.Overwrite == dmgrutil.BoolTrue {
 		// 覆盖
-		cmd = fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, file.Filename), filepath.Join(clusterUntarDir, "conf", file.Filename))
+		cmd = fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, file.Filename), filepath.Join(clusterUntarDir, dmgrutil.DirConf, file.Filename))
 	}
 	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
 	if response.FailWithMsg(c, err) {
@@ -873,14 +873,46 @@ func ClusterUpgrade(c *gin.Context) {
 		return
 	}
 
-	// 集群拓扑查询生成
-	clusterTopos, err := s.GetClusterTopologyByClusterName(clusterMeta.ClusterName)
+	// 集群拓扑查询生成 From 数据库
+	clusterTopoDB, err := s.GetClusterTopologyByClusterName(clusterMeta.ClusterName)
 	if response.FailWithMsg(c, err) {
 		return
 	}
 
+	// 考虑升级，需要把数据库的 cluster_version 替换成当前升级集群版本
+	var clusterTopos []response.ClusterTopologyRespStruct
+	for _, c := range clusterTopoDB {
+		c.ClusterVersion = req.ClusterVersion
+		clusterTopos = append(clusterTopos, c)
+	}
+
 	// 获取生成集群部署配置文件、运行脚本等文件信息
 	cos := template.GetClusterFile(clusterTopos)
+
+	// 继承上个版本参数配置文件 dm-master.toml、dm-worker.toml 以及 alertmanager.yml，其他保持默认默认，不影响
+	cmds := []string{
+		fmt.Sprintf(`cp %v %v`,
+			filepath.Join(clusterNameDir, clusterMeta.ClusterVersion, dmgrutil.DirConf, "*.toml"),
+			filepath.Join(clusterNameDir, req.ClusterVersion, dmgrutil.DirConf)),
+		fmt.Sprintf(`cp %v %v`,
+			filepath.Join(clusterNameDir, clusterMeta.ClusterVersion, dmgrutil.DirConf, "alertmanager.yml"),
+			filepath.Join(clusterNameDir, req.ClusterVersion, dmgrutil.DirConf)),
+	}
+	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
+	if response.FailWithMsg(c, err) {
+		return
+	}
+	for _, cmd := range cmds {
+		_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(cmd, executor.DefaultExecuteTimeout)
+		if response.FailWithMsg(c, err) {
+			return
+		}
+		if len(stdErr) != 0 {
+			if response.FailWithMsg(c, fmt.Errorf("local host [%v] user [%v] running cmd [%v] failed: %v", currentIP, currentUser, cmd, string(stdErr))) {
+				return
+			}
+		}
+	}
 
 	// 生成以及 Copy 组件配置文件、运行脚本
 	if response.FailWithMsg(c,
@@ -895,6 +927,7 @@ func ClusterUpgrade(c *gin.Context) {
 	copyFileTasks := CopyClusterFile(clusterTopos)
 	copyFileTask := task.NewBuilder().
 		Parallel("+ Copy files", false, copyFileTasks...).BuildTask()
+
 	if response.FailWithMsg(c, copyFileTask.Execute(ctxt.NewContext())) {
 		return
 	}

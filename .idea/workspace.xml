@@ -95,6 +95,17 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
     <proxy>https://goproxy.cn,direct</proxy>
@@ -116,6 +127,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="346" y="0" key="#go_build_github.com/wentaojin/dmgr/cmd_(1)/0.0.1280.680@0.0.1280.680" timestamp="1626187723398" />
+    <state x="93" y="93" width="1095" height="495" key="DiffContextDialog" timestamp="1630137416697">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="93" y="93" width="1095" height="495" key="DiffContextDialog/0.0.1280.680@0.0.1280.680" timestamp="1630137416697" />
     <state width="1237" height="160" key="GridCell.Tab.0.bottom" timestamp="1629903319434">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
