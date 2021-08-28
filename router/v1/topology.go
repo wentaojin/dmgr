@@ -52,7 +52,7 @@ func ClusterDeploy(c *gin.Context) {
 	}
 
 	// 验证判断前端请求
-	topo, uniqueHosts := request.ValidDeployReqStructField(req)
+	topo, uniqueHosts, instanceList := request.ValidDeployReqStructField(req)
 
 	// 判断集群名是否冲突
 	s := service.NewMysqlService()
@@ -73,6 +73,14 @@ func ClusterDeploy(c *gin.Context) {
 	}
 	if response.FailWithMsg(c, request.ValidComponentPortConflict(topo.ClusterTopology, dbHostPortArr)) {
 		return
+	}
+
+	// 判断实例名是否冲突【集群全局唯一】
+	repeatInstList := dmgrutil.FilterRepeatElem(instanceList)
+	if len(repeatInstList) != 0 {
+		if response.FailWithMsg(c, fmt.Errorf("cluster topology component isn't global unique, exist conflict [%v]", repeatInstList)) {
+			return
+		}
 	}
 
 	// 判断对应版本离线安装包是否存在
@@ -309,6 +317,20 @@ func ClusterScaleOut(c *gin.Context) {
 		return
 	}
 
+	// 判断是否实例名冲突【集群全局唯一】
+	// 获取集群拓扑信息
+	topoDB, err := s.GetClusterTopologyByClusterName(topo.ClusterName)
+	if response.FailWithMsg(c, err) {
+		return
+	}
+	for _, t := range topoDB {
+		if topo.InstanceName == strings.ToLower(t.InstanceName) {
+			if response.FailWithMsg(c, fmt.Errorf("scale out component [%s] instance [%s] conflict with the cluster exist component [%s] instance [%s]", topo.ComponentName, topo.InstanceName, t.ComponentName, t.InstanceName)) {
+				return
+			}
+		}
+	}
+
 	// 获取扩容集群元信息
 	clusterMeta, err := s.GetClusterMeta(req.ClusterName)
 	if response.FailWithMsg(c, err) {
@@ -347,12 +369,7 @@ func ClusterScaleOut(c *gin.Context) {
 	envInitTasks := EnvClusterUserInit(machineList, clusterMeta.ClusterUser, topo.SkipCreateUser)
 	copyCompTasks := EnvClusterComponentInit(clusterTopo, clusterUntarDir)
 
-	// 获取集群拓扑信息
-	topoDB, err := s.GetClusterTopologyByClusterName(topo.ClusterName)
-	if response.FailWithMsg(c, err) {
-		return
-	}
-	// 获取生成集群部署配置文件、运行脚本等文件信息
+	// 获取生成集群部署配置文件、运行脚本等文件信息【根据元数据库已有集群组件信息】
 	cos := template.GetClusterFile(topoDB)
 
 	// 生成以及 Copy 组件配置文件、运行脚本

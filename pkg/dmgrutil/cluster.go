@@ -17,8 +17,25 @@ package dmgrutil
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 )
+
+// 初始化组件配置文件、脚本等文件缓存目录以及 SSH 认证存放目录
+func InitComponentCacheAndSSHDir(clusterPath, clusterName string) error {
+	if exist, _ := PathExists(AbsClusterCacheDir(clusterPath, clusterName)); !exist {
+		if err := os.MkdirAll(AbsClusterCacheDir(clusterPath, clusterName), 0750); err != nil {
+			return err
+		}
+	}
+	// 初始化 SSH 存放认证目录
+	if exist, _ := PathExists(AbsClusterSSHDir(clusterPath, clusterName)); !exist {
+		if err := os.MkdirAll(AbsClusterSSHDir(clusterPath, clusterName), 0750); err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
 // 集群解压存放目录
 // {cluster_path}/cluster/{cluster_name}/{cluster_version}

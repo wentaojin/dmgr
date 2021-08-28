@@ -46,10 +46,11 @@ func validTopologyReqStructSkipCreateUser(fl validator.FieldLevel) bool {
 }
 
 // 验证集群部署请求字段
-func ValidDeployReqStructField(clusterTopo ClusterDeployReqStruct) (ClusterDeployReqStruct, []string) {
+func ValidDeployReqStructField(clusterTopo ClusterDeployReqStruct) (ClusterDeployReqStruct, []string, []string) {
 	var (
 		clusterTopos []TopologyReqStruct
 		machineHosts []string
+		instanceList []string
 	)
 
 	for _, topo := range clusterTopo.ClusterTopology {
@@ -68,6 +69,7 @@ func ValidDeployReqStructField(clusterTopo ClusterDeployReqStruct) (ClusterDeplo
 		topo.ClusterName = clusterTopo.ClusterMetaReqStruct.ClusterName
 		clusterTopos = append(clusterTopos, topo)
 		machineHosts = append(machineHosts, topo.MachineHost)
+		instanceList = append(instanceList, topo.InstanceName)
 	}
 
 	if clusterTopo.AdminUser == "" {
@@ -80,7 +82,7 @@ func ValidDeployReqStructField(clusterTopo ClusterDeployReqStruct) (ClusterDeplo
 	clusterTopo.ClusterTopology = clusterTopos
 	uniqueHosts := dmgrutil.NewStringSet(machineHosts...)
 
-	return clusterTopo, uniqueHosts.Slice()
+	return clusterTopo, uniqueHosts.Slice(), instanceList
 }
 
 // 验证集群扩容请求字段
