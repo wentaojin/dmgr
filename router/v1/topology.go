@@ -813,7 +813,7 @@ func CLusterReload(c *gin.Context) {
 					CopyFile(
 						t.ClusterName,
 						filepath.Join(pkgDir, file.Filename),
-						dmgrutil.AbsClusterConfDir(t.DeployDir, t.InstanceName),
+						filepath.Join(dmgrutil.AbsClusterConfDir(t.DeployDir, t.InstanceName), file.Filename),
 						dmgrutil.FileTypeComponent,
 						t.MachineHost,
 						false,
