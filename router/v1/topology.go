@@ -24,6 +24,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/wentaojin/dmgr/pkg/cluster/template/script"
+
 	"github.com/wentaojin/dmgr/pkg/cluster/ctxt"
 
 	"github.com/wentaojin/dmgr/pkg/cluster/api"
@@ -382,6 +384,15 @@ func ClusterScaleOut(c *gin.Context) {
 		cos.GrafanaAddr = fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort)
 	case dmgrutil.ComponentAlertmanager:
 		cos.AlertmanagerAddrs = append(cos.AlertmanagerAddrs, fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort))
+		cos.AlertmanagerScripts = append(cos.AlertmanagerScripts, &script.AlertManagerScript{
+			IP:          topo.MachineHost,
+			WebPort:     topo.ServicePort,
+			ClusterPort: topo.ClusterPort,
+			DeployDir:   dmgrutil.AbsClusterDeployDir(topo.DeployDir, topo.InstanceName),
+			DataDir:     dmgrutil.AbsClusterDataDir(topo.DeployDir, topo.DataDir, topo.InstanceName),
+			LogDir:      dmgrutil.AbsClusterLogDir(topo.DeployDir, topo.LogDir, topo.InstanceName),
+			TLSEnabled:  false,
+		})
 	case dmgrutil.ComponentPrometheus:
 		cos.PrometheusAddr = fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort)
 	default:
@@ -405,7 +416,10 @@ func ClusterScaleOut(c *gin.Context) {
 	}
 
 	// 集群已部署存在的组件配置文件以及脚本刷新 refresh
-	copyFileTasks := CopyClusterFile(topoDB)
+	refreshFileTasks := CopyClusterFile(topoDB)
+
+	// 扩容组件配置文件以及脚本分发
+	scaleFileTasks := CopyClusterFile(clusterTopo)
 
 	// 扩容集群组件
 	builder := task.NewBuilder().
@@ -415,7 +429,8 @@ func ClusterScaleOut(c *gin.Context) {
 				SSHKeyCopy(dmgrutil.HomeSshDir, dmgrutil.AbsClusterSSHDir(clusterTopo[0].ClusterPath, topo.ClusterName), machineList, executor.DefaultExecuteTimeout, dmgrutil.RsaConcurrency).BuildTask()).
 		Parallel("+ Initialize target host environments", false, envInitTasks...).
 		Parallel("+ Copy components", false, copyCompTasks...).
-		Parallel("+ Copy files", false, copyFileTasks...).BuildTask()
+		Parallel("+ Refresh files", false, refreshFileTasks...).
+		Parallel("+ Copy files", false, scaleFileTasks...).BuildTask()
 
 	if response.FailWithMsg(c, builder.Execute(ctxt.NewContext())) {
 		return
