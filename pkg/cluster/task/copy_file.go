@@ -68,7 +68,7 @@ func (c *CopyFile) Execute(ctx *ctxt.Context) error {
 	}
 
 	if c.fileType == dmgrutil.FileTypeRule {
-		cmd := fmt.Sprintf(`sed -i -e "s/ENV_LABELS_ENV/%[1]s/g %[2]s" `, c.clusterName, c.dst)
+		cmd := fmt.Sprintf(`sed -i -e "s/ENV_LABELS_ENV/%[1]s/g" %[2]s`, c.clusterName, c.dst)
 		_, stderr, err := e.Execute(cmd, true)
 		if err != nil || len(stderr) != 0 {
 			return errors.Annotatef(err, "stderr: %s", string(stderr))
