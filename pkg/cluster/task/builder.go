@@ -159,14 +159,15 @@ func (b *Builder) CopyComponent(clusterName, componentName string,
 }
 
 // CopyFile 将 CopyFile 任务附加到当前任务集合
-func (b *Builder) CopyFile(src, dst, fileType, remoteHost string, download bool, limit int) *Builder {
+func (b *Builder) CopyFile(clusterName, src, dst, fileType, remoteHost string, download bool, limit int) *Builder {
 	b.tasks = append(b.tasks, &CopyFile{
-		src:        src,
-		dst:        dst,
-		fileType:   fileType,
-		remoteHost: remoteHost,
-		download:   download,
-		limit:      limit,
+		clusterName: clusterName,
+		src:         src,
+		dst:         dst,
+		fileType:    fileType,
+		remoteHost:  remoteHost,
+		download:    download,
+		limit:       limit,
 	})
 	return b
 }

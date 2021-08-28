@@ -90,6 +90,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 		componentName := strings.ToLower(cluster.ComponentName)
 		if componentName == dmgrutil.ComponentGrafana {
 			copyFileTask.CopyFile(
+				cluster.ClusterName,
 				filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "grafana.ini"),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "grafana.ini"),
 				dmgrutil.FileTypeComponent,
@@ -97,6 +98,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				false,
 				0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "dashboard.yml"),
 					filepath.Join(dmgrutil.AbsClusterDataboardDir(cluster.DeployDir, cluster.InstanceName), "dashboard.yml"),
 					dmgrutil.FileTypeComponent,
@@ -104,6 +106,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 					false,
 					0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "datasource.yml"),
 					filepath.Join(dmgrutil.AbsClusterDatasourceDir(cluster.DeployDir, cluster.InstanceName), "datasource.yml"),
 					dmgrutil.FileTypeComponent,
@@ -111,6 +114,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 					false,
 					0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "run_grafana.sh"),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_grafana.sh"),
 					dmgrutil.FileTypeScript,
@@ -121,6 +125,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentPrometheus {
 			copyFileTask.CopyFile(
+				cluster.ClusterName,
 				filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "prometheus.yml"),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "prometheus.yml"),
 				dmgrutil.FileTypeComponent,
@@ -128,13 +133,15 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				false,
 				0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfDmWorkerRuleFile)),
 					filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "dm_worker.rules.yml"),
-					dmgrutil.FileTypeComponent,
+					dmgrutil.FileTypeRule,
 					cluster.MachineHost,
 					false,
 					0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), "run_prometheus.sh"),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_prometheus.sh"),
 					dmgrutil.FileTypeScript,
@@ -145,6 +152,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentAlertmanager {
 			copyFileTask.CopyFile(
+				cluster.ClusterName,
 				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfAlertmanagerFile)),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "alertmanager.yml"),
 				dmgrutil.FileTypeComponent,
@@ -152,6 +160,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				false,
 				0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("run_alertmanager-%s-%d.sh", cluster.MachineHost, cluster.ServicePort)),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_alertmanager.sh"),
 					dmgrutil.FileTypeScript,
@@ -162,6 +171,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentDmMaster {
 			copyFileTask.CopyFile(
+				cluster.ClusterName,
 				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfDmMasterFile)),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "dm-master.toml"),
 				dmgrutil.FileTypeComponent,
@@ -169,6 +179,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				false,
 				0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("run_dm-master-%s-%d.sh", cluster.MachineHost, cluster.ServicePort)),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_dm-master.sh"),
 					dmgrutil.FileTypeScript,
@@ -179,6 +190,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 
 		if componentName == dmgrutil.ComponentDmWorker {
 			copyFileTask.CopyFile(
+				cluster.ClusterName,
 				filepath.Join(dmgrutil.AbsUntarConfDir(cluster.ClusterPath, cluster.ClusterName, cluster.ClusterVersion, dmgrutil.ConfDmWorkerFile)),
 				filepath.Join(dmgrutil.AbsClusterConfDir(cluster.DeployDir, cluster.InstanceName), "dm-worker.toml"),
 				dmgrutil.FileTypeComponent,
@@ -186,6 +198,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 				false,
 				0).
 				CopyFile(
+					cluster.ClusterName,
 					filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("run_dm-worker-%s-%d.sh", cluster.MachineHost, cluster.ServicePort)),
 					filepath.Join(dmgrutil.AbsClusterScriptDir(cluster.DeployDir, cluster.InstanceName), "run_dm-worker.sh"),
 					dmgrutil.FileTypeScript,
@@ -195,6 +208,7 @@ func CopyClusterFile(clusterTopo []response.ClusterTopologyRespStruct) []task.Ta
 		}
 
 		copyFileTask.CopyFile(
+			cluster.ClusterName,
 			filepath.Join(dmgrutil.AbsClusterCacheDir(cluster.ClusterPath, cluster.ClusterName), fmt.Sprintf("%s-%s-%d.service", componentName, cluster.MachineHost, cluster.ServicePort)),
 			filepath.Join(dmgrutil.AbsClusterTempSystemdDir(cluster.DeployDir), fmt.Sprintf("%s-%d.service", componentName, cluster.ServicePort)),
 			dmgrutil.FileTypeSystemd,

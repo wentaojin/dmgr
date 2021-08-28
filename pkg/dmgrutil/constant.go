@@ -95,6 +95,7 @@ const (
 	FileTypeComponent = "component"
 	FileTypeScript    = "script"
 	FileTypeSystemd   = "systemd"
+	FileTypeRule      = "rule"
 )
 
 var (
