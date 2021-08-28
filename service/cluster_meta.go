@@ -35,7 +35,7 @@ func (s *MysqlService) GetClusterStatus(clusterStatus string) ([]response.Cluste
 	return cm, nil
 }
 
-func (s *MysqlService) UpdateClusterStatus(clusterName, clusterStatus string) error {
+func (s *MysqlService) UpdateClusterMetaStatus(clusterName, clusterStatus string) error {
 	if _, err := s.Engine.Exec(`UPDATE cluster_meta SET cluster_status = ? WHERE cluster_name = ?`, clusterStatus, clusterName); err != nil {
 		return err
 	}

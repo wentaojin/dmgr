@@ -96,6 +96,16 @@ const (
 	FileTypeScript    = "script"
 	FileTypeSystemd   = "systemd"
 	FileTypeRule      = "rule"
+
+	// 用于指定组件 reload 滚更
+	ReloadAlertmanagerFile = "alertmanager.yml"
+	ReloadDmMasterFile     = "dm-master.toml"
+	ReloadDmWorkerFile     = "dm-worker.toml"
+
+	// 组件 hotfix 状态
+	NormalComponent  = "Normal"  // 未打补丁以及配置变更
+	ReloadComponent  = "Reload"  // 存在配置变更（可能打过补丁）
+	PatchedComponent = "Patched" //存在补丁状态（可能配置变更过）
 )
 
 var (

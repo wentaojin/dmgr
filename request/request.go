@@ -101,7 +101,7 @@ type ClusterUpgradeReqStruct struct {
 	ClusterVersion string `json:"cluster_version" form:"cluster_version" binding:"required"`
 }
 
-// 集群补丁请求
+// 集群滚更、补丁请求
 type ClusterPatchReqStruct struct {
 	ClusterName   string                `json:"cluster_name" form:"cluster_name" binding:"required"`
 	ComponentName string                `json:"component_name" form:"component_name"`

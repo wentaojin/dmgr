@@ -222,7 +222,7 @@ func ClusterStart(c *gin.Context) {
 	}
 
 	// 更新集群状态
-	if response.FailWithMsg(c, s.UpdateClusterStatus(req.ClusterName, dmgrutil.ClusterUpStatus)) {
+	if response.FailWithMsg(c, s.UpdateClusterMetaStatus(req.ClusterName, dmgrutil.ClusterUpStatus)) {
 		return
 	}
 	response.SuccessWithoutData(c)
@@ -276,7 +276,7 @@ func ClusterStop(c *gin.Context) {
 		}
 	}
 	// 更新集群状态
-	if response.FailWithMsg(c, s.UpdateClusterStatus(req.ClusterName, dmgrutil.ClusterOfflineStatus)) {
+	if response.FailWithMsg(c, s.UpdateClusterMetaStatus(req.ClusterName, dmgrutil.ClusterOfflineStatus)) {
 		return
 	}
 	response.SuccessWithoutData(c)
@@ -682,47 +682,115 @@ func ClusterScaleIn(c *gin.Context) {
 }
 
 // 集群滚更
+// Only 支持
+// dm-master 组件配置文件 dm-master.toml
+// dm-worker 组件配置文件 dm-worker.toml
+// alertmanager 组件配置文件 alertmanager.yml 滚更
 func CLusterReload(c *gin.Context) {
-	var req request.ClusterOperatorReqStruct
+	var req request.ClusterPatchReqStruct
 	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
 		return
 	}
 
-	// 判断指定实例名是否在指定组件中 [组件操作以实例名为准，实例名全局唯一]
-	s := service.NewMysqlService()
-	instNames, err := s.FilterComponentInstance(req)
-	if response.FailWithMsg(c, err) {
-		return
-	}
-	// 根据集群名、实例名查询集群拓扑
-	clusterTopos, err := s.GetClusterTopologyByInstanceName(req.ClusterName, instNames)
-	if response.FailWithMsg(c, err) {
-		return
-	}
+	// 确保文件未缓存（例如在 iOS 设备上发生的情况）
+	c.Header("Expires", "Mon, 26 Jul 1997 05:00:00 GMT")
+	c.Header("Last-Modified", time.Now().UTC().Format(http.TimeFormat))
+	c.Header("Cache-Control", "no-cache, no-store, must-revalidate")
+	c.Header("Cache-Control", "post-check=0, pre-check=0")
+	c.Header("Pragma", "no-cache")
 
+	s := service.NewMysqlService()
 	// 获取集群元信息
 	clusterMeta, err := s.GetClusterMeta(req.ClusterName)
 	if response.FailWithMsg(c, err) {
 		return
 	}
 
-	// 获取生成集群部署配置文件、运行脚本等文件信息
-	cos := template.GetClusterFile(clusterTopos)
+	// 解压离线镜像包到指定目录
+	// {cluster_path}/cluster/{cluster_name}/{cluster_version}
+	clusterNameDir := dmgrutil.AbsClusterUntarDir(clusterMeta.ClusterPath, clusterMeta.ClusterName)
+	// 新集群版本路径
+	clusterUntarDir := filepath.Join(clusterNameDir, clusterMeta.ClusterVersion)
+	// 目标目录是否存在
+	pkgDir := filepath.Join(clusterUntarDir, dmgrutil.DirPatch)
+	if exist, _ := dmgrutil.PathExists(pkgDir); !exist {
+		if response.FailWithMsg(c, os.MkdirAll(pkgDir, 0750)) {
+			return
+		}
+	}
 
-	// 生成以及 Copy 组件配置文件、运行脚本
-	if response.FailWithMsg(c,
-		template.GenerateClusterFileWithStage(
-			clusterTopos,
-			cos,
-			template.ClusterDeployStage,
-			clusterMeta.AdminUser,
-			clusterMeta.AdminPassword)) {
+	// 定义需要前端上传的文件字段名
+	file, err := c.FormFile("file")
+	if response.FailWithMsg(c, err) {
 		return
 	}
-	copyFileTasks := CopyClusterFile(clusterTopos)
-	copyFileTask := task.NewBuilder().
-		Parallel("+ Copy files", false, copyFileTasks...).BuildTask()
-	if response.FailWithMsg(c, copyFileTask.Execute(ctxt.NewContext())) {
+
+	// 判断是否符合 reload 组件要求
+	switch strings.ToLower(req.ComponentName) {
+	case dmgrutil.ComponentDmMaster:
+		if file.Filename != dmgrutil.ReloadDmMasterFile {
+			if response.FailWithMsg(c, fmt.Errorf("component [%v] reload file name is non-compliant, only support file name is dm-master.toml", dmgrutil.ComponentDmMaster)) {
+				return
+			}
+		}
+	case dmgrutil.ComponentDmWorker:
+		if file.Filename != dmgrutil.ReloadDmWorkerFile {
+			if response.FailWithMsg(c, fmt.Errorf("component [%v] reload file name is non-compliant, only support file name is dm-worker.toml", dmgrutil.ComponentDmMaster)) {
+				return
+			}
+		}
+	case dmgrutil.ComponentAlertmanager:
+		if file.Filename != dmgrutil.ReloadAlertmanagerFile {
+			if response.FailWithMsg(c, fmt.Errorf("component [%v] reload file name is non-compliant, only support file name is alertmanager.yml", dmgrutil.ComponentDmMaster)) {
+				return
+			}
+		}
+	default:
+		if response.FailWithMsg(c, fmt.Errorf("only support dm-master、dm-worker and alertmanager component reload, others not support")) {
+			return
+		}
+	}
+
+	// 文件上传
+	filePath := filepath.Join(pkgDir, file.Filename)
+	if response.FailWithMsg(c, c.SaveUploadedFile(file, filePath)) {
+		return
+	}
+
+	// 	本地运行
+	// 文件解压是否覆盖
+	var cmd string
+	if req.Overwrite == dmgrutil.BoolTrue {
+		// 覆盖
+		cmd = fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, file.Filename), filepath.Join(clusterUntarDir, file.Filename))
+	}
+	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
+	if response.FailWithMsg(c, err) {
+		return
+	}
+	_, stdErr, err := executor.NewLocalExecutor(currentIP, currentUser, currentUser == "root").Execute(cmd, executor.DefaultExecuteTimeout)
+	if response.FailWithMsg(c, err) {
+		return
+	}
+	if len(stdErr) != 0 {
+		if response.FailWithMsg(c, fmt.Errorf("local host [%v] user [%v] running cmd [%v] failed: %v", currentIP, currentUser, cmd, string(stdErr))) {
+			return
+		}
+	}
+
+	// 判断指定实例名是否在指定组件中 [组件操作以实例名为准，实例名全局唯一]
+	instNames, err := s.FilterComponentInstance(request.ClusterOperatorReqStruct{
+		ClusterName:   req.ClusterName,
+		ComponentName: []string{req.ComponentName},
+		InstanceName:  req.InstanceName,
+	})
+	if response.FailWithMsg(c, err) {
+		return
+	}
+
+	// 根据集群名、实例名查询集群拓扑
+	clusterTopos, err := s.GetClusterTopologyByInstanceName(req.ClusterName, instNames)
+	if response.FailWithMsg(c, err) {
 		return
 	}
 
@@ -742,6 +810,15 @@ func CLusterReload(c *gin.Context) {
 						t.ClusterUser,
 						executor.DefaultConnectTimeout,
 						module.DefaultSystemdExecuteTimeout).
+					CopyFile(
+						t.ClusterName,
+						filepath.Join(pkgDir, file.Filename),
+						dmgrutil.AbsClusterConfDir(t.DeployDir, t.InstanceName),
+						dmgrutil.FileTypeComponent,
+						t.MachineHost,
+						false,
+						0,
+					).
 					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
 						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
 						module.DefaultSystemdExecuteTimeout).
@@ -753,6 +830,12 @@ func CLusterReload(c *gin.Context) {
 			}
 		}
 	}
+
+	// 元数据表更新
+	if response.FailWithMsg(c, s.UpdateClusterHotFixStatus(req.ClusterName, instNames, dmgrutil.ReloadComponent)) {
+		return
+	}
+
 	response.SuccessWithoutData(c)
 }
 
@@ -923,17 +1006,21 @@ func ClusterPatch(c *gin.Context) {
 	// 文件解压是否覆盖
 	var cmds []string
 	if req.Overwrite == dmgrutil.BoolTrue {
-		if req.ComponentName == dmgrutil.ComponentGrafana {
+		// 覆盖
+		// 组件是 grafana 组件则不进行解压
+		if strings.ToLower(req.ComponentName) == dmgrutil.ComponentGrafana {
 			cmds = []string{
+				fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, dmgrutil.ComponentGrafanaTarPKG), filepath.Join(clusterUntarDir, dmgrutil.ComponentGrafanaTarPKG)),
+			}
+		} else {
+			cmds = []string{
+				fmt.Sprintf(`tar --no-same-owner -zxvf %v -C %v; rm -rf %v`, filePath, pkgDir, filePath),
 				fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, strings.ToLower(req.ComponentName)), filepath.Join(clusterUntarDir, strings.ToLower(req.ComponentName))),
 			}
 		}
-		cmds = []string{
-			fmt.Sprintf(`tar --no-same-owner -zxvf %v -C %v; rm -rf %v`, filePath, pkgDir, filePath),
-			fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, strings.ToLower(req.ComponentName)), filepath.Join(clusterUntarDir, strings.ToLower(req.ComponentName))),
-		}
 	} else {
-		if req.ComponentName != dmgrutil.ComponentGrafana {
+		// 补丁组件非 grafana 组件需要解压
+		if strings.ToLower(req.ComponentName) != dmgrutil.ComponentGrafana {
 			cmds = []string{fmt.Sprintf(`tar --no-same-owner -zxvf %v -C %v; rm -rf %v`, filePath, pkgDir, filePath)}
 		}
 	}
@@ -1019,6 +1106,12 @@ func ClusterPatch(c *gin.Context) {
 			}
 		}
 	}
+
+	// 元数据表更新
+	if response.FailWithMsg(c, s.UpdateClusterHotFixStatus(req.ClusterName, instNames, dmgrutil.PatchedComponent)) {
+		return
+	}
+
 	response.SuccessWithoutData(c)
 }
 
