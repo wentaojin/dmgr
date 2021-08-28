@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/README" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,21 +39,22 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pkg/cluster/api/dmpb" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/conf" />
     <property name="settings.editor.selected.configurable" value="MTConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api\dmpb" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Marvin\Projects\goModules\dmgr\router\timeout" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\ctxt" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\task" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\executor" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Marvin\Projects\goModules\dmgr\conf" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api\dmpb" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
     </key>
   </component>
   <component name="RunManager" selected="Go Build.go build github.com/wentaojin/dmgr/test">
