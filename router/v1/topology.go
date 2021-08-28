@@ -762,7 +762,7 @@ func CLusterReload(c *gin.Context) {
 	var cmd string
 	if req.Overwrite == dmgrutil.BoolTrue {
 		// 覆盖
-		cmd = fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, file.Filename), filepath.Join(clusterUntarDir, file.Filename))
+		cmd = fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, file.Filename), filepath.Join(clusterUntarDir, "conf", file.Filename))
 	}
 	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
 	if response.FailWithMsg(c, err) {
