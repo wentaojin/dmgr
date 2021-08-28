@@ -94,7 +94,7 @@ peer_port,
 cluster_port,
 deploy_dir,
 data_dir,
-log_dir FROM cluster_topology cluster_name = ? AND topo.instance_name IN (?)`, clusterName, instanceNames)
+log_dir FROM cluster_topology WHERE cluster_name = ? AND topo.instance_name IN (?)`, clusterName, instanceNames)
 	if err != nil {
 		return req, err
 	}

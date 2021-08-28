@@ -132,6 +132,20 @@ func FilterRepeatElem(str []string) []string {
 	return repeatElem
 }
 
+// 判断数组是否存在某个元素
+func IsContainElem(array interface{}, value interface{}) bool {
+	switch reflect.TypeOf(array).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(array)
+		for i := 0; i < s.Len(); i++ {
+			if reflect.DeepEqual(value, s.Index(i).Interface()) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 // 获取本机客户端地址
 func GetClientOutBoundIP() (username, ip string, err error) {
 	u, err := user.Current()

@@ -373,6 +373,23 @@ func ClusterScaleOut(c *gin.Context) {
 	cos := template.GetClusterFile(topoDB)
 
 	// 生成以及 Copy 组件配置文件、运行脚本
+	switch strings.ToLower(topo.ComponentName) {
+	case dmgrutil.ComponentDmMaster:
+		cos.DmMasterAddrs = append(cos.DmMasterAddrs, fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort))
+	case dmgrutil.ComponentDmWorker:
+		cos.DmWorkerAddrs = append(cos.DmWorkerAddrs, fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort))
+	case dmgrutil.ComponentGrafana:
+		cos.GrafanaAddr = fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort)
+	case dmgrutil.ComponentAlertmanager:
+		cos.AlertmanagerAddrs = append(cos.AlertmanagerAddrs, fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort))
+	case dmgrutil.ComponentPrometheus:
+		cos.PrometheusAddr = fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort)
+	default:
+		if response.FailWithMsg(c, fmt.Errorf("component [%v] not exist, panic", topo.ComponentName)) {
+			return
+		}
+	}
+
 	if response.FailWithMsg(c, template.GenerateClusterFileWithStage(clusterTopo,
 		cos.DmMasterScripts,
 		cos.AlertmanagerScripts,
@@ -386,7 +403,9 @@ func ClusterScaleOut(c *gin.Context) {
 		topo.AdminPassword)) {
 		return
 	}
-	copyFileTasks := CopyClusterFile(clusterTopo)
+
+	// 集群已部署存在的组件配置文件以及脚本刷新 refresh
+	copyFileTasks := CopyClusterFile(topoDB)
 
 	// 扩容集群组件
 	builder := task.NewBuilder().
@@ -578,6 +597,80 @@ func ClusterScaleIn(c *gin.Context) {
 		return
 	}
 
+	// 刷新 prometheus 组件
+	if !dmgrutil.IsContainElem(req.ComponentName, dmgrutil.ComponentPrometheus) {
+		// 获取集群拓扑信息
+		topoDB, err := s.GetClusterTopologyByClusterName(req.ClusterName)
+		if response.FailWithMsg(c, err) {
+			return
+		}
+		// 获取扩容集群元信息
+		clusterMeta, err := s.GetClusterMeta(req.ClusterName)
+		if response.FailWithMsg(c, err) {
+			return
+		}
+
+		// 获取生成集群部署配置文件、运行脚本等文件信息【根据元数据库已有集群组件信息】
+		cos := template.GetClusterFile(topoDB)
+
+		// 生成以及 Copy 组件配置文件、运行脚本
+		if response.FailWithMsg(c, template.GenerateClusterFileWithStage(topoDB,
+			cos.DmMasterScripts,
+			cos.AlertmanagerScripts,
+			cos.AlertmanagerAddrs,
+			cos.DmMasterAddrs,
+			cos.DmWorkerAddrs,
+			cos.GrafanaAddr,
+			cos.PrometheusAddr,
+			template.ClusterScaleOutStage,
+			"",
+			"")) {
+			return
+		}
+
+		// 集群已部署存在的组件配置文件以及脚本刷新 refresh
+		copyFileTasks := CopyClusterFile(topoDB)
+
+		builder := task.NewBuilder().
+			SSHKeySet(
+				filepath.Join(
+					dmgrutil.AbsClusterSSHDir(clusterMeta.ClusterPath, clusterMeta.ClusterName), "id_ed25519"),
+				filepath.Join(
+					dmgrutil.AbsClusterSSHDir(clusterMeta.ClusterPath, clusterMeta.ClusterName), "id_ed25519.pub")).
+			Parallel("+ Copy files", false, copyFileTasks...).BuildTask()
+
+		if response.FailWithMsg(c, builder.Execute(ctxt.NewContext())) {
+			return
+		}
+
+		// 刷新 prometheus 组件
+		for _, t := range topoDB {
+			if strings.ToLower(t.ComponentName) == dmgrutil.ComponentPrometheus {
+				refreshCompTask := task.NewBuilder().
+					SSHKeySet(
+						filepath.Join(
+							dmgrutil.AbsClusterSSHDir(t.ClusterPath, t.ClusterName), "id_ed25519"),
+						filepath.Join(
+							dmgrutil.AbsClusterSSHDir(t.ClusterPath, t.ClusterName), "id_ed25519.pub")).
+					UserSSH(
+						t.MachineHost,
+						t.SshPort,
+						t.ClusterUser,
+						executor.DefaultConnectTimeout,
+						module.DefaultSystemdExecuteTimeout).
+					StopInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort),
+						module.DefaultSystemdExecuteTimeout).
+					StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
+						fmt.Sprintf("%s-%d.service", t.ComponentName, t.ServicePort), module.DefaultSystemdExecuteTimeout).BuildTask()
+
+				if response.FailWithMsg(c, refreshCompTask.Execute(ctxt.NewContext())) {
+					return
+				}
+			}
+		}
+
+	}
 	response.SuccessWithoutData(c)
 }
 
