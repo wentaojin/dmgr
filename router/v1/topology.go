@@ -688,7 +688,7 @@ func ClusterScaleIn(c *gin.Context) {
 // alertmanager 组件配置文件 alertmanager.yml 滚更
 func CLusterReload(c *gin.Context) {
 	var req request.ClusterPatchReqStruct
-	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
+	if response.FailWithMsg(c, c.ShouldBind(&req)) {
 		return
 	}
 
