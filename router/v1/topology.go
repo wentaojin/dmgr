@@ -926,6 +926,11 @@ func ClusterUpgrade(c *gin.Context) {
 	}
 	copyFileTasks := CopyClusterFile(clusterTopos)
 	copyFileTask := task.NewBuilder().
+		SSHKeySet(
+			filepath.Join(
+				dmgrutil.AbsClusterSSHDir(clusterMeta.ClusterPath, clusterMeta.ClusterName), "id_ed25519"),
+			filepath.Join(
+				dmgrutil.AbsClusterSSHDir(clusterMeta.ClusterPath, clusterMeta.ClusterName), "id_ed25519.pub")).
 		Parallel("+ Copy files", false, copyFileTasks...).BuildTask()
 
 	if response.FailWithMsg(c, copyFileTask.Execute(ctxt.NewContext())) {
