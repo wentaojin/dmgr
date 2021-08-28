@@ -139,13 +139,7 @@ func ClusterDeploy(c *gin.Context) {
 	if response.FailWithMsg(c,
 		template.GenerateClusterFileWithStage(
 			clusterTopo,
-			cos.DmMasterScripts,
-			cos.AlertmanagerScripts,
-			cos.AlertmanagerAddrs,
-			cos.DmMasterAddrs,
-			cos.DmWorkerAddrs,
-			cos.GrafanaAddr,
-			cos.PrometheusAddr,
+			cos,
 			template.ClusterDeployStage,
 			topo.AdminUser,
 			topo.AdminPassword)) {
@@ -375,6 +369,8 @@ func ClusterScaleOut(c *gin.Context) {
 	cos := template.GetClusterFile(topoDB)
 
 	// 生成以及 Copy 组件配置文件、运行脚本
+	// 1、重新生成以及分发集群已存在的组件配置文件、运行脚本
+	// 2、生成以及分发扩容组件配置文件、运行脚本
 	switch strings.ToLower(topo.ComponentName) {
 	case dmgrutil.ComponentDmMaster:
 		cos.DmMasterAddrs = append(cos.DmMasterAddrs, fmt.Sprintf("%s:%v", topo.MachineHost, topo.ServicePort))
@@ -401,14 +397,16 @@ func ClusterScaleOut(c *gin.Context) {
 		}
 	}
 
+	if response.FailWithMsg(c, template.GenerateClusterFileWithStage(topoDB,
+		cos,
+		template.ClusterDeployStage,
+		"",
+		"")) {
+		return
+	}
+
 	if response.FailWithMsg(c, template.GenerateClusterFileWithStage(clusterTopo,
-		cos.DmMasterScripts,
-		cos.AlertmanagerScripts,
-		cos.AlertmanagerAddrs,
-		cos.DmMasterAddrs,
-		cos.DmWorkerAddrs,
-		cos.GrafanaAddr,
-		cos.PrometheusAddr,
+		cos,
 		template.ClusterScaleOutStage,
 		topo.AdminUser,
 		topo.AdminPassword)) {
@@ -630,13 +628,7 @@ func ClusterScaleIn(c *gin.Context) {
 
 		// 生成以及 Copy 组件配置文件、运行脚本
 		if response.FailWithMsg(c, template.GenerateClusterFileWithStage(topoDB,
-			cos.DmMasterScripts,
-			cos.AlertmanagerScripts,
-			cos.AlertmanagerAddrs,
-			cos.DmMasterAddrs,
-			cos.DmWorkerAddrs,
-			cos.GrafanaAddr,
-			cos.PrometheusAddr,
+			cos,
 			template.ClusterScaleOutStage,
 			"",
 			"")) {
@@ -721,13 +713,7 @@ func CLusterReload(c *gin.Context) {
 	if response.FailWithMsg(c,
 		template.GenerateClusterFileWithStage(
 			clusterTopos,
-			cos.DmMasterScripts,
-			cos.AlertmanagerScripts,
-			cos.AlertmanagerAddrs,
-			cos.DmMasterAddrs,
-			cos.DmWorkerAddrs,
-			cos.GrafanaAddr,
-			cos.PrometheusAddr,
+			cos,
 			template.ClusterDeployStage,
 			clusterMeta.AdminUser,
 			clusterMeta.AdminPassword)) {
@@ -817,13 +803,7 @@ func ClusterUpgrade(c *gin.Context) {
 	if response.FailWithMsg(c,
 		template.GenerateClusterFileWithStage(
 			clusterTopos,
-			cos.DmMasterScripts,
-			cos.AlertmanagerScripts,
-			cos.AlertmanagerAddrs,
-			cos.DmMasterAddrs,
-			cos.DmWorkerAddrs,
-			cos.GrafanaAddr,
-			cos.PrometheusAddr,
+			cos,
 			template.ClusterDeployStage,
 			clusterMeta.AdminUser,
 			clusterMeta.AdminPassword)) {

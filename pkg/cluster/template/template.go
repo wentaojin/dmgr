@@ -90,13 +90,7 @@ func GetClusterFile(topo []response.ClusterTopologyRespStruct) ClusterOperatorSt
 // 生成集群配置文件 - 集群阶段
 func GenerateClusterFileWithStage(
 	topo []response.ClusterTopologyRespStruct,
-	dmMasterScripts []*script.DMMasterScript,
-	alertmanagerScripts []*script.AlertManagerScript,
-	alertmanagerAddrs []string,
-	dmMasterAddrs []string,
-	dmWorkerAddrs []string,
-	grafanaAddr string,
-	prometheusAddr string,
+	cos ClusterOperatorStage,
 	clusterStage string,
 	adminUser, adminPassword string) error {
 
@@ -108,7 +102,7 @@ func GenerateClusterFileWithStage(
 					dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
 					dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
 					dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
-					AppendEndpoints(dmMasterScripts...).
+					AppendEndpoints(cos.DmMasterScripts...).
 					WithPort(t.ServicePort).
 					WithPeerPort(t.PeerPort).
 					WithScheme("http").
@@ -129,7 +123,7 @@ func GenerateClusterFileWithStage(
 					dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
 					dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
 					WithPort(t.ServicePort).
-					AppendEndpoints(dmMasterScripts...).
+					AppendEndpoints(cos.DmMasterScripts...).
 					WithPeerPort(t.PeerPort).
 					WithScheme("http").
 					ConfigToFile(
@@ -158,7 +152,7 @@ func GenerateClusterFileWithStage(
 			if err := script.NewDMWorkerScript(t.InstanceName, t.MachineHost,
 				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
 				dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName)).
-				WithPort(t.ServicePort).AppendEndpoints(dmMasterScripts...).ConfigToFile(
+				WithPort(t.ServicePort).AppendEndpoints(cos.DmMasterScripts...).ConfigToFile(
 				filepath.Join(
 					dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
 					t.ClusterVersion,
@@ -183,7 +177,7 @@ func GenerateClusterFileWithStage(
 		case dmgrutil.ComponentGrafana:
 			var grafanaUser, grafanaPassword string
 
-			promtheusAddrs := strings.Split(prometheusAddr, ":")
+			promtheusAddrs := strings.Split(cos.PrometheusAddr, ":")
 
 			// 用于集群扩容阶段 -》 扩容阶段如果未指定 grafana 用户密码，则使用数据库中已有的 grafana 用户密码
 			if adminUser == "" {
@@ -262,10 +256,10 @@ func GenerateClusterFileWithStage(
 			}
 		case dmgrutil.ComponentPrometheus:
 			if err := config.NewPrometheusConfig(t.ClusterName, t.ClusterVersion, false).
-				AddAlertmanager(alertmanagerAddrs).
-				AddDMMaster(dmMasterAddrs).
-				AddDMWorker(dmWorkerAddrs).
-				AddGrafana(grafanaAddr).
+				AddAlertmanager(cos.AlertmanagerAddrs).
+				AddDMMaster(cos.DmMasterAddrs).
+				AddDMWorker(cos.DmWorkerAddrs).
+				AddGrafana(cos.GrafanaAddr).
 				SetRemoteConfig("").
 				ConfigToFile(
 					filepath.Join(
@@ -312,7 +306,7 @@ func GenerateClusterFileWithStage(
 				dmgrutil.AbsClusterDeployDir(t.DeployDir, t.InstanceName),
 				dmgrutil.AbsClusterDataDir(t.DeployDir, t.DataDir, t.InstanceName),
 				dmgrutil.AbsClusterLogDir(t.DeployDir, t.LogDir, t.InstanceName), false).
-				AppendEndpoints(alertmanagerScripts).WithClusterPort(t.ClusterPort).WithWebPort(t.ServicePort).
+				AppendEndpoints(cos.AlertmanagerScripts).WithClusterPort(t.ClusterPort).WithWebPort(t.ServicePort).
 				ConfigToFile(
 					filepath.Join(
 						dmgrutil.AbsClusterUntarDir(t.ClusterPath, t.ClusterName),
