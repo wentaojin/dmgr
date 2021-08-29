@@ -1,6 +1,6 @@
-DMGR 数据迁移管理平台
+### DMGR 数据迁移管理平台
 
-管理 MySQL -> TiDB DM 数据迁移任务，已集成 [DM](https://docs.pingcap.com/zh/tidb-data-migration/stable/overview) 集群级别管理功能
+MySQL -> TiDB DM 数据迁移任务管理，已集成 [DM](https://docs.pingcap.com/zh/tidb-data-migration/stable/overview) 集群级别管理功能
 
 1. 集群部署
 2. 集群启停
@@ -11,7 +11,8 @@ DMGR 数据迁移管理平台
 7. 集群升级
 8. 集群销毁
 
-DMGR 运行示例
+### DMGR 运行示例
+
 ```
 # dmgr.toml 配置文件示例参见 conf 目录
 $ ./dmgr --config dmgr.toml
@@ -23,18 +24,41 @@ $ ./dmgr --config dmgr.toml
 
 数据同步任务功能待设计阶段...
 
-DMGR DM 集群管理级别功能设计
-```
-dmgr 管理表结构设计：
-1、部署机器列表新增(部署、升级前必备)  -> machine
+### DMGR 集群管理级别功能设计
+
+#### dmgr 管理表结构设计
+- 部署机器列表新增(部署、升级前必备)  -> machine
+
   * 机器新增用户链接信息，需要 root 用户或者具备 sudo 权限的用户 
-2、离线包上传(部署、升级前必备) -> warehouse
-3、集群运维
+  * 离线包上传(部署、升级前必备) -> warehouse
+  * 集群运维管理
   - 保存集群元信息 -> cluster_meta
   - 保存集群拓扑  -> cluster_topology
-4、用户登录       -> user
+  - 用户登录       -> user
 
-dm 安装包结构设计：
+#### dmgr 集群管理目录层级设计
+
+```
+集群管理元目录层级 {cluster_path}/cluster/{cluster_name}
+v2.0.1               -> 离线安装包解压后的存放目录，版本号区分
+cache                -> 模板文件生成文件
+ssh                  -> 集群 ssh 认证存放路径
+```
+
+#### dmgr 集群部署目录层级设计
+
+```
+dm 集群常见部署目录层级
+{deploy_dir}/bin 
+{deploy_dir}/scripts
+{deploy_dir}/conf
+{data_dir}/data
+{log_dir}/log
+```
+
+#### dm 安装包结构设计
+
+```
 dm-v2.0.1.tar.gz 压缩包内容【格式必须】
   bin                     -> 二进制文件
     * prometheus
@@ -93,20 +117,5 @@ dm-v2.0.1.tar.gz 压缩包内容【格式必须】
     * dmctl             -> 二进制文件
     * task_advanced.yml  -> 任务同步示例文件
     * task_basic.yml     -> 任务同步示例文件
-
-
-dmgr 集群管理目录层级设计：
-# 集群管理元目录层级 {cluster_path}/cluster/{cluster_name}
-  v2.0.1               -> 离线安装包解压后的目录名
-  cache                -> 模板文件生成文件
-  ssh                  -> 集群 ssh 认证存放路径
-
-dmgr 集群部署目录层级设计：
-# dm 集群部署存放
-{deploy_dir}/bin 
-{deploy_dir}/scripts
-{deploy_dir}/conf
-{data_dir}/data
-{log_dir}/log
 ```
 
