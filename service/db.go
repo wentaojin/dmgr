@@ -40,7 +40,7 @@ func NewMySQLEngineDB(cfg *dmgrutil.DbConfig) (err error) {
 }
 
 func SyncMysqlEngineDB() error {
-	if _, err := Engine.Exec(Tables); err != nil {
+	if _, err := Engine.Exec(ClusterTables, TaskTables); err != nil {
 		return errors.Errorf("create table struct failed, err: %v\n", err)
 	}
 	if err := initMysqlEngineData(); err != nil {
