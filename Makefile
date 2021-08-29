@@ -10,7 +10,7 @@ GOOS    := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 GOARCH  := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 GOENV   := GO111MODULE=on CGO_ENABLED=1 GOOS=$(GOOS) GOARCH=$(GOARCH)
 GO      := $(GOENV) go
-GOBUILD := $(GO) build $(BUILD_FLAGS)
+GOBUILD := $(GO) build
 GORUN   := $(GO) run
 SHELL   := /usr/bin/env bash
 
@@ -18,16 +18,13 @@ COMMIT  := $(shell git describe --no-match --always --dirty)
 BUILDTS := $(shell date -u '+%Y-%m-%d %H:%M:%S')
 GITHASH := $(shell git rev-parse HEAD)
 GITREF  := $(shell git rev-parse --abbrev-ref HEAD)
-GOVERSION := $(shell go version)
 
 
 LDFLAGS := -w -s
-LDFLAGS += -X "$(REPO)/pkg/dmgrutil.ReleaseVersion=$(COMMIT)"
+LDFLAGS += -X "$(REPO)/pkg/dmgrutil.Version=$(COMMIT)"
 LDFLAGS += -X "$(REPO)/pkg/dmgrutil.BuildTS=$(BuildTS)"
 LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GitHash=$(GITHASH)"
 LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GitBranch=$(GITREF)"
-LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GoVersion=$(GOVERSION)"
-LDFLAGS += $(EXTRA_LDFLAGS)
 
 
 build: clean gotool
@@ -40,7 +37,7 @@ gotool:
 	$(GO) mod tidy
 
 clean:
-	@if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
+	@if [ -f ${BINARYPATH} ] ; then rm ${BINARYPATH} ; fi
 
 help:
 	@echo "make - 格式化 Go 代码, 并编译生成二进制文件"

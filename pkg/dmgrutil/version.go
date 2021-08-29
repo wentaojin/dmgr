@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"strings"
 
 	"go.uber.org/zap"
 )
@@ -34,7 +33,7 @@ var (
 
 func GetAppVersion(version bool) {
 	if version {
-		fmt.Printf("%v", getRawVersion("dmgr"))
+		fmt.Printf("%v", getRawVersion())
 		os.Exit(1)
 	}
 }
@@ -51,9 +50,9 @@ func RecordAppVersion(app string, logger *zap.Logger, cfg *Config) {
 	logger.Info(app+" config", zap.Stringer("config", cfg))
 }
 
-func getRawVersion(app string) string {
+func getRawVersion() string {
 	info := ""
-	info += fmt.Sprintf("%s: %s\n", strings.ToUpper(app), Version)
+	info += fmt.Sprintf("Release Version: %s\n", Version)
 	info += fmt.Sprintf("Git Commit Hash: %s\n", GitHash)
 	info += fmt.Sprintf("Git Branch: %s\n", GitBranch)
 	info += fmt.Sprintf("UTC Build Time: %s\n", BuildTS)
