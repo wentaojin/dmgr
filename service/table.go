@@ -77,20 +77,19 @@ CREATE TABLE IF NOT EXISTS task_meta (
 cluster_name varchar(30) NOT NULL COMMENT '集群名',
 task_name varchar(30) NOT NULL COMMENT '任务名',
 task_mode varchar(30) NOT NULL DEFAULT 'all' COMMENT '任务模式 "full" - "只进行全量数据迁移"、"incremental" - "Binlog 实时同步"、"all" - "全量 + Binlog 迁移"',
-shard_mode varchar(30) NOT NULL DEFAULT NULL COMMENT '任务协调模式 ""、"pessimistic、"optimistic" 默认使用 ""',
+shard_mode varchar(30) NOT NULL DEFAULT '' COMMENT '任务协调模式 ""、"pessimistic、"optimistic" 默认使用 ""',
 meta_schema varchar(30) NOT NULL DEFAULT 'dm_meta' COMMENT '任务元数据库',
 timezone varchar(30) NOT NULL DEFAULT 'Asia/Shanghai' COMMENT '时区',
 case_sensitive varchar(30) NOT NULL DEFAULT 'false' COMMENT 'schema/table 是否大小写敏感',
 online_ddl varchar(30) NOT NULL DEFAULT 'true' COMMENT '是否激活 online_ddl',
 online_ddl_scheme varchar(30) NOT NULL DEFAULT 'pt' COMMENT 'online_ddl 模式，只支持 "gh-ost" 、"pt" 的自动处理',
-ignore_checking_items varchar(125) NOT NULL DEFAULT NULL COMMENT '是否关闭任何检查项，默认""不关闭',
+ignore_checking_items varchar(125) NOT NULL DEFAULT '' COMMENT '是否关闭任何检查项，默认""不关闭',
 clean_dump_file varchar(30) NOT NULL DEFAULT 'true' COMMENT '是否清理 dump 阶段产生的文件',
 task_source_id varchar(1024) NOT NULL COMMENT '源库实例名,格式 source1;source2 多个 source 分号分割',
 target_id varchar(30) NOT NULL COMMENT '目标数据源 ID',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-PRIMARY KEY (cluster_name,task_name),
-UNIQUE INDEX idx_host_port (target_host,target_port)
+PRIMARY KEY (cluster_name,task_name)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
