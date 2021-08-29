@@ -1,4 +1,5 @@
 .PHONY: all build run gotool clean help
+.DEFAULT_GOAL := default
 
 CMDPATH="./cmd"
 BINARYPATH="bin/dmgr"
@@ -29,7 +30,7 @@ LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GoVersion=$(GOVERSION)"
 LDFLAGS += $(EXTRA_LDFLAGS)
 
 
-FILES   := $$(find . -name "*.go")
+default: clean gotool run
 
 all: clean gotool build
 
