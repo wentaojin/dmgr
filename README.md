@@ -1,6 +1,5 @@
 DMGR 数据迁移管理平台
-
-DMGR 用于管理 TiDB -> MySQL DM 数据迁移任务，已完成 DM 集群管理级别功能：
+管理 MySQL -> TiDB DM 数据迁移任务，已集成 [DM](https://docs.pingcap.com/zh/tidb-data-migration/stable/overview) 集群级别管理功能
 
 1. 集群部署
 2. 集群启停
@@ -11,10 +10,19 @@ DMGR 用于管理 TiDB -> MySQL DM 数据迁移任务，已完成 DM 集群管�
 7. 集群升级
 8. 集群销毁
 
+DMGR 运行示例
+```
+# dmgr.toml 配置文件示例参见 conf 目录
+$ ./dmgr --config dmgr.toml
+
+# 程序默认运行 debug 模式，展示 api 接口，若无需展示，请切换至 release 模式运行
+$ export GIN_MODE=release
+$ ./dmgr --config dmgr.toml
+```
+
 数据同步任务功能待设计阶段...
 
 DMGR DM 集群管理级别功能设计
-
 ```
 dmgr 管理表结构设计：
 1、部署机器列表新增(部署、升级前必备)  -> machine
@@ -87,8 +95,7 @@ dm-v2.0.1.tar.gz 压缩包内容【格式必须】
 
 
 dmgr 集群管理目录层级设计：
-# 集群管理元目录层级
-# {cluster_path}/cluster/{cluster_name}  
+# 集群管理元目录层级 {cluster_path}/cluster/{cluster_name}
   v2.0.1               -> 离线安装包解压后的目录名
   cache                -> 模板文件生成文件
   ssh                  -> 集群 ssh 认证存放路径
