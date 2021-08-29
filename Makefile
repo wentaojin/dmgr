@@ -22,7 +22,7 @@ GITREF  := $(shell git rev-parse --abbrev-ref HEAD)
 
 LDFLAGS := -w -s
 LDFLAGS += -X "$(REPO)/pkg/dmgrutil.Version=$(COMMIT)"
-LDFLAGS += -X "$(REPO)/pkg/dmgrutil.BuildTS=$(BuildTS)"
+LDFLAGS += -X "$(REPO)/pkg/dmgrutil.BuildTS=$(BUILDTS)"
 LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GitHash=$(GITHASH)"
 LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GitBranch=$(GITREF)"
 
@@ -31,7 +31,7 @@ build: clean gotool
 	$(GOBUILD) -ldflags '$(LDFLAGS)' -o $(BINARYPATH) $(CMDPATH)
 
 run: gotool
-	$(GORUN) $(CMDPATH) --config $(CONFIGPATH)
+	$(GORUN) -race $(CMDPATH) --config $(CONFIGPATH)
 
 gotool:
 	$(GO) mod tidy
