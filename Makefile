@@ -14,7 +14,7 @@ GOBUILD := $(GO) build
 GORUN   := $(GO) run
 SHELL   := /usr/bin/env bash
 
-COMMIT  := $(shell git describe --tags --dirty="-dev")
+COMMIT  := $(shell git describe --always --no-match --tags --dirty="-dev")
 BUILDTS := $(shell date -u '+%Y-%m-%d %H:%M:%S')
 GITHASH := $(shell git rev-parse HEAD)
 GITREF  := $(shell git rev-parse --abbrev-ref HEAD)
