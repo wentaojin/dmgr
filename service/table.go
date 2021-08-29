@@ -59,7 +59,6 @@ target_packet bigint NOT NULL DEFAULT 67108864 COMMENT '目标数据库 max_allo
 sql_mode varchar(255) DEFAULT NULL COMMENT '目标数据库 SQL MODE',
 skip_utf8_check int DEFAULT NULL COMMENT '目标数据库 tidb_skip_utf8_check',
 constraint_check_in_place int DEFAULT NULL COMMENT '目标数据库 tidb_constraint_check_in_place',
-target_ssl_key varchar(255) DEFAULT NULL COMMENT '目标数据库 SSL KEY',
 target_ssl_ca varchar(255) DEFAULT NULL COMMENT '目标数据库 SSL CA',
 target_ssl_cert varchar(255) DEFAULT NULL COMMENT '目标数据库 SSL CERT',
 target_ssl_key varchar(255) DEFAULT NULL COMMENT '目标数据库 SSL KEY',
