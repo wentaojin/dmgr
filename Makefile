@@ -1,8 +1,8 @@
-.PHONY: all build run gotool clean help
-.DEFAULT_GOAL := default
+.PHONY: run build gotool clean help
 
 CMDPATH="./cmd"
 BINARYPATH="bin/dmgr"
+CONFIGPATH="./conf/dmgr.toml"
 
 REPO    := github.com/wentaojin/dmgr
 
@@ -30,22 +30,17 @@ LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GoVersion=$(GOVERSION)"
 LDFLAGS += $(EXTRA_LDFLAGS)
 
 
-default: clean gotool run
-
-all: clean gotool build
+run: gotool
+	$(GORUN) $(CMDPATH) --config $(CONFIGPATH)
 
 build: clean gotool
 	$(GOBUILD) -ldflags '$(LDFLAGS)' -o $(BINARYPATH) $(CMDPATH)
-
-run:
-	$(GORUN) -race $(CMDPATH)
 
 gotool:
 	$(GO) mod tidy
 
 clean:
 	@if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
-
 
 help:
 	@echo "make - 格式化 Go 代码, 并编译生成二进制文件"
