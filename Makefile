@@ -1,4 +1,4 @@
-.PHONY: run build gotool clean help
+.PHONY: build run gotool clean help
 
 CMDPATH="./cmd"
 BINARYPATH="bin/dmgr"
@@ -8,7 +8,7 @@ REPO    := github.com/wentaojin/dmgr
 
 GOOS    := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 GOARCH  := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
-GOENV   := GO111MODULE=on CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH)
+GOENV   := GO111MODULE=on CGO_ENABLED=1 GOOS=$(GOOS) GOARCH=$(GOARCH)
 GO      := $(GOENV) go
 GOBUILD := $(GO) build $(BUILD_FLAGS)
 GORUN   := $(GO) run
@@ -30,11 +30,11 @@ LDFLAGS += -X "$(REPO)/pkg/dmgrutil.GoVersion=$(GOVERSION)"
 LDFLAGS += $(EXTRA_LDFLAGS)
 
 
-run: gotool
-	$(GORUN) $(CMDPATH) --config $(CONFIGPATH)
-
 build: clean gotool
 	$(GOBUILD) -ldflags '$(LDFLAGS)' -o $(BINARYPATH) $(CMDPATH)
+
+run: gotool
+	$(GORUN) $(CMDPATH) --config $(CONFIGPATH)
 
 gotool:
 	$(GO) mod tidy

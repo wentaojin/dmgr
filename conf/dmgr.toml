@@ -13,7 +13,7 @@ db-name = "dmgr"
 # 日志 level
 log-level = "info"
 # 日志文件路径
-log-file = "./dmgr.log"
+log-file = "./conf/dmgr.log"
 # 每个日志文件保存的最大尺寸 单位：M
 max-size = 128
 # 文件最多保存多少天
