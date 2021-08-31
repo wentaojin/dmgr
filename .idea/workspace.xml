@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/request/taskstruct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/request.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/clusterstruct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/response/respstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/response/clusterstruct.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/table.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/table.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -172,10 +176,10 @@
     </state>
     <state x="2406" y="49" width="1588" height="1302" key="find.popup/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1629869165442" />
     <state x="243" y="24" width="794" height="632" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1630134158408" />
-    <state x="2526" y="2" width="1344" height="1396" key="search.everywhere.popup" timestamp="1629801474208">
-      <screen x="1920" y="0" width="2560" height="1400" />
+    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1630247699273">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="2526" y="2" width="1344" height="1396" key="search.everywhere.popup/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1629801474208" />
-    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1629624730338" />
+    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1630247699273" />
   </component>
 </project>
