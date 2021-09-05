@@ -106,6 +106,9 @@ const (
 	NormalComponent  = "Normal"  // 未打补丁以及配置变更
 	ReloadComponent  = "Reload"  // 存在配置变更（可能打过补丁）
 	PatchedComponent = "Patched" //存在补丁状态（可能配置变更过）
+
+	// 任务 source name 分隔符
+	TaskSourceDelimiter = ";"
 )
 
 var (

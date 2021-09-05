@@ -72,11 +72,13 @@ func registerRouter(file *dmgrutil.MiddlewareConfig) *gin.Engine {
 
 	// 方便统一添加路由前缀
 	v1Group := r.Group("v1")
-	InitBaseRouter(v1Group, authMiddleware)      // 注册基础路由, 不会鉴权
-	InitUserRouter(v1Group, authMiddleware)      // 注册用户路由
-	InitMachineRouter(v1Group, authMiddleware)   // 注册机器路由
-	InitWarehouseRouter(v1Group, authMiddleware) // 注册离线包路由
-	InitClusterRouter(v1Group, authMiddleware)   // 注册集群路由
+	InitBaseRouter(v1Group, authMiddleware)       // 注册基础路由, 不会鉴权
+	InitUserRouter(v1Group, authMiddleware)       // 注册用户路由
+	InitMachineRouter(v1Group, authMiddleware)    // 注册机器路由
+	InitWarehouseRouter(v1Group, authMiddleware)  // 注册离线包路由
+	InitClusterRouter(v1Group, authMiddleware)    // 注册集群管理路由
+	InitDatasourceRouter(v1Group, authMiddleware) // 注册任务数据源路由
+	InitTaskRouter(v1Group, authMiddleware)       // 注册任务管理路由
 
 	return r
 }

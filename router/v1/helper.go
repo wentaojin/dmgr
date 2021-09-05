@@ -20,6 +20,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/wentaojin/dmgr/pkg/cluster/api"
+	"github.com/wentaojin/dmgr/service"
+
 	"github.com/wentaojin/dmgr/request"
 
 	"github.com/wentaojin/dmgr/pkg/cluster/executor"
@@ -296,4 +299,29 @@ func EnvClusterComponentInit(clusterTopo []response.ClusterTopologyRespStruct,
 	}
 
 	return copyCompTasks
+}
+
+// 用于 DM Master API 访问
+func GetActiveDmMasterAddr(s *service.MysqlService, clusterName string) (string, error) {
+	var (
+		dmMasterAddr     []string
+		activeMasterAddr string
+	)
+
+	dmMasters, err := s.GetClusterComponent(clusterName, dmgrutil.ComponentDmMaster)
+	if err != nil {
+		return activeMasterAddr, err
+	}
+	for _, dm := range dmMasters {
+		dmMasterAddr = append(dmMasterAddr, fmt.Sprintf("%s:%d", dm.MachineHost, dm.ServicePort))
+	}
+
+	dmMasterClient := api.NewDMMasterClient(dmMasterAddr, api.DmMasterApiTimeout, nil)
+
+	_, activeMasterAddr, err = dmMasterClient.GetLeader(api.DefaultRetryOpt)
+	if err != nil {
+		return activeMasterAddr, err
+	}
+
+	return dmMasterClient.GetURL(activeMasterAddr), nil
 }

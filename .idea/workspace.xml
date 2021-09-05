@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/request/taskstruct.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/conf/dmgr.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctl.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctlstruct.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/request.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/response/task.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/router/v1/datasource.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/router/v1/task.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/datasource.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/json.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/request.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/clusterstruct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/response/respstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/response/clusterstruct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/dmgr.toml" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dmgr.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/api.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/api/http.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/http.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/dmgrutil/constant.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/dmgrutil/constant.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/dmgrutil/ioutil.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/dmgrutil/ioutil.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/clusterstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/cluster.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/taskstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/task.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/response/clusterstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/response/cluster.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/apis.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/apis.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/v1/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/helper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/v1/topology.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/topology.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/table.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/table.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test/ssh.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,9 +44,17 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="C:\Marvin\Golang\GoRoot" />
+  <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
@@ -33,34 +65,39 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="NewWatcherDialog.advanced.open" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/conf" />
-    <property name="settings.editor.selected.configurable" value="MTConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Marvin\Projects\goModules\dmgr\router\timeout" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\ctxt" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\task" />
-      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\executor" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Marvin\Projects\goModules\dmgr\conf" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api\dmpb" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\api" />
       <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pkg/cluster/api" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\router\timeout" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\router" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\ctxt" />
+      <recent name="C:\Marvin\Projects\goModules\dmgr\pkg\cluster\task" />
     </key>
   </component>
   <component name="RunManager" selected="Go Build.go build github.com/wentaojin/dmgr/test">
@@ -68,27 +105,27 @@
       <module name="dmgr" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/cmd/test.go" />
       <package value="github.com/wentaojin/dmgr/cmd" />
       <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/cmd/test.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build github.com/wentaojin/dmgr/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="dmgr" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/cmd/main.go" />
       <package value="github.com/wentaojin/dmgr/cmd" />
       <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/cmd/main.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build github.com/wentaojin/dmgr/test" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="dmgr" />
       <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <filePath value="$PROJECT_DIR$/test/test.go" />
+      <kind value="FILE" />
       <package value="github.com/wentaojin/dmgr/test" />
       <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/test/json.go" />
       <method v="2" />
     </configuration>
     <recent_temporary>
@@ -99,87 +136,32 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
+    <environment>
+      <map>
+        <entry key="GOPROXY" value="https://goproxy.cn,direct" />
+      </map>
+    </environment>
     <proxy>https://goproxy.cn,direct</proxy>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="233" y="0" key="#Go_Modules_(vgo)" timestamp="1626078485232">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="233" y="0" key="#Go_Modules_(vgo)/0.0.1280.680@0.0.1280.680" timestamp="1626078485232" />
-    <state x="350" y="130" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1627199701531">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="350" y="130" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.680@0.0.1280.680" timestamp="1627199701531" />
-    <state x="346" y="0" key="#go_build_github.com/wentaojin/dmgr/cmd" timestamp="1626187604034">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="346" y="0" key="#go_build_github.com/wentaojin/dmgr/cmd/0.0.1280.680@0.0.1280.680" timestamp="1626187604034" />
-    <state x="346" y="0" key="#go_build_github.com/wentaojin/dmgr/cmd_(1)" timestamp="1626187723398">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="346" y="0" key="#go_build_github.com/wentaojin/dmgr/cmd_(1)/0.0.1280.680@0.0.1280.680" timestamp="1626187723398" />
-    <state x="93" y="93" width="1095" height="495" key="DiffContextDialog" timestamp="1630137416697">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="93" y="93" width="1095" height="495" key="DiffContextDialog/0.0.1280.680@0.0.1280.680" timestamp="1630137416697" />
-    <state width="1237" height="160" key="GridCell.Tab.0.bottom" timestamp="1629903319434">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="2517" height="376" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1627531490891" />
-    <state width="1237" height="160" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1629903319434" />
-    <state width="1237" height="160" key="GridCell.Tab.0.center" timestamp="1629903319434">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="2517" height="376" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1627531490891" />
-    <state width="1237" height="160" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1629903319434" />
-    <state width="1237" height="160" key="GridCell.Tab.0.left" timestamp="1629903319434">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="2517" height="376" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1627531490890" />
-    <state width="1237" height="160" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1629903319434" />
-    <state width="1237" height="160" key="GridCell.Tab.0.right" timestamp="1629903319434">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="2517" height="376" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1627531490891" />
-    <state width="1237" height="160" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1629903319434" />
-    <state x="142" y="0" key="SettingsEditor" timestamp="1629642744095">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="142" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1629642744095" />
-    <state x="488" y="250" key="VCS.ChangelistChooser" timestamp="1629641002231">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="488" y="250" key="VCS.ChangelistChooser/0.0.1280.680@0.0.1280.680" timestamp="1629641002231" />
-    <state x="243" y="24" width="794" height="632" key="find.popup" timestamp="1630134158408">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="2406" y="49" width="1588" height="1302" key="find.popup/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1629869165442" />
-    <state x="243" y="24" width="794" height="632" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1630134158408" />
-    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1630247699273">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="2526" y="2" width="1344" height="1396" key="search.everywhere.popup/0.0.1280.680/1920.0.2560.1400@1920.0.2560.1400" timestamp="1629801474208" />
-    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1630247699273" />
   </component>
 </project>

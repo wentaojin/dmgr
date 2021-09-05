@@ -90,7 +90,7 @@ func ClusterDeploy(c *gin.Context) {
 	if response.FailWithMsg(c, err) {
 		return
 	}
-	if dmgrutil.IsStructureEmpty(pkg, response.WarehouseRespStruct{}) {
+	if dmgrutil.IsStructureEqual(pkg, response.WarehouseRespStruct{}) {
 		if response.FailWithMsg(c, fmt.Errorf("cluster_version [%v] offline package not exist", topo.ClusterVersion)) {
 			return
 		}
@@ -554,7 +554,7 @@ func ClusterScaleIn(c *gin.Context) {
 			return
 		}
 	}
-	dmMasterClient := api.NewDMMasterClient(activeDmMasters, 10*time.Second, nil)
+	dmMasterClient := api.NewDMMasterClient(activeDmMasters, api.DmMasterApiTimeout, nil)
 
 	// 根据集群名、实例名查询集群拓扑
 	clusterTopos, err := s.GetClusterTopologyByInstanceName(req.ClusterName, instNames)
@@ -852,7 +852,7 @@ func ClusterUpgrade(c *gin.Context) {
 	if response.FailWithMsg(c, err) {
 		return
 	}
-	if dmgrutil.IsStructureEmpty(pkg, response.WarehouseRespStruct{}) {
+	if dmgrutil.IsStructureEqual(pkg, response.WarehouseRespStruct{}) {
 		if response.FailWithMsg(c, fmt.Errorf("cluster_version [%v] offline package not exist", req.ClusterVersion)) {
 			return
 		}

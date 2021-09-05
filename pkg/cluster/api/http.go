@@ -85,6 +85,24 @@ func (c *HTTPClient) Delete(url string, body io.Reader) ([]byte, int, error) {
 	return b, statusCode, err
 }
 
+// Patch send a PATCH request to the url and returns the response and status code.
+func (c *HTTPClient) Patch(url string, body io.Reader) ([]byte, int, error) {
+	var statusCode int
+	req, err := http.NewRequest("PATCH", url, body)
+	if err != nil {
+		return nil, statusCode, err
+	}
+
+	res, err := c.client.Do(req)
+	if err != nil {
+		return nil, statusCode, err
+	}
+	defer res.Body.Close()
+	b, err := checkHTTPResponse(res)
+	statusCode = res.StatusCode
+	return b, statusCode, err
+}
+
 // WithClient uses the specified HTTP client
 func (c *HTTPClient) WithClient(client *http.Client) *HTTPClient {
 	c.client = client

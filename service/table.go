@@ -19,7 +19,53 @@ package service
 const (
 	TaskTables = `-- DM 上游数据源列表
 CREATE TABLE IF NOT EXISTS task_source (
-source_id varchar(30) NOT NULL COMMENT '源数据 ID',
+source_name varchar(30) NOT NULL COMMENT '源库数据名',
+host varchar(255) NOT NULL COMMENT '源数据库用户',
+user varchar(30) NOT NULL COMMENT '源数据库用户密码',
+password varchar(255) NOT NULL COMMENT '源数据库密码',
+port int NOT NULL COMMENT '源数据库端口',
+ssl_ca varchar(255) COMMENT '源数据库 SSL CA',
+ssl_cert varchar(255) COMMENT '源数据库 SSL CERT',
+ssl_key varchar(255) COMMENT '源数据库 SSL KEY',
+label varchar(125) COMMENT '数据源区域标签',
+create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+PRIMARY KEY (source_name),
+UNIQUE INDEX idx_host_port (host,port)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_bin
+COMMENT = '源数据列表';
+
+-- DM 下游数据源列表
+CREATE TABLE IF NOT EXISTS task_target (
+target_name varchar(30) NOT NULL COMMENT '目标数据源名',
+host varchar(255) NOT NULL COMMENT '目标数据库用户',
+user varchar(30) NOT NULL COMMENT '目标数据库用户密码',
+password varchar(255) NOT NULL COMMENT '目标数据库密码',
+port int NOT NULL COMMENT '目标数据库端口',
+max_allowed_packet bigint NOT NULL DEFAULT 67108864 COMMENT '目标数据库 max_allowed_packet',
+session varchar(255) COMMENT '目标数据库的 session 变量，格式 variable_name:variable_value 多个变量分号隔开',
+ssl_ca varchar(255) COMMENT '目标数据库 SSL CA',
+ssl_cert varchar(255) COMMENT '目标数据库 SSL CERT',
+ssl_key varchar(255) COMMENT '目标数据库 SSL KEY',
+label varchar(125) COMMENT '数据源区域标签',
+create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+PRIMARY KEY (target_name),
+UNIQUE INDEX idx_host_port (host,port)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_bin
+COMMENT = '目标数据源列表';
+
+-- DM 同步任务集群关系映射表
+CREATE TABLE IF NOT EXISTS task_cluster (
+cluster_name varchar(30) NOT NULL COMMENT '集群名',
+task_name varchar(30) NOT NULL COMMENT '任务名',
+source_name varchar(1024) NOT NULL COMMENT '源库实例名',
 enable_gtid varchar(10) NOT NULL DEFAULT 'true' COMMENT 'DM-Worker 是否使用 gtid',
 relay_binlog_gtid varchar(255) COMMENT '拉取上游 binlog 起始 gtid',
 enable_relay varchar(10) NOT NULL DEFAULT 'false' COMMENT 'DM-Worker 是否使用 relay',
@@ -31,62 +77,31 @@ purge_remain_space int NOT NULL DEFAULT 15 COMMENT '设置最小的可用磁盘�
 checker_check_enable varchar(10) NOT NULL DEFAULT 'true' COMMENT '启用自动重试功能',
 checker_backoff_rollback varchar(10) NOT NULL DEFAULT '5m0s' COMMENT '如果指数回退策略的间隔大于该值，且任务处于正常状态，尝试减小间隔',
 checker_backoff_max varchar(10) NOT NULL DEFAULT '5m0s' COMMENT '指数回退策略的间隔的最大值',
-source_host varchar(255) NOT NULL COMMENT '源数据库用户',
-source_user varchar(30) NOT NULL COMMENT '源数据库用户密码',
-source_password varchar(255) NOT NULL COMMENT '源数据库密码',
-source_port int NOT NULL COMMENT '源数据库端口',
-source_ssl_ca varchar(255) COMMENT '源数据库 SSL CA',
-source_ssl_cert varchar(255) COMMENT '源数据库 SSL CERT',
-source_ssl_key varchar(255) COMMENT '源数据库 SSL KEY',
+target_name varchar(30) NOT NULL COMMENT '目标数据名',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-PRIMARY KEY (source_id),
-UNIQUE INDEX idx_host_port (source_host,source_port)
+PRIMARY KEY (cluster_name,task_name,source_name),
+INDEX idx_source_name (source_name)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_bin
-COMMENT = '源数据列表';
-
--- DM 下游数据源列表
-CREATE TABLE IF NOT EXISTS task_target (
-target_id varchar(30) NOT NULL COMMENT '目标数据源 ID',
-target_host varchar(255) NOT NULL COMMENT '目标数据库用户',
-target_user varchar(30) NOT NULL COMMENT '目标数据库用户密码',
-target_password varchar(255) NOT NULL COMMENT '目标数据库密码',
-target_port int NOT NULL COMMENT '目标数据库端口',
-target_packet bigint NOT NULL DEFAULT 67108864 COMMENT '目标数据库 max_allowed_packet',
-sql_mode varchar(255) COMMENT '目标数据库 SQL MODE',
-skip_utf8_check int NOT NULL DEFAULT 1 COMMENT '目标数据库 tidb_skip_utf8_check',
-constraint_check_in_place int NOT NULL DEFAULT 0 COMMENT '目标数据库 tidb_constraint_check_in_place',
-target_ssl_ca varchar(255) COMMENT '目标数据库 SSL CA',
-target_ssl_cert varchar(255) COMMENT '目标数据库 SSL CERT',
-target_ssl_key varchar(255) COMMENT '目标数据库 SSL KEY',
-create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-PRIMARY KEY (target_id),
-UNIQUE INDEX idx_host_port (target_host,target_port)
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_bin
-COMMENT = '目标数据源列表';
+COMMENT = '任务集群关系映射表';
 
 -- DM 同步任务数据列表
 CREATE TABLE IF NOT EXISTS task_meta (
 cluster_name varchar(30) NOT NULL COMMENT '集群名',
 task_name varchar(30) NOT NULL COMMENT '任务名',
+conf_version varchar(10) NOT NULL DEFAULT 'v1' COMMENT '配置版本，兼容老版本逻辑，没有配置则为 v1',
 task_mode varchar(30) NOT NULL DEFAULT 'all' COMMENT '任务模式 "full" - "只进行全量数据迁移"、"incremental" - "Binlog 实时同步"、"all" - "全量 + Binlog 迁移"',
 shard_mode varchar(30) NOT NULL DEFAULT '' COMMENT '任务协调模式 ""、"pessimistic、"optimistic" 默认使用 ""',
 meta_schema varchar(30) NOT NULL DEFAULT 'dm_meta' COMMENT '任务元数据库',
 timezone varchar(30) NOT NULL DEFAULT 'Asia/Shanghai' COMMENT '时区',
 case_sensitive varchar(30) NOT NULL DEFAULT 'false' COMMENT 'schema/table 是否大小写敏感',
-online_ddl varchar(30) NOT NULL DEFAULT 'true' COMMENT '是否激活 online_ddl',
-online_ddl_scheme varchar(30) NOT NULL DEFAULT 'pt' COMMENT 'online_ddl 模式，只支持 "gh-ost" 、"pt" 的自动处理',
-ignore_checking_items varchar(125) NOT NULL DEFAULT '' COMMENT '是否关闭任何检查项，默认""不关闭',
+online_ddl varchar(30) NOT NULL DEFAULT 'true' COMMENT '激活 online_ddl，支持 "gh-ost" 、"pt" 的自动处理',
+ignore_checking_items varchar(125) NOT NULL DEFAULT '' COMMENT '是否关闭任何检查项，默认 "" 不关闭',
 clean_dump_file varchar(30) NOT NULL DEFAULT 'true' COMMENT '是否清理 dump 阶段产生的文件',
-task_source_id varchar(1024) NOT NULL COMMENT '源库实例名,格式 source1;source2 多个 source 分号分割',
-target_id varchar(30) NOT NULL COMMENT '目标数据源 ID',
+on_duplication varchar(10) NOT NULL DEFAULT 'overwrite' COMMENT '处理冲突数据行为，overwrite/error',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name)
@@ -105,7 +120,6 @@ schema_pattern varchar(125) COMMENT '源库名匹配规则',
 table_pattern varchar(125) COMMENT '源库表名匹配规则',
 target_schema varchar(125) COMMENT '目标库名称',
 target_table varchar(125) COMMENT '目标表名称',
-task_source_id varchar(1024) NOT NULL COMMENT '源库实例名,格式 source1;source2 多个 source 分号分割',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name,route_name)
@@ -125,7 +139,6 @@ table_pattern varchar(125) COMMENT '源库表名匹配规则',
 events varchar(1024) COMMENT '匹配上 schema-pattern 和 table-pattern 的库或者表的操作类型',
 sql_pattern varchar(1024) COMMENT '匹配上 schema-pattern 和 table-pattern 的库或者表的 sql 语句',
 action varchar(125) COMMENT '迁移（Do）还是忽略(Ignore)',
-task_source_id varchar(1024) NOT NULL COMMENT '源库实例名,格式 source1;source2 多个 source 分号分割',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name,filter_name)
@@ -143,7 +156,6 @@ expression_name varchar(30) NOT NULL COMMENT '过滤名',
 schema_name varchar(125) COMMENT '匹配的上游数据库库名，不支持通配符匹配或正则匹配',
 table_name varchar(125) COMMENT '匹配的上游表名，不支持通配符匹配或正则匹配',
 insert_value_expr varchar(125) COMMENT '匹配上 schema 和 table 的库表的操作类型',
-task_source_id varchar(1024) NOT NULL COMMENT '源库实例名,格式 source1;source2 格式 source1;source2 格式 source1;source2 多个 source 分号分割',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name,expression_name)
@@ -162,7 +174,6 @@ do_dbs varchar(125) COMMENT '匹配的上游数据库库名迁移',
 ignore_dbs varchar(125) COMMENT '忽略匹配的上游数据库库名迁移',
 do_tables varchar(1024) COMMENT '匹配的上游数据库表名迁移，格式 dbName@tableName，多个表名以分号分割',
 ignore_tables varchar(1024) COMMENT '忽略匹配的上游数据库表名迁移，格式 dbName@tableName，多个表名以分号分割',    
-task_source_id varchar(1024) NOT NULL COMMENT '源库实例名,格式 source1;source2 格式 source1;source2 多个 source 分号分割',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name,block_allow_name)
@@ -179,8 +190,7 @@ task_name varchar(30) NOT NULL COMMENT '任务名',
 rule_name varchar(125) NOT NULL DEFAULT 'global' COMMENT '工具配置规则名',
 threads  int NOT NULL DEFAULT 4 COMMENT '数据导出并发',
 chunk_filesize int NOT NULL DEFAULT 64 COMMENT '数据导出文件切分大小',
-extra_args varchar(1024) NOT NULL DEFAULT '--consistency none' COMMENT '数据导出其他参数配置',
-task_source_id varchar(1024) NOT NULL COMMENT '源库实例名,格式 source1;source2 格式 source1;source2 多个 source 分号分割',
+extra_ars varchar(1024) NOT NULL DEFAULT '--consistency none' COMMENT '数据导出其他参数配置',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name,rule_name)
@@ -197,7 +207,6 @@ task_name varchar(30) NOT NULL COMMENT '任务名',
 rule_name varchar(125) NOT NULL DEFAULT 'global' COMMENT '工具配置规则名',
 pool_size  int NOT NULL DEFAULT 16 COMMENT '数据导出并发',
 data_dir varchar(125) NOT NULL DEFAULT './dumped_data' COMMENT '数据目录',
-task_source_id varchar(1024) COMMENT '源库实例名,格式 source1;source2 格式 source1;source2 多个 source 分号分割',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name,rule_name)
@@ -216,7 +225,6 @@ worker_count  int NOT NULL DEFAULT 16 COMMENT '数据同步并发',
 batch int NOT NULL DEFAULT 100 COMMENT '数据同步 batch 大小',
 enable_ansi_quotes varchar(10) NOT NULL DEFAULT 'true' COMMENT '目标库连接中 session 设置 sql-mode: "ANSI_QUOTES"，则需开启此项',
 safe_mode varchar(10) NOT NULL DEFAULT 'false' COMMENT '数据同步模式是否开启 safe-mode',
-task_source_id varchar(1024) COMMENT '源库实例名,格式 source1;source2 格式 source1;source2 多个 source 分号分割',
 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (cluster_name,task_name,rule_name)

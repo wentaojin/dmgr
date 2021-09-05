@@ -74,3 +74,29 @@ func InitClusterRouter(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware)
 	}
 	return router
 }
+
+// 数据源路由
+func InitDatasourceRouter(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) (R gin.IRoutes) {
+	router := r.Group("/datasource").Use(authMiddleware.MiddlewareFunc())
+	{
+		router.POST("/source-create", v1.TaskSourceCreate)
+		router.POST("/source-delete", v1.TaskSourceDelete)
+		router.PATCH("/source-update", v1.TaskSourceUpdate)
+		router.POST("/target-create", v1.TaskTargetCreate)
+		router.POST("/target-delete", v1.TaskTargetDelete)
+		router.PATCH("/target-update", v1.TaskTargetUpdate)
+		router.POST("/task-cluster", v1.TaskClusterCreate)
+	}
+	return router
+}
+
+// 任务路由
+func InitTaskRouter(r *gin.RouterGroup, authMiddleware *jwt.GinJWTMiddleware) (R gin.IRoutes) {
+	router := r.Group("/task")
+	initGP := router.Group("/init").Use(authMiddleware.MiddlewareFunc())
+	{
+		initGP.POST("/route-create", v1.TaskRouteCreate)
+	}
+
+	return router
+}

@@ -46,7 +46,7 @@ func IsExist(path string) bool {
 }
 
 // 判断结构体是否相等
-func IsStructureEmpty(newStruct, originStruct interface{}) bool {
+func IsStructureEqual(newStruct, originStruct interface{}) bool {
 	return reflect.DeepEqual(newStruct, originStruct)
 }
 

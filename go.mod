@@ -6,7 +6,6 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/appleboy/easyssh-proxy v1.3.9
 	github.com/appleboy/gin-jwt/v2 v2.6.4
-	github.com/asaskevich/EventBus v0.0.0-20200907212545-49d423059eef
 	github.com/gin-gonic/gin v1.7.2
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-sql-driver/mysql v1.6.0
@@ -18,10 +17,11 @@ require (
 	github.com/joomcode/errorx v1.0.3
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
-	github.com/mitchellh/go-homedir v1.1.0 // indirect
+	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pingcap/errors v0.11.4
 	github.com/pingcap/failpoint v0.0.0-20210316064728-7acb0f0a3dfd
 	github.com/pingcap/log v0.0.0-20210625125904-98ed8e2eb1c7
+	github.com/tidwall/gjson v1.6.0
 	github.com/ulule/limiter/v3 v3.8.0
 	github.com/xxjwxc/gowp v0.0.0-20210520113007-57eb4693b12d
 	go.uber.org/atomic v1.8.0 // indirect

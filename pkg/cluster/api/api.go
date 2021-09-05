@@ -35,10 +35,13 @@ import (
 var (
 	dmMembersURI = "apis/v1alpha1/members"
 
-	defaultRetryOpt = &dmgrutil.RetryOption{
+	DefaultRetryOpt = &dmgrutil.RetryOption{
 		Delay:   time.Second * 5,
 		Timeout: time.Second * 60,
 	}
+
+	// DM Master 请求接口耗时
+	DmMasterApiTimeout = 10 * time.Second
 )
 
 // DMMasterClient is an HTTP client of the dm-master server
@@ -191,12 +194,12 @@ func (dm *DMMasterClient) GetWorker(name string) (string, error) {
 }
 
 // GetLeader gets leader of dm cluster
-func (dm *DMMasterClient) GetLeader(retryOpt *dmgrutil.RetryOption) (string, error) {
+func (dm *DMMasterClient) GetLeader(retryOpt *dmgrutil.RetryOption) (string, string, error) {
 	query := "?leader=true"
 	endpoints := dm.getEndpoints(dmMembersURI + query)
 
 	if retryOpt == nil {
-		retryOpt = defaultRetryOpt
+		retryOpt = DefaultRetryOpt
 	}
 
 	var (
@@ -208,16 +211,18 @@ func (dm *DMMasterClient) GetLeader(retryOpt *dmgrutil.RetryOption) (string, err
 		memberResp, err = dm.getMember(endpoints)
 		return err
 	}, *retryOpt); err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	leaderName := ""
+	leaderAddr := ""
 	for _, member := range memberResp.Members {
 		if leader := member.GetLeader(); leader != nil {
 			leaderName = leader.GetName()
+			leaderAddr = leader.GetAddr()
 		}
 	}
-	return leaderName, nil
+	return leaderName, leaderAddr, nil
 }
 
 // GetRegisteredMembers gets all registerer members of dm cluster
@@ -261,7 +266,7 @@ func (dm *DMMasterClient) OfflineMember(query string, retryOpt *dmgrutil.RetryOp
 	endpoints := dm.getEndpoints(dmMembersURI + query)
 
 	if retryOpt == nil {
-		retryOpt = defaultRetryOpt
+		retryOpt = DefaultRetryOpt
 	}
 
 	if err := dmgrutil.Retry(func() error {

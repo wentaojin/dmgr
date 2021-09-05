@@ -2,8 +2,8 @@
 listen-port = ":9527"
 
 [db]
-host = "172.16.4.215"
-port = 5000
+host = "172.16.4.206"
+port = 4000
 user = "root"
 password = ""
 db-name = "dmgr"
