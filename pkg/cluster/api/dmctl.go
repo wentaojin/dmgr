@@ -19,8 +19,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-
-	"github.com/wentaojin/dmgr/pkg/dmgrutil"
 )
 
 // 任务管理请求接口列表
@@ -49,9 +47,11 @@ func DeleteSourceBySourceName(dmMasterHttpUrl, sourceName string) ([]byte, error
 	client := NewHTTPClient(DmMasterApiTimeout, nil)
 	body, statusCode, err := client.Delete(url, nil)
 
-	if statusCode == 400 || bytes.Contains(body, []byte("not exists")) {
-		dmgrutil.Logger.Debug(fmt.Sprintf("source name [%v] to delete does not exist, ignore delete.", sourceName))
-		return body, nil
+	if statusCode == 400 {
+		return body, fmt.Errorf("source name [%v] to delete failed: %v", sourceName, string(body))
+	}
+	if bytes.Contains(body, []byte("not exists")) {
+		return body, fmt.Errorf("source name [%v] to delete does not exist, ignore delete", sourceName)
 	}
 	if err != nil {
 		return body, err
@@ -65,9 +65,12 @@ func StartSourceBySourceName(dmMasterHttpUrl, sourceName string, body io.Reader)
 	client := NewHTTPClient(DmMasterApiTimeout, nil)
 	resp, statusCode, err := client.Patch(url, body)
 
-	if statusCode == 400 || bytes.Contains(resp, []byte("not exists")) {
-		dmgrutil.Logger.Debug(fmt.Sprintf("source name [%v] to patch does not exist, ignore start.", sourceName))
-		return resp, nil
+	if statusCode == 400 {
+		return resp, fmt.Errorf("source name [%v] to patch failed: %v", sourceName, string(resp))
+	}
+
+	if bytes.Contains(resp, []byte("not exists")) {
+		return resp, fmt.Errorf("source name [%v] to patch does not exist, ignore start", sourceName)
 	}
 	if err != nil {
 		return resp, err
@@ -81,9 +84,12 @@ func StopSourceBySourceName(dmMasterHttpUrl, sourceName string, body io.Reader) 
 	client := NewHTTPClient(DmMasterApiTimeout, nil)
 	resp, statusCode, err := client.Patch(url, body)
 
-	if statusCode == 400 || bytes.Contains(resp, []byte("not exists")) {
-		dmgrutil.Logger.Debug(fmt.Sprintf("source name [%v] to patch does not exist, ignore stop.", sourceName))
-		return resp, nil
+	if statusCode == 400 {
+		return resp, fmt.Errorf("source name [%v] to patch failed: %v", sourceName, string(resp))
+	}
+
+	if bytes.Contains(resp, []byte("not exists")) {
+		return resp, fmt.Errorf("source name [%v] to patch does not exist, ignore stop", sourceName)
 	}
 	if err != nil {
 		return resp, err
@@ -125,10 +131,13 @@ func DeleteTaskByTaskName(dmMasterHttpUrl, taskName string) ([]byte, error) {
 	client := NewHTTPClient(DmMasterApiTimeout, nil)
 	body, statusCode, err := client.Delete(url, nil)
 
-	if statusCode == 400 || bytes.Contains(body, []byte("not exists")) {
-		dmgrutil.Logger.Debug(fmt.Sprintf("task name [%v] to delete does not exist, ignore delete.", taskName))
-		return body, nil
+	if statusCode == 400 {
+		return body, fmt.Errorf("source name [%v] to delete failed: %v", taskName, string(body))
 	}
+	if bytes.Contains(body, []byte("not exists")) {
+		return body, fmt.Errorf("source name [%v] to delete does not exist, ignore delete", taskName)
+	}
+
 	if err != nil {
 		return body, err
 	}

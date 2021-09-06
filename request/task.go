@@ -25,23 +25,6 @@ type TaskSourceCreateReqStruct struct {
 	Label string `json:"label" form:"label" db:"label"`
 }
 
-// 任务下游数据源创建请求
-type TaskTargetCreateReqStruct struct {
-	TaskTargetStruct
-	TaskDatasourceStruct
-	TaskDatasourceSslStruct
-	Label string `json:"label" form:"label" db:"label"`
-}
-
-// 任务集群数据源映射请求
-type TaskCLusterReqStruct struct {
-	ClusterName string `json:"cluster_name" form:"cluster_name" db:"cluster_name" binding:"required"`
-	TaskName    string `json:"task_name" form:"task_name" db:"task_name" binding:"required"`
-	SourceName  string `json:"source_name" form:"source_name" db:"source_name" binding:"required"`
-	TargetName  string `json:"target_name" form:"target_name" db:"target_name" binding:"required"`
-	TaskSourceConfStruct
-}
-
 // 任务上游数据源删除请求
 type TaskSourceDeleteReqStruct struct {
 	ClusterName string `json:"cluster_name" form:"cluster_name" db:"cluster_name" binding:"required"`
@@ -57,6 +40,14 @@ type TaskSourceUpdateReqStruct struct {
 	TaskSourceConfStruct
 }
 
+// 任务下游数据源创建请求
+type TaskTargetCreateReqStruct struct {
+	TaskTargetStruct
+	TaskDatasourceStruct
+	TaskDatasourceSslStruct
+	Label string `json:"label" form:"label" db:"label"`
+}
+
 // 任务下游数据源删除请求
 type TaskTargetDeleteReqStruct struct {
 	ClusterName string `json:"cluster_name" form:"cluster_name" db:"cluster_name" binding:"required"`
@@ -69,6 +60,15 @@ type TaskTargetUpdateReqStruct struct {
 	ClusterName string `json:"cluster_name" form:"cluster_name" binding:"required"`
 	TaskName    string `json:"task_name" form:"task_name" binding:"required"`
 	TaskTargetCreateReqStruct
+}
+
+// 任务集群数据源映射请求
+type TaskCLusterReqStruct struct {
+	ClusterName string `json:"cluster_name" form:"cluster_name" db:"cluster_name" binding:"required"`
+	TaskName    string `json:"task_name" form:"task_name" db:"task_name" binding:"required"`
+	SourceName  string `json:"source_name" form:"source_name" db:"source_name" binding:"required"`
+	TargetName  string `json:"target_name" form:"target_name" db:"target_name" binding:"required"`
+	TaskSourceConfStruct
 }
 
 // 任务同步元数据请求

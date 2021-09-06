@@ -5,32 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/conf/dmgr.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctl.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctlstruct.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/request/request.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/response/task.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/router/v1/datasource.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/router/v1/task.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/datasource.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/json.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/dmgr.toml" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dmgr.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/api.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/api/http.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/http.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/dmgrutil/constant.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/dmgrutil/constant.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/dmgrutil/ioutil.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/dmgrutil/ioutil.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/clusterstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/cluster.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/taskstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/task.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/response/clusterstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/response/cluster.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/apis.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/apis.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/v1/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/helper.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/v1/topology.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/topology.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/table.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/table.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test/ssh.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/dmgr.log" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dmgr.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/api/dmctl.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctl.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/cluster/api/dmctlstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctlstruct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/task.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/v1/datasource.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/datasource.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

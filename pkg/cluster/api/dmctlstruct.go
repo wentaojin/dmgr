@@ -59,7 +59,7 @@ func NewRelayStatusBody(respBody []byte) *RelayStatusBodyStruct {
 		RelayBinlogName: "",
 		RelayBinlogGtid: "",
 		RelayDir:        "",
-		Purge:           Purge{},
+		Purge:           Purge{Interval: 3, Expires: 10, RemainSpace: 10},
 	}
 }
 

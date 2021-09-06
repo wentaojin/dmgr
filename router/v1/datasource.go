@@ -19,8 +19,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/tidwall/gjson"
+
+	"github.com/gin-gonic/gin"
 	"github.com/wentaojin/dmgr/pkg/cluster/api"
 	"github.com/wentaojin/dmgr/pkg/dmgrutil"
 	"github.com/wentaojin/dmgr/request"
@@ -37,34 +38,6 @@ func TaskSourceCreate(c *gin.Context) {
 
 	s := service.NewMysqlService()
 	if response.FailWithMsg(c, s.AddTaskSource(req)) {
-		return
-	}
-	response.SuccessWithoutData(c)
-}
-
-// 下游数据源创建
-func TaskTargetCreate(c *gin.Context) {
-	var req request.TaskTargetCreateReqStruct
-	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
-		return
-	}
-
-	s := service.NewMysqlService()
-	if response.FailWithMsg(c, s.AddTaskTarget(req)) {
-		return
-	}
-	response.SuccessWithoutData(c)
-}
-
-// 任务集群数据关系映射创建
-func TaskClusterCreate(c *gin.Context) {
-	var req request.TaskCLusterReqStruct
-	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
-		return
-	}
-
-	s := service.NewMysqlService()
-	if response.FailWithMsg(c, s.AddTaskCluster(req)) {
 		return
 	}
 	response.SuccessWithoutData(c)
@@ -213,7 +186,13 @@ func TaskSourceUpdate(c *gin.Context) {
 			}
 
 			// todo: 待完善
-			// 1. 启动 source (待补充完善)
+			// 1、判断是否是账号密码更新
+			// 2、不存在账号密码更新
+			if !dmgrutil.IsStructureEqual(req.TaskSourceCreateReqStruct, sourceInfo.TaskSourceCreateReqStruct) {
+				// todo：账号密码更新待完善
+			}
+
+			// todo: 非账号密码更新待完善
 			jsonSRC, err := dmgrutil.Struct2Json(api.NewRelayStatusBody(respByte))
 			if response.FailWithMsg(c, err) {
 				return
@@ -227,6 +206,34 @@ func TaskSourceUpdate(c *gin.Context) {
 				return
 			}
 		}
+	}
+	response.SuccessWithoutData(c)
+}
+
+// 任务集群数据关系映射创建
+func TaskClusterCreate(c *gin.Context) {
+	var req request.TaskCLusterReqStruct
+	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
+		return
+	}
+
+	s := service.NewMysqlService()
+	if response.FailWithMsg(c, s.AddTaskCluster(req)) {
+		return
+	}
+	response.SuccessWithoutData(c)
+}
+
+// 下游数据源创建
+func TaskTargetCreate(c *gin.Context) {
+	var req request.TaskTargetCreateReqStruct
+	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
+		return
+	}
+
+	s := service.NewMysqlService()
+	if response.FailWithMsg(c, s.AddTaskTarget(req)) {
+		return
 	}
 	response.SuccessWithoutData(c)
 }
@@ -276,13 +283,13 @@ func TaskTargetDelete(c *gin.Context) {
 		return
 	}
 
-	// todo: 待完善
-	// 1. 停止同步任务（待补充）
-	// 2. 删除同步任务
-	_, err = api.DeleteTaskByTaskName(dmMasterUrl, req.TaskName)
-	if response.FailWithMsg(c, err) {
-		return
-	}
+	// todo: API 待完善
+	// 1. 停止同步任务（待完善补充）
+	// 2. 只停止任务不删除任务
+	//_, err = api.DeleteTaskByTaskName(dmMasterUrl, req.TaskName)
+	//if response.FailWithMsg(c, err) {
+	//	return
+	//}
 
 	if response.FailWithMsg(c, s.DeleteTaskTarget(req)) {
 		return
@@ -336,10 +343,9 @@ func TaskTargetUpdate(c *gin.Context) {
 				return
 			}
 
-			// todo: 待完善
-			// 1. 停止任务同步 (待补充完善)
-			// 2. 重新启动任务同步
-
+			// todo: API 待完善
+			// 1. 停止任务同步 (API 待补充完善)
+			// 2. 重新启动任务同步（请求 struct body 待补充完善，暂时以 task struct 代替）
 			_, err = api.StartTaskMigration(dmMasterUrl, strings.NewReader("task struct"))
 			if response.FailWithMsg(c, err) {
 				return
