@@ -24,6 +24,45 @@ import (
 	"github.com/wentaojin/dmgr/response"
 )
 
+// 获取数据源配置
+func (s *MysqlService) GetSourceConf(clusterName, taskName, sourceName string) (response.TaskSourceConfRespStruct, error) {
+	var resp response.TaskSourceConfRespStruct
+	if err := s.Engine.Get(&resp, `SELECT 
+s.cluster_name,
+s.task_name,
+s.source_name,
+c.host,
+c.user,
+c.password,
+c.port,
+c.ssl_ca,
+c.ssl_cert,
+c.ssl_key,
+c.label,
+s.enable_gtid,
+s.relay_binlog_gtid,
+s.enable_relay,
+s.relay_binlog_name,
+s.relay_dir,
+s.purge_interval,
+s.purge_expires,
+s.purge_remain_space,
+s.checker_check_enable,
+s.checker_backoff_rollback,
+s.checker_backoff_max
+FROM
+task_source s,
+task_cluster c
+WHERE 
+s.source_name=c.source_name
+AND s.cluster_name = ?
+AND s.task_name = ?
+AND s.source_name = ?`, clusterName, taskName, sourceName); err != nil {
+		return resp, err
+	}
+	return resp, nil
+}
+
 // 上游数据源信息新增
 func (s *MysqlService) AddTaskSource(source request.TaskSourceCreateReqStruct) error {
 	if _, err := s.Engine.NamedExec(`INSERT INTO task_source (

@@ -15,6 +15,11 @@ limitations under the License.
 */
 package api
 
+import (
+	"github.com/wentaojin/dmgr/request"
+	"github.com/wentaojin/dmgr/response"
+)
+
 // 任务请求 JSON 接口请求 PATH
 const (
 	RelayStatusPath = "relay_status.stage"
@@ -25,6 +30,21 @@ const (
 const (
 	RelayStatusRunningStage = "Running"
 )
+
+// 任务 source 创建请求
+type SourceBodyStruct struct {
+	request.TaskSourceStruct
+	request.TaskDatasourceStruct
+	request.TaskDatasourceSslStruct
+}
+
+func NewSourceBody(resp response.TaskSourceConfRespStruct) *SourceBodyStruct {
+	return &SourceBodyStruct{
+		TaskSourceStruct:        request.TaskSourceStruct{SourceName: resp.TaskCLusterReqStruct.SourceName},
+		TaskDatasourceStruct:    resp.TaskDatasourceStruct,
+		TaskDatasourceSslStruct: resp.TaskDatasourceSslStruct,
+	}
+}
 
 // 任务 DM Worker 请求
 type WorkerNameBodyStruct struct {

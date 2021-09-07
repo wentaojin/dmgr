@@ -29,6 +29,44 @@ import (
 	"github.com/wentaojin/dmgr/service"
 )
 
+// 任务集群数据关系映射创建
+func TaskClusterCreate(c *gin.Context) {
+	var req request.TaskCLusterReqStruct
+	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
+		return
+	}
+
+	s := service.NewMysqlService()
+	dmMasterUrl, err := GetActiveDmMasterAddr(s, req.ClusterName)
+	if response.FailWithMsg(c, err) {
+		return
+	}
+
+	// 多个 source 任务名，以分号界限多个【source_name;source_name】
+	sources := strings.Split(req.SourceName, dmgrutil.TaskSourceDelimiter)
+	for _, source := range sources {
+		resp, err := s.GetSourceConf(req.ClusterName, req.TaskName, source)
+		if response.FailWithMsg(c, err) {
+			return
+		}
+		jsonSRC, err := dmgrutil.Struct2Json(api.NewSourceBody(resp))
+		if response.FailWithMsg(c, err) {
+			return
+		}
+
+		// 任务 source 创建
+		respByte, err := api.CreateSource(dmMasterUrl, strings.NewReader(jsonSRC))
+		if response.FailWithMsg(c, fmt.Errorf("response: %v, error: %v", string(respByte), err)) {
+			return
+		}
+	}
+
+	if response.FailWithMsg(c, s.AddTaskCluster(req)) {
+		return
+	}
+	response.SuccessWithoutData(c)
+}
+
 // 上游数据源创建
 func TaskSourceCreate(c *gin.Context) {
 	var req request.TaskSourceCreateReqStruct
@@ -210,20 +248,6 @@ func TaskSourceUpdate(c *gin.Context) {
 	response.SuccessWithoutData(c)
 }
 
-// 任务集群数据关系映射创建
-func TaskClusterCreate(c *gin.Context) {
-	var req request.TaskCLusterReqStruct
-	if response.FailWithMsg(c, c.ShouldBindJSON(&req)) {
-		return
-	}
-
-	s := service.NewMysqlService()
-	if response.FailWithMsg(c, s.AddTaskCluster(req)) {
-		return
-	}
-	response.SuccessWithoutData(c)
-}
-
 // 下游数据源创建
 func TaskTargetCreate(c *gin.Context) {
 	var req request.TaskTargetCreateReqStruct
@@ -285,11 +309,11 @@ func TaskTargetDelete(c *gin.Context) {
 
 	// todo: API 待完善
 	// 1. 停止同步任务（待完善补充）
-	// 2. 只停止任务不删除任务
-	//_, err = api.DeleteTaskByTaskName(dmMasterUrl, req.TaskName)
-	//if response.FailWithMsg(c, err) {
-	//	return
-	//}
+	// 2. 只停止任务不删除任务(临时设置删除)
+	_, err = api.DeleteTaskByTaskName(dmMasterUrl, req.TaskName)
+	if response.FailWithMsg(c, err) {
+		return
+	}
 
 	if response.FailWithMsg(c, s.DeleteTaskTarget(req)) {
 		return

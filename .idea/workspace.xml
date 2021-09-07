@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/dmgr.log" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dmgr.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/cluster/api/dmctl.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/cluster/api/dmctlstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/cluster/api/dmctlstruct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/request/task.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/response/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/response/task.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/v1/datasource.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/datasource.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/datasource.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/datasource.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

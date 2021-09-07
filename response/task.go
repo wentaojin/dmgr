@@ -21,6 +21,14 @@ import (
 	"github.com/wentaojin/dmgr/request"
 )
 
+// 查询任务 source 信息响应
+type TaskSourceConfRespStruct struct {
+	request.TaskCLusterReqStruct
+	request.TaskDatasourceStruct
+	request.TaskDatasourceSslStruct
+	Label string `json:"label" form:"label" db:"label"`
+}
+
 // 查询上游数据源信息响应
 type TaskSourceRespStruct struct {
 	request.TaskSourceCreateReqStruct
