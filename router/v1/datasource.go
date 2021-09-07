@@ -41,8 +41,9 @@ func TaskClusterCreate(c *gin.Context) {
 	if response.FailWithMsg(c, err) {
 		return
 	}
-
 	// 多个 source 任务名，以分号界限多个【source_name;source_name】
+	var taskSources []request.TaskCLusterReqStruct
+
 	sources := strings.Split(req.SourceName, dmgrutil.TaskSourceDelimiter)
 	for _, source := range sources {
 		resp, err := s.GetSourceConf(req.ClusterName, req.TaskName, source)
@@ -59,9 +60,12 @@ func TaskClusterCreate(c *gin.Context) {
 		if response.FailWithMsg(c, fmt.Errorf("response: %v, error: %v", string(respByte), err)) {
 			return
 		}
+
+		req.SourceName = source
+		taskSources = append(taskSources, req)
 	}
 
-	if response.FailWithMsg(c, s.AddTaskCluster(req)) {
+	if response.FailWithMsg(c, s.AddTaskCluster(taskSources)) {
 		return
 	}
 	response.SuccessWithoutData(c)

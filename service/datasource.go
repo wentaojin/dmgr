@@ -16,10 +16,7 @@ limitations under the License.
 package service
 
 import (
-	"strings"
-
 	"github.com/jmoiron/sqlx"
-	"github.com/wentaojin/dmgr/pkg/dmgrutil"
 	"github.com/wentaojin/dmgr/request"
 	"github.com/wentaojin/dmgr/response"
 )
@@ -162,14 +159,7 @@ func (s *MysqlService) GetTaskClusterBySourceName(sourceName string) ([]response
 }
 
 // 创建任务集群信息
-func (s *MysqlService) AddTaskCluster(reqStruct request.TaskCLusterReqStruct) error {
-	var taskSources []request.TaskCLusterReqStruct
-	sources := strings.Split(reqStruct.SourceName, dmgrutil.TaskSourceDelimiter)
-	for _, source := range sources {
-		reqStruct.TaskName = source
-		taskSources = append(taskSources, reqStruct)
-	}
-
+func (s *MysqlService) AddTaskCluster(taskSources []request.TaskCLusterReqStruct) error {
 	for _, source := range taskSources {
 		if _, err := s.Engine.NamedExec(`INSERT INTO task_cluster (
 cluster_name,
