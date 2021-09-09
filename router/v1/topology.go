@@ -719,6 +719,9 @@ func CLusterReload(c *gin.Context) {
 		}
 	}
 
+	// 获取前端数组
+	reqInstances := c.PostFormArray("instance_name")
+
 	// 定义需要前端上传的文件字段名
 	file, err := c.FormFile("file")
 	if response.FailWithMsg(c, err) {
@@ -782,7 +785,7 @@ func CLusterReload(c *gin.Context) {
 	instNames, err := s.FilterComponentInstance(request.ClusterOperatorReqStruct{
 		ClusterName:   req.ClusterName,
 		ComponentName: []string{req.ComponentName},
-		InstanceName:  req.InstanceName,
+		InstanceName:  reqInstances,
 	})
 	if response.FailWithMsg(c, err) {
 		return
@@ -1028,6 +1031,9 @@ func ClusterPatch(c *gin.Context) {
 		}
 	}
 
+	// 获取前端数组
+	reqInstances := c.PostFormArray("instance_name")
+
 	// 定义需要前端上传的文件字段名
 	file, err := c.FormFile("file")
 	if response.FailWithMsg(c, err) {
@@ -1083,7 +1089,7 @@ func ClusterPatch(c *gin.Context) {
 	instNames, err := s.FilterComponentInstance(request.ClusterOperatorReqStruct{
 		ClusterName:   req.ClusterName,
 		ComponentName: []string{req.ComponentName},
-		InstanceName:  req.InstanceName,
+		InstanceName:  reqInstances,
 	})
 	if response.FailWithMsg(c, err) {
 		return
