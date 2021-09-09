@@ -1034,6 +1034,16 @@ func ClusterPatch(c *gin.Context) {
 	// 获取前端数组
 	reqInstances := c.PostFormArray("instance_name")
 
+	// 判断指定实例名是否在指定组件中 [组件操作以实例名为准，实例名全局唯一]
+	instNames, err := s.FilterComponentInstance(request.ClusterOperatorReqStruct{
+		ClusterName:   req.ClusterName,
+		ComponentName: []string{req.ComponentName},
+		InstanceName:  reqInstances,
+	})
+	if response.FailWithMsg(c, err) {
+		return
+	}
+
 	// 定义需要前端上传的文件字段名
 	file, err := c.FormFile("file")
 	if response.FailWithMsg(c, err) {
@@ -1083,16 +1093,6 @@ func ClusterPatch(c *gin.Context) {
 				return
 			}
 		}
-	}
-
-	// 判断指定实例名是否在指定组件中 [组件操作以实例名为准，实例名全局唯一]
-	instNames, err := s.FilterComponentInstance(request.ClusterOperatorReqStruct{
-		ClusterName:   req.ClusterName,
-		ComponentName: []string{req.ComponentName},
-		InstanceName:  reqInstances,
-	})
-	if response.FailWithMsg(c, err) {
-		return
 	}
 
 	// 根据集群名、实例名查询集群拓扑

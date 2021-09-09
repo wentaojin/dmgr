@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="fa5a63e7-174b-42b1-a8a2-da38c7e784e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/dmgr.log" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dmgr.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/v1/topology.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/v1/topology.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/json.go" beforeDir="false" afterPath="$PROJECT_DIR$/test/test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +103,7 @@
       <kind value="FILE" />
       <package value="github.com/wentaojin/dmgr/test" />
       <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/test/json.go" />
+      <filePath value="$PROJECT_DIR$/test/test.go" />
       <method v="2" />
     </configuration>
     <recent_temporary>

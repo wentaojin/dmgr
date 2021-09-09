@@ -18,23 +18,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/tidwall/gjson"
+	"github.com/wentaojin/dmgr/pkg/dmgrutil"
 )
 
 func main() {
-	jsonStr := `{
-  "source_name": "mysql-replica-01",
-  "worker_name": "worker-1",
-  "enable_relay": false,
-  "relay_status": {
-    "master_binlog": "(mysql-bin.000001, 1979)",
-    "master_binlog_gtid": "e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849",
-    "relay_dir": "./sub_dir",
-    "relay_binlog_gtid": "e9a1fc22-ec08-11e9-b2ac-0242ac110003:1-7849",
-    "relay_catch_up_master": true,
-    "stage": "Running"
-  }
-}`
-	workName := gjson.Get(jsonStr, "worker_name|@join")
-	fmt.Println(workName)
+	originInsts := dmgrutil.NewStringSet([]string{}...)
+	requestInsts := dmgrutil.NewStringSet([]string{"master1", "master2"}...)
+	diffInsts := requestInsts.Difference(originInsts).Slice()
+	fmt.Println(diffInsts)
 }
