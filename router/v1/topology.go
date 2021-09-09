@@ -765,7 +765,8 @@ func CLusterReload(c *gin.Context) {
 	var cmd string
 	if req.Overwrite == dmgrutil.BoolTrue {
 		// 覆盖
-		cmd = fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, file.Filename), filepath.Join(clusterUntarDir, dmgrutil.DirConf, file.Filename))
+		cmd = fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, file.Filename),
+			filepath.Join(clusterUntarDir, dmgrutil.DirConf, file.Filename))
 	}
 	currentUser, currentIP, err := dmgrutil.GetClientOutBoundIP()
 	if response.FailWithMsg(c, err) {
@@ -1063,12 +1064,13 @@ func ClusterPatch(c *gin.Context) {
 		// 组件是 grafana 组件则不进行解压
 		if strings.ToLower(req.ComponentName) == dmgrutil.ComponentGrafana {
 			cmds = []string{
-				fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, dmgrutil.ComponentGrafanaTarPKG), filepath.Join(clusterUntarDir, dmgrutil.ComponentGrafanaTarPKG)),
+				fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, dmgrutil.ComponentGrafanaTarPKG),
+					filepath.Join(clusterUntarDir, dmgrutil.DirBin, dmgrutil.ComponentGrafanaTarPKG)),
 			}
 		} else {
 			cmds = []string{
 				fmt.Sprintf(`tar --no-same-owner -zxvf %v -C %v; rm -rf %v`, filePath, pkgDir, filePath),
-				fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, strings.ToLower(req.ComponentName)), filepath.Join(clusterUntarDir, strings.ToLower(req.ComponentName))),
+				fmt.Sprintf(`cp %s %s`, filepath.Join(pkgDir, strings.ToLower(req.ComponentName)), filepath.Join(clusterUntarDir, dmgrutil.DirBin, strings.ToLower(req.ComponentName))),
 			}
 		}
 	} else {
