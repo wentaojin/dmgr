@@ -83,8 +83,8 @@ type ClusterStatusReqStruct struct {
 // 集群启动、停止或销毁请求
 type ClusterOperatorReqStruct struct {
 	ClusterName   string   `json:"cluster_name" form:"cluster_name" binding:"required"`
-	ComponentName []string `json:"component_name" form:"component_name"`
-	InstanceName  []string `json:"instance_name" form:"instance_name"`
+	ComponentName []string `json:"component_name" form:"component_name;default=[]"`
+	InstanceName  []string `json:"instance_name" form:"instance_name;default=[]"`
 }
 
 // 集群扩容请求
@@ -105,7 +105,7 @@ type ClusterUpgradeReqStruct struct {
 type ClusterPatchReqStruct struct {
 	ClusterName   string                `json:"cluster_name" form:"cluster_name" binding:"required"`
 	ComponentName string                `json:"component_name" form:"component_name"`
-	InstanceName  []string              `json:"instance_name" form:"instance_name"`
+	InstanceName  []string              `json:"instance_name" form:"instance_name;default=[]"`
 	Overwrite     string                `json:"overwrite" form:"overwrite" binding:"validIsSkip"`
 	File          *multipart.FileHeader `json:"file" form:"file" binding:"required"`
 }

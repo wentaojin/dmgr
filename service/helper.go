@@ -40,7 +40,7 @@ func (s *MysqlService) FilterComponentInstance(req request.ClusterOperatorReqStr
 			requestInsts := dmgrutil.NewStringSet(req.InstanceName...)
 			diffInsts := requestInsts.Difference(originInsts).Slice()
 			if len(diffInsts) != 0 {
-				return instNames, fmt.Errorf("request component instance [%v] not exists in the component", diffInsts)
+				return instNames, fmt.Errorf("request component instance %v not exists in the component", diffInsts)
 			}
 			instNames = req.InstanceName
 		} else {
