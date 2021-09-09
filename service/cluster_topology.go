@@ -158,11 +158,10 @@ log_dir FROM cluster_topology WHERE machine_host IN (?)`, machineHosts)
 	return hostPorts, nil
 }
 
-func (s *MysqlService) UpdateClusterHotFixStatus(clusterName string, instanceNames []string, hotFixStatus string) error {
-	for _, inst := range instanceNames {
-		if _, err := s.Engine.Exec(`UPDATE cluster_topology SET hotfix = ? WHERE cluster_name = ? AND instance_name = ?`, hotFixStatus, clusterName, inst); err != nil {
-			return err
-		}
+func (s *MysqlService) UpdateClusterHotFixStatus(clusterName string, instanceName string, hotFixStatus string) error {
+	if _, err := s.Engine.Exec(`UPDATE cluster_topology SET hotfix = ? WHERE cluster_name = ? AND instance_name = ?`, hotFixStatus, clusterName, instanceName); err != nil {
+		return err
 	}
+
 	return nil
 }

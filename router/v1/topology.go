@@ -830,13 +830,12 @@ func CLusterReload(c *gin.Context) {
 				if response.FailWithMsg(c, reloadCompTask.Execute(ctxt.NewContext())) {
 					return
 				}
+				// 元数据表更新
+				if response.FailWithMsg(c, s.UpdateClusterHotFixStatus(req.ClusterName, t.InstanceName, dmgrutil.ReloadComponent)) {
+					return
+				}
 			}
 		}
-	}
-
-	// 元数据表更新
-	if response.FailWithMsg(c, s.UpdateClusterHotFixStatus(req.ClusterName, instNames, dmgrutil.ReloadComponent)) {
-		return
 	}
 
 	response.SuccessWithoutData(c)
@@ -1147,15 +1146,13 @@ func ClusterPatch(c *gin.Context) {
 				if response.FailWithMsg(c, patchCompTask.BuildTask().Execute(ctxt.NewContext())) {
 					return
 				}
+				// 元数据表更新
+				if response.FailWithMsg(c, s.UpdateClusterHotFixStatus(req.ClusterName, t.InstanceName, dmgrutil.PatchedComponent)) {
+					return
+				}
 			}
 		}
 	}
-
-	// 元数据表更新
-	if response.FailWithMsg(c, s.UpdateClusterHotFixStatus(req.ClusterName, instNames, dmgrutil.PatchedComponent)) {
-		return
-	}
-
 	response.SuccessWithoutData(c)
 }
 
