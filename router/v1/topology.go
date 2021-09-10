@@ -1139,7 +1139,7 @@ func ClusterPatch(c *gin.Context) {
 						"patched",
 						filepath.Join(pkgDir, t.ComponentName),
 						t.MachineHost,
-						dmgrutil.AbsClusterBinDir(t.DeployDir, t.InstanceName),
+						filepath.Join(dmgrutil.AbsClusterBinDir(t.DeployDir, t.InstanceName), t.ComponentName),
 					)
 				}
 				patchCompTask = patchCompTask.StartInstance(t.MachineHost, t.ServicePort, t.InstanceName, t.LogDir,
